@@ -1,0 +1,19 @@
+{
+  "name": "scrum-masters",
+  "version": "1.0.0",
+  "description": "\"# Scrum Masters\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SE-GUC/Scrum-Masters.git"
+  },
+  "author": "Scrum Masters",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SE-GUC/Scrum-Masters/issues"
+  },
+  "homepage": "https://github.com/SE-GUC/Scrum-Masters#readme"
+}
