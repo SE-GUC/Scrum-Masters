@@ -57,7 +57,7 @@ return res.json({ data:commentf.comment_text });
 
 });
 
-app.put('/:comment_id', (req, res) => {
+router.put('/:comment_id', (req, res) => {
     const commentId = req.params.comment_id
     const updatedcommenttext = req.body.comment_text
     const commentfs = Comment.find(comment => comment.comment_id === commentId)
@@ -67,7 +67,7 @@ app.put('/:comment_id', (req, res) => {
 
 
 
-app.delete('/comment_id', (req, res) => {
+router.delete('/comment_id', (req, res) => {
     const comment_ID = req.params.id 
     const commentds = Comment.find(comment => comment.comment_id === comment_ID)
     const index = Comment.indexOf(commentds)

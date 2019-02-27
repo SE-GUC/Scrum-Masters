@@ -1,7 +1,15 @@
 const express = require("express");
 const app = express();
+const comment = require('./routes/api/comment')
 
 app.use(express.json());
+app.get('/', (req, res) => {
+  res.send(`<h1>Welcome to Book Store</h1>
+  <a href="/api/comment">comments</a>`
+  );
+})
+
+app.use('/api/comment', comment)
 
 app.get("/", (req, res) => {
   res.send(`<h1>Welcome to our Scrum Master's Website</h1>`);
