@@ -1,18 +1,28 @@
-const express = require("express");
-const app = express();
+const express = require('express')
 
-app.use(express.json());
+// Require Router Handlers
+const electronicJournal = require('./routes/api/electronicJournal')
 
-app.get("/", (req, res) => {
-  res.send(`<h1>Welcome to our Scrum Master's Website</h1>`);
-});
+const app = express()
+
+// Init middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+
+// Entry point
+app.get('/', (req, res) => {
+  res.send(`<h1>Welcome to our Scrum Master's Website</h1>`)
+})
+
+// Direct to Route Handlers
+app.use('/api/electronicJournals', electronicJournal)
 
 // Handling 404
 app.use((req, res) => {
-  res.status(404).send({ err: "We can not find what you are looking for" });
-});
+  res.status(404).send({ err: 'We can not find what you are looking for' })
+})
 
-const port = 3000;
+const port = process.env.PORT || 3000
 app.listen(port, () =>
   console.log(`Server is up and running on server ${port}`)
-);
+)
