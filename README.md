@@ -42,6 +42,6 @@ npm run server
 2. Choose POST request from the dropdown list
 3. Add the URL you want to send the post request to
 4. Naviagte to the fourth option(Body)
-5. Choose x-www-form-urlencoded
+5. Choose **x-www-form-urlencoded**
 6. Add the Key(attribute), Value
 7. Send the request
