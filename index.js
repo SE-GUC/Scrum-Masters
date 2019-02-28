@@ -1,15 +1,20 @@
 const express = require('express')
-const app = express()
 
+// Require Router Handlers
 const electronicJournal = require('./routes/api/electronicJournal')
 
-app.use(express.json())
+const app = express()
 
+// Init middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+
+// Entry point
 app.get('/', (req, res) => {
   res.send(`<h1>Welcome to our Scrum Master's Website</h1>`)
 })
 
-// Direct routes to appropriate files
+// Direct to Route Handlers
 app.use('/api/electronicJournals', electronicJournal)
 
 // Handling 404
