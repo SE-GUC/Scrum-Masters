@@ -25,5 +25,5 @@ npm install
 -To Auto format your code run command.
 
 ```bash
-pip install foobar
+standard --fix
 ```
