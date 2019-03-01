@@ -22,12 +22,12 @@ const companies = [{
     investor_gender : 'Unspecified',
     nationality : 'Mexican',
     investor_id_type : "Mexican?",
-    investor_id_number =  '11111111111111',
-    investor_birth_date = '13/7/1900',
+    investor_id_number : '11111111111111',
+    investor_birth_date : '13/7/1900',
     investor_address :'Brazil, Rio, makram ebeid',
     investor_telephone : '999999999',
     investor_fax : '2993298',
-    investor_email =   'Ibrahim_hima@Cameron.org',
+    investor_email :  'Ibrahim_hima@Cameron.org',
 },
 {
     organizational_rule : 'msh 3aref1',
@@ -45,12 +45,12 @@ const companies = [{
     investor_gender : 'Unspecified',
     nationality : 'Mexican',
     investor_id_type : "Mexican?",
-    investor_id_number =  '11111111111111',
-    investor_birth_date = '13/7/1901',
+    investor_id_number : '11111111111111',
+    investor_birth_date : '13/7/1901',
     investor_address :'Brazil, Rio, Abbas',
     investor_telephone : '999999999',
     investor_fax : '2993298',
-    investor_email =   'Shaaban_shebo@Cameron.org',
+    investor_email :  'Shaaban_shebo@Cameron.org',
 }
 ]
 
@@ -77,41 +77,41 @@ router.post('/',(req,res)=>{
     const investor_address = req.body.investor_address
     const investor_telephone = req.body.investor_telephone
     const investor_fax = req.body.investor_fax
-    const investor_fax = req.body.investor_fax
+    const investor_email = req.body.investor_email
 
     const schema = {
-        organizational_rule= Joi.string().required(),
-        legal_form = Joi.string().required(),
-        company_name_arabic = Joi.string().required(), //Unique??
-        company_name_english = Joi.string().required(),
-        hq_governorate = Joi.string().alphanum().required(),
-        hq_city = Joi.string().alphanum().required(),
-        hq_address = Joi.object().keys({
-            Building_number = Joi.string().required(),
-            Street = Joi.string().required(),
+        organizational_rule: Joi.string().required(),
+        legal_form : Joi.string().required(),
+        company_name_arabic : Joi.string().required(), //Unique??
+        company_name_english : Joi.string().required(),
+        hq_governorate : Joi.string().alphanum().required(),
+        hq_city : Joi.string().alphanum().required(),
+        hq_address : Joi.object().keys({
+            Building_number : Joi.string().required(),
+            Street : Joi.string().required(),
         }),
-        hq_telephone = Joi.string().min(10).max(11).required(),
-        hq_fax = Joi.string().min(7).max(7).required(),
-        capital_currency = Joi.string().required(),
-        capital = Joi.number().min(100000).required(),
-        investor_name = Joi.object().keys({
-           first_name = Joi.string().required(),
-           Middle_name = Joi.string().required(),
-           Last_name = Joi.string.required(),
+        hq_telephone : Joi.string().min(10).max(11).required(),
+        hq_fax : Joi.string().min(7).max(7).required(),
+        capital_currency : Joi.string().required(),
+        capital : Joi.number().min(100000).required(),
+        investor_name : Joi.object().keys({
+           first_name : Joi.string().required(),
+           Middle_name : Joi.string().required(),
+           Last_name : Joi.string.required(),
         }),
-        investor_gender = Joi.string().required(),
-        nationality = Joi.string().required(),
-        investor_id_type = Joi.string().required(),
-        investor_id_number =  Joi.string().min(14).max(14).required(),
-        investor_birth_date = Joi.date().format().required(),
-        investor_address = Joi.object().keys({
-            Country = Joi.string().required(),
-            city = Joi.string().required(),
-            Street = Joi.string().required(),
+        investor_gender : Joi.string().required(),
+        nationality : Joi.string().required(),
+        investor_id_type : Joi.string().required(),
+        investor_id_number :  Joi.string().min(14).max(14).required(),
+        investor_birth_date : Joi.date().format().required(),
+        investor_address : Joi.object().keys({
+            Country : Joi.string().required(),
+            city : Joi.string().required(),
+            Street : Joi.string().required(),
         }),
-        investor_telephone = Joi.string().required(),
-        investor_fax = Joi.string().required(),
-        investor_email =   Joi.string().email().required(),
+        investor_telephone : Joi.string().required(),
+        investor_fax : Joi.string().required(),
+        investor_email :   Joi.string().email().required(),
     
     }
 
