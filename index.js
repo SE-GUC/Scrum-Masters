@@ -3,6 +3,7 @@ const express = require('express')
 // Require Router Handlers
 const electronicJournal = require('./routes/api/electronicJournal')
 const comment = require('./routes/api/comment')
+const admin = require('./routes/api/admin')
 
 const app = express()
 
@@ -14,14 +15,15 @@ app.use(express.urlencoded({ extended: false }))
 app.get('/', (req, res) => {
 
     res.send(`<h1>Welcome to our Scrum Master's Website</h1>`)
-  <a href="/api/comment">comments</a>`
-  );
+  
+  
 
 })
 
 // Direct to Route Handlers
 app.use('/api/electronicJournals', electronicJournal)
 app.use('/api/comment', comment)
+app.use('/api/admin', admin)
 
 // Handling 404
 app.use((req, res) => {
