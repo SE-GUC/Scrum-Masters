@@ -6,8 +6,8 @@ const uuid = require('uuid');
 
 const lawyer = require('../../models/lawyer.js')
 
-const lawyer_data=[new lawyer(1,'Mortada','dada@mansour.com',12345678,07000500),
-                  new lawyer(2,'Mortaaa','dadaaa@mansour.com',12245678,070450500)];
+const lawyer_data=[new lawyer(1,'Mortada','dada@mansour.com',12345678,07000500,null),
+                  new lawyer(2,'Mortaaa','dadaaa@mansour.com',12245678,070450500,null)];
 
 //Create
 router.post('/create', (req,res) => {
