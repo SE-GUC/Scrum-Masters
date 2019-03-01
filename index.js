@@ -9,8 +9,6 @@ const admin = require('./routes/api/admin')
 const company = require('./routes/api/company')
 const lawyer = require('./routes/api/lawyer')
 
-const app = express()
-
 // Init middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
