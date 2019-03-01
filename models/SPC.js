@@ -1,8 +1,7 @@
-
+const uuid = require("uuid");
 
 class SPC {
   constructor(
-    id,
     organizational_rule,
     legal_form,
     company_name_arabic,
@@ -25,7 +24,7 @@ class SPC {
     investor_fax,
     investor_email
   ) {
-    this.id = id;
+    this.id = uuid.v4();
     this.organizational_rule = organizational_rule;
     this.legal_form = legal_form;
     this.company_name_arabic = company_name_arabic;
