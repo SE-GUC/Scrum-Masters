@@ -1,4 +1,4 @@
-
+const SPC = require('./SPC.js')
 
 class SSC extends SPC {
   constructor(
@@ -51,6 +51,7 @@ class SSC extends SPC {
     );
     this.investor_type = investor_type;
     this.board_members = board_members;
+	this.isSPC = false;
   }
 }
 

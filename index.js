@@ -3,7 +3,7 @@ const express = require('express')
 // Require Router Handlers
 const electronicJournal = require('./routes/api/electronicJournal')
 const comment = require('./routes/api/comment')
-const spc = require('./routes/api/spc')
+const company = require('./routes/api/company')
 
 const app = express()
 
@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 // Direct to Route Handlers
 app.use('/api/electronicJournals', electronicJournal)
 app.use('/api/comment', comment)
-app.use('/api/spc', spc)
+app.use('/api/company', company)
 
 // Handling 404
 app.use((req, res) => {

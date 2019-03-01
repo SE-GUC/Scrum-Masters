@@ -46,6 +46,7 @@ class SPC {
     this.investor_telephone = investor_telephone;
     this.investor_fax = investor_fax;
     this.investor_email = investor_email;
+	this.isSPC = true;
   }
 }
 
