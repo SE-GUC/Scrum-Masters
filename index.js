@@ -1,11 +1,11 @@
 const express = require('express')
 const app = express()
 app.use(express.json())
-=======
 
 // Require Router Handlers
 const electronicJournal = require('./routes/api/electronicJournal')
 const comment = require('./routes/api/comment')
+const company = require('./routes/api/company')
 const lawyer = require('./routes/api/lawyer')
 
 const app = express()
@@ -23,8 +23,8 @@ app.get('/', (req, res) => {
 // Direct to Route Handlers
 app.use('/api/electronicJournals', electronicJournal)
 app.use('/api/comment', comment)
+app.use('/api/company', company)
 app.use('/api/lawyer', lawyer) 
-
 
 // Handling 404
 app.use((req, res) => {
