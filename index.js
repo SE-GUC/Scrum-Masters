@@ -12,7 +12,11 @@ app.use(express.urlencoded({ extended: false }))
 
 // Entry point
 app.get('/', (req, res) => {
-  res.send(`<h1>Welcome to our Scrum Master's Website</h1>`)
+
+    res.send(`<h1>Welcome to our Scrum Master's Website</h1>`)
+  <a href="/api/comment">comments</a>`
+  );
+
 })
 
 // Direct to Route Handlers
@@ -24,7 +28,9 @@ app.use((req, res) => {
   res.status(404).send({ err: 'We can not find what you are looking for' })
 })
 
+
 const port = process.env.PORT || 3000
+
 app.listen(port, () =>
   console.log(`Server is up and running on server ${port}`)
 )
