@@ -2,25 +2,24 @@ const express = require('express');
 const router = express.Router();
 
 const joi = require('joi');
-const uuid = require('uuid');
 
 const lawyer = require('../../models/lawyer.js')
 
-const lawyer_data=[new lawyer(1,'Mortada','dada@mansour.com',12345678,07000500,null),
-                  new lawyer(2,'Mortaaa','dadaaa@mansour.com',12245678,070450500,null)];
+const lawyer_data=[new lawyer('John','johnschmidt@abc.com',12345678,07000500,null),
+                   new lawyer('Mark','mark@abc.com',12245678,070450500,null)];
 
 //Create
 router.post('/create', (req,res) => {
   const { error }=validateLawyer(req.body);
   if(error) return res.status(400).send(error.details[0].message);
 
-  const ID=lawyer_data.length+1;
   const name=req.body.name;
   const email=req.body.email;
   const password=req.body.password;
   const telephone=req.body.telephone;
+  const tasks=null;
   
-  const createdLawyer=new lawyer(ID,name,email,password,telephone);
+  const createdLawyer=new lawyer(name,email,password,telephone,tasks);
   lawyer_data.push(createdLawyer);
   return res.json(createdLawyer);
 });
@@ -31,18 +30,18 @@ router.get('/getall', (req,res)=>{
 })
 
 //Retrieve specific
-router.get('/get:ID', (req,res)=>{
-  const wantedID=parseInt(req.params.ID);
-  const specificLawyer=lawyer_data.find(e=>e.ID === wantedID);
-  if(!specificLawyer) return res.status(404).send('No lawyer with the specified ID has been found');
+router.get('/get:id', (req,res)=>{
+  const wantedID=req.params.id;
+  const specificLawyer=lawyer_data.find(e=>e.id === wantedID);
+  if(!specificLawyer) return res.status(404).send('No lawyer with the specified id has been found');
   res.send(specificLawyer);
 })
 
 //Update
-router.put('/update:ID', (req,res)=>{
-  const wantedID=parseInt(req.params.ID);
-  const updateLawyer=lawyer_data.find(e=>e.ID === wantedID);
-  if(!updateLawyer) return res.status(404).send('No lawyer with the specified ID has been found');
+router.put('/update:id', (req,res)=>{
+  const wantedID=req.params.id;
+  const updateLawyer=lawyer_data.find(e=>e.id === wantedID);
+  if(!updateLawyer) return res.status(404).send('No lawyer with the specified id has been found');
   const { error }=validateLawyer(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -54,10 +53,10 @@ router.put('/update:ID', (req,res)=>{
 })
 
 //Deletion
-router.delete('/delete:ID', (req,res)=>{
-  const wantedID=parseInt(req.params.ID);
-  const deleteLawyer=lawyer_data.find(e=>e.ID === wantedID);
-  if(!deleteLawyer) return res.status(404).send('No lawyer with the specified ID has been found');
+router.delete('/delete:id', (req,res)=>{
+  const wantedID=req.params.id;
+  const deleteLawyer=lawyer_data.find(e=>e.id === wantedID);
+  if(!deleteLawyer) return res.status(404).send('No lawyer with the specified id has been found');
   const index = lawyer_data.indexOf(deleteLawyer);
   lawyer_data.splice(index,1);
   res.send(deleteLawyer);
