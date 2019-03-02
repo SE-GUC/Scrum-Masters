@@ -1,4 +1,3 @@
-const uuid = require('uuid')
 
 class admin {
   constructor (id, name, email, password, age, gender, nationality) {
