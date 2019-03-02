@@ -1,9 +1,29 @@
 const uuid = require('uuid')
 
 class SPC {
-  constructor (organizational_rule, legal_form, company_name_arabic, company_name_english, hq_governorate, hq_city, hq_address, hq_telephone,
-    hq_fax, capital_currency, capital, investor_name, investor_gender, nationality, investor_id_type, investor_id_number,
-    investor_birth_date, investor_address, investor_telephone, investor_fax, investor_email) {
+  constructor (
+    organizational_rule,
+    legal_form,
+    company_name_arabic,
+    company_name_english,
+    hq_governorate,
+    hq_city,
+    hq_address,
+    hq_telephone,
+    hq_fax,
+    capital_currency,
+    capital,
+    investor_name,
+    investor_gender,
+    nationality,
+    investor_id_type,
+    investor_id_number,
+    investor_birth_date,
+    investor_address,
+    investor_telephone,
+    investor_fax,
+    investor_email
+  ) {
     this.id = uuid.v4()
     this.organizational_rule = organizational_rule
     this.legal_form = legal_form
@@ -26,7 +46,8 @@ class SPC {
     this.investor_telephone = investor_telephone
     this.investor_fax = investor_fax
     this.investor_email = investor_email
-  };
-};
+    this.isSPC = true
+  }
+}
 
 module.exports = SPC

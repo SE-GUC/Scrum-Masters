@@ -9,7 +9,7 @@ const lawyer_data=[new lawyer('John','johnschmidt@abc.com',12345678,07000500,nul
                    new lawyer('Mark','mark@abc.com',12245678,070450500,null)];
 
 //Create
-router.post('/create', (req,res) => {
+router.post('/', (req,res) => {
   const { error }=validateLawyer(req.body);
   if(error) return res.status(400).send(error.details[0].message);
 
@@ -25,12 +25,12 @@ router.post('/create', (req,res) => {
 });
 
 //Retrieve all
-router.get('/getall', (req,res)=>{
+router.get('/', (req,res)=>{
   res.send(lawyer_data);
 })
 
 //Retrieve specific
-router.get('/get:id', (req,res)=>{
+router.get('/:ID', (req,res)=>{
   const wantedID=req.params.id;
   const specificLawyer=lawyer_data.find(e=>e.id === wantedID);
   if(!specificLawyer) return res.status(404).send('No lawyer with the specified id has been found');
@@ -38,7 +38,7 @@ router.get('/get:id', (req,res)=>{
 })
 
 //Update
-router.put('/update:id', (req,res)=>{
+router.put('/:ID', (req,res)=>{
   const wantedID=req.params.id;
   const updateLawyer=lawyer_data.find(e=>e.id === wantedID);
   if(!updateLawyer) return res.status(404).send('No lawyer with the specified id has been found');
@@ -53,7 +53,7 @@ router.put('/update:id', (req,res)=>{
 })
 
 //Deletion
-router.delete('/delete:id', (req,res)=>{
+router.delete('/:ID', (req,res)=>{
   const wantedID=req.params.id;
   const deleteLawyer=lawyer_data.find(e=>e.id === wantedID);
   if(!deleteLawyer) return res.status(404).send('No lawyer with the specified id has been found');
