@@ -1,4 +1,3 @@
-const uuid = require('uuid')
 
 class Lawyer {
   constructor (ID, name, email, password, telephone, tasks) {

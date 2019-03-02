@@ -92,7 +92,7 @@ function validateReviewer (reviewer) {
     telephone: Joi.number().required()
   }
 
-  return Joi.validate(reviewer, schema);
+  return Joi.validate(reviewer, schema)
 }
 
 module.exports = router
