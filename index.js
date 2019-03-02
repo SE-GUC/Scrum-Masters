@@ -10,6 +10,7 @@ const admin = require('./routes/api/admin')
 const company = require('./routes/api/company')
 const lawyer = require('./routes/api/lawyer')
 const reviewer = require('./routes/api/reviewer')
+const notification = require('./routes/api/notification')
 const investor = require('./routes/api/investor')
 
 // Init middleware
@@ -27,6 +28,7 @@ app.use('/api/admin', admin)
 app.use('/api/company', company)
 app.use('/api/lawyer', lawyer)
 app.use('/api/reviewers', reviewer)
+app.use('/api/notification', notification)
 
 // Handling 404
 app.use((req, res) => {
