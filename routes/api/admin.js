@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
   const admin = {
     id: admin_data.length + 1,
     name: req.body.name,
-    email: req.body.name,
+    email: req.body.email,
     password: req.body.password,
     age: req.body.age,
     gender: req.body.gender,
