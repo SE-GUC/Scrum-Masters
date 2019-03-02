@@ -1,7 +1,7 @@
 
 class Lawyer {
-  constructor (ID, name, email, password, telephone, tasks) {
-    this.ID = ID
+  constructor (name, email, password, telephone, tasks) {
+    this.id = uuid.v4()
     this.name = name
     this.email = email
     this.password = password
