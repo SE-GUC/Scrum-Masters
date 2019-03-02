@@ -30,7 +30,7 @@ router.get('/', (req,res)=>{
 })
 
 //Retrieve specific
-router.get('/:ID', (req,res)=>{
+router.get('/:id', (req,res)=>{
   const wantedID=req.params.id;
   const specificLawyer=lawyer_data.find(e=>e.id === wantedID);
   if(!specificLawyer) return res.status(404).send('No lawyer with the specified id has been found');
@@ -38,7 +38,7 @@ router.get('/:ID', (req,res)=>{
 })
 
 //Update
-router.put('/:ID', (req,res)=>{
+router.put('/:id', (req,res)=>{
   const wantedID=req.params.id;
   const updateLawyer=lawyer_data.find(e=>e.id === wantedID);
   if(!updateLawyer) return res.status(404).send('No lawyer with the specified id has been found');
@@ -53,7 +53,7 @@ router.put('/:ID', (req,res)=>{
 })
 
 //Deletion
-router.delete('/:ID', (req,res)=>{
+router.delete('/:id', (req,res)=>{
   const wantedID=req.params.id;
   const deleteLawyer=lawyer_data.find(e=>e.id === wantedID);
   if(!deleteLawyer) return res.status(404).send('No lawyer with the specified id has been found');
