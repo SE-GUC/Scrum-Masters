@@ -50,15 +50,17 @@ router.get('/', (req, res) => {
 
 //Retrieve specific data
 router.get('/:id', (req, res) => {
-    const id = parseInt(req.params.id)  
+    const id = req.params.id  
     const investor = investor_data.find(investor => investor.ID === id)
+    if(!investor) return res.status(404).send({error: 'investor does not exist'})
     res.send(investor)
 })
 
 //Delete
 router.delete('/:id', (req, res) => {
-    const id = parseInt(req.params.id)  
+    const id = req.params.id 
     const investor = investor_data.find(investor => investor.ID === id)
+    if(!investor) return res.status(404).send({error: 'investor does not exist'})
     const index = investor_data.indexOf(investor)
     investor_data.splice(index,1)
     res.send(investor)
@@ -67,7 +69,7 @@ router.delete('/:id', (req, res) => {
 //Update
 router.put('/:id', (req,res) => {
     
-    const id = parseInt(req.params.id)  
+    const id = req.params.id  
     const investor = investor_data.find(investor => investor.ID === id)
      if(!investor) return res.status(404).send({error: 'investor does not exist'})
      const schema = {

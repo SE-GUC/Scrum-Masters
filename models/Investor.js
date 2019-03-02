@@ -3,7 +3,7 @@ const uuid=require('uuid')
 class Investor{
     constructor(name,email,password,age,gender,nationality,telephone,company_applications)
     {
-        this.ID=uuid;
+        this.ID=uuid.v4();
         this.name=name;
         this.email=email;
         this.password=password;
