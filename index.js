@@ -1,13 +1,13 @@
 const express = require('express')
 const app = express()
-app.use(express.json())
-=======
+
+
 
 // Require Router Handlers
 const electronicJournal = require('./routes/api/electronicJournal')
 const comment = require('./routes/api/comment')
 
-const app = express()
+
 
 // Init middleware
 app.use(express.json())
@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false }))
 app.get('/', (req, res) => {
 
     res.send(`<h1>Welcome to our Scrum Master's Website</h1>`)
-  <a href="/api/comment">comments</a>`
+  '<a href="/api/comment">comments</a>'
 
 })
 
@@ -32,7 +32,7 @@ app.use((req, res) => {
 
 
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3001
 
 
 app.listen(port, () =>
