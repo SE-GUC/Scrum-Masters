@@ -214,7 +214,7 @@ function validateCompany (company) {
     hq_telephone: Joi.string(),
     hq_fax: Joi.string(),
     capital_currency: Joi.required(),
-    capital: Joi.number().required(),
+    capital: Joi.number().min(50000).required(),
     investor_name: Joi.string().required(),
     nationality: Joi.required(),
     investor_id_type: Joi.required(),
