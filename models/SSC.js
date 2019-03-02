@@ -1,7 +1,7 @@
 const SPC = require('./SPC.js')
 
 class SSC extends SPC {
-  constructor(
+  constructor (
     organizational_rule,
     legal_form,
     company_name_arabic,
@@ -48,11 +48,11 @@ class SSC extends SPC {
       investor_telephone,
       investor_fax,
       investor_email
-    );
-    this.investor_type = investor_type;
-    this.board_members = board_members;
-	this.isSPC = false;
+    )
+    this.investor_type = investor_type
+    this.board_members = board_members
+    this.isSPC = false
   }
 }
 
-module.exports = SSC;
+module.exports = SSC

@@ -89,7 +89,7 @@ router.post('/', (req, res) => {
 })
 
 router.put('/:id', (req, res) => {
-  // Lookup the course
+  // Lookup the electronic Journal
 
   const electronicJournal = electronicJournals.find(
     e => e.id === parseInt(req.params.id)
@@ -104,12 +104,12 @@ router.put('/:id', (req, res) => {
 
   if (error) return res.status(400).send(error.details[0].message)
 
-  // Update course
+  // Update electronic Journal
   electronicJournal.name = req.body.name
   electronicJournal.desc = req.body.desc
   electronicJournal.news = req.body.news
 
-  // Return the updated course
+  // Return the updated electronic Journal
   res.send(electronicJournal)
 })
 
@@ -126,7 +126,7 @@ router.delete('/:id', (req, res) => {
   const index = electronicJournals.indexOf(electronicJournal)
   electronicJournals.splice(index, 1)
 
-  // Return the same course by convention
+  // Return the same reviewer by convention
   res.send(electronicJournal)
 })
 
