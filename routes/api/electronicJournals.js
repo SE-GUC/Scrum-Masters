@@ -23,15 +23,7 @@ router.get('/', async (req, res) => {
 // @route  GET api/electronicJournals/:id
 // @desc   Gets a specific electronic Journal by the ID
 // @access Public
-// router.get('/:id', (req, res) => {
-//   // Find the electronic Journal with given id
-//   const electronicJournal = electronicJournals.find(
-//     e => e.id === parseInt(req.params.id)
-//   )
-//   // Send 404 error if not found
-//   if (!electronicJournal) return res.status(404).send(`The electronicJournal with this ID was not found.`)
-//   res.send(electronicJournal)
-// })
+
 router.get('/:id', async (req, res) => {
   const electronicJournal = await ElectronicJournal.findById(req.params.id)
 
@@ -42,24 +34,7 @@ router.get('/:id', async (req, res) => {
 
 // @route  POST api/electronicJournals
 // @desc   Creates a new electronicJournal
-// @access Public
-// router.post('/', (req, res) => {
-//   // Validate using destructring = result.error to simplify the code
-//   const { error } = validateJournal(req.body)
-
-//   // If invalid, return 400 - Bad request
-//   if (error) return res.status(400).send(error.details[0].message)
-
-//   // Create the electronic Journal, add to the array and display it.
-//   const electronicJournal = {
-//     id: electronicJournals.length + 1,
-//     name: req.body.name,
-//     desc: req.body.desc,
-//     news: req.body.news
-//   }
-//   electronicJournals.push(electronicJournal)
-//   res.send(electronicJournal)
-// })
+// @access Private
 
 router.post('/', async (req, res) => {
   try {
@@ -78,7 +53,7 @@ router.post('/', async (req, res) => {
 
 // @route  PUT api/electronicJournals/:id
 // @desc   Update the value of current electronicJournal
-// @access Public
+// @access Private
 router.put('/:id', async (req, res) => {
   try {
     // Lookup the electronic Journal
@@ -105,7 +80,7 @@ router.put('/:id', async (req, res) => {
 
 // @route  DELETE api/electronicJournals/:id
 // @desc   Delete an electronic Journal
-// @access Public
+// @access Private
 router.delete('/:id', async (req, res) => {
   try {
     // Lookup the electronic Journal and Delete it
