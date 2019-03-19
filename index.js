@@ -1,10 +1,20 @@
 const express = require('express')
 const app = express()
+const mongoose = require('mongoose')
 
 app.use(express.json())
 
+// DB config
+const db = require('./config/keys').mongoURI
+
+// Connect to MongoDB
+mongoose
+  .connect(db, { useNewUrlParser: true })
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err))
+
 // Require Router Handlers
-const electronicJournal = require('./routes/api/electronicJournal')
+const electronicJournal = require('./routes/api/electronicJournals')
 const comment = require('./routes/api/comment')
 const admin = require('./routes/api/admin')
 const company = require('./routes/api/company')
