@@ -1,7 +1,7 @@
 const express = require('express')
-const app = express()
 const mongoose = require('mongoose')
 
+const app = express()
 app.use(express.json())
 
 // DB config
@@ -14,14 +14,18 @@ mongoose
   .catch(err => console.log(err))
 
 // Require Router Handlers
-const electronicJournal = require('./routes/api/electronicJournals')
+const user = require('./routes/api/user')
+const electronicJournal = require('./routes/api/electronicJournal')
 const comment = require('./routes/api/comment')
-const admin = require('./routes/api/admin')
 const company = require('./routes/api/company')
-const lawyer = require('./routes/api/lawyer')
-const reviewer = require('./routes/api/reviewer')
 const notification = require('./routes/api/notification')
-const investor = require('./routes/api/investor')
+
+// Connect to mongo
+const keys = require('./config/keys')
+mongoose
+  .connect(keys.mongoURI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.log(err))
 
 // Init middleware
 app.use(express.json())
@@ -31,13 +35,10 @@ app.get('/', (req, res) => {
 })
 
 // Direct to Route Handlers
+app.use('/api/user', user)
 app.use('/api/electronicJournals', electronicJournal)
 app.use('/api/comment', comment)
-app.use('/api/investor', investor)
-app.use('/api/admin', admin)
 app.use('/api/company', company)
-app.use('/api/lawyer', lawyer)
-app.use('/api/reviewers', reviewer)
 app.use('/api/notification', notification)
 
 // Handling 404
