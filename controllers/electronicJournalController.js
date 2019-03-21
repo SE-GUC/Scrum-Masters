@@ -50,7 +50,7 @@ exports.updateElectronicJournal = async (req, res) => {
     if (error) return res.status(400).send(error.details[0].message)
 
     // Lookup the electronic Journal and update it
-    const updatedElectronicJournal = await ElectronicJournal.findByIdAndUpdate(req.params.id, req.body)
+    const updatedElectronicJournal = await ElectronicJournal.findByIdAndUpdate(req.params.id, req.body, { new: true })
 
     // If not existing, return 404
     if (!updatedElectronicJournal) return res.status(404).send(`The electronicJournal with this ID was not found.`)
