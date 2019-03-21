@@ -1,5 +1,4 @@
 
-
 class BoardMember {
   constructor (name, type, nationality, gender, id_type, id_number, birth_date, address, position) {
     this.name = name

@@ -20,9 +20,9 @@ router.post('/', (req, res) => {
   const { error } = validateNotification(req.body)
 
   if (error) return res.status(400).send(error.details[0].message)
-  
+
   notification = new Notification(req.body.owner_id, req.body.object_type, req.body.object_id, req.body.notif_text)
-  
+
   notifications.push(notification)
   res.send(notification)
 })
@@ -31,19 +31,19 @@ router.delete('/:id', (req, res) => {
   const notification = notifications.find(s => s.id === req.params.id)
   if (!notification) { return res.status(404).send(`There is no notification with such id`) }
 
-  notification.viewed = true;
+  notification.viewed = true
 
   res.send(notification)
 })
 
-function validateNotification(notification) {
+function validateNotification (notification) {
   var schema = {
-	owner_id: Joi.string().required(),
-	object_type: Joi.string().required(),
-	object_id: Joi.string().required(),
-	notif_text: Joi.string().required()
+    owner_id: Joi.string().required(),
+    object_type: Joi.string().required(),
+    object_id: Joi.string().required(),
+    notif_text: Joi.string().required()
   }
-  
+
   return Joi.validate(notification, schema)
 }
 
