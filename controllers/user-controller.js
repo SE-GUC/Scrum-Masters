@@ -65,7 +65,7 @@ exports.updateUser = (req, res) => {
   const { error } = validateUser(req.body, false)
   if (error) return res.status(400).send(error.details[0].message)
 
-  User.findByIdAndUpdate(req.params.id, req.body, { new: false })
+  User.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(user => {
       if (!user) return res.status(404).send('User not found')
       return res.json({ msg: "User updated", data: user })
