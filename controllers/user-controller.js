@@ -21,7 +21,7 @@ function validateUser (user, creating) {
 exports.listAllUsers = (req, res) => {
   User.find({}, { _id: true })
     .then(users => {
-      return res.json(users)
+      return res.json({ data: users })
     }).catch(err => {
       console.log(err)
       return res.sendStatus(500)
@@ -50,7 +50,7 @@ exports.createUser = (req, res) => {
       var user = req.body
       User.create(user)
         .then(user => {
-          return res.json(user)
+          return res.json({ msg: "User created", data: user })
         }).catch(err => {
           console.log(err)
           return res.sendStatus(500)
@@ -65,10 +65,10 @@ exports.updateUser = (req, res) => {
   const { error } = validateUser(req.body, false)
   if (error) return res.status(400).send(error.details[0].message)
 
-  User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  User.findByIdAndUpdate(req.params.id, req.body, { new: false })
     .then(user => {
       if (!user) return res.status(404).send('User not found')
-      return res.json(user)
+      return res.json({ msg: "User updated", data: user })
     }).catch(err => {
       console.log(err)
       return res.sendStatus(500)
@@ -79,7 +79,7 @@ exports.deleteUser = (req, res) => {
   User.findByIdAndRemove(req.params.id)
     .then(user => {
       if (!user) return res.status(404).send('User not found')
-      return res.json(user)
+      return res.json({ msg: "User deleted", data: user })
     }).catch(err => {
       console.log(err)
       return res.sendStatus(500)
