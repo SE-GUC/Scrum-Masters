@@ -4,9 +4,18 @@ const mongoose = require('mongoose')
 const app = express()
 app.use(express.json())
 
+// DB config
+const db = require('./config/keys').mongoURI
+
+// Connect to MongoDB
+mongoose
+  .connect(db, { useNewUrlParser: true })
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err))
+
 // Require Router Handlers
 const user = require('./routes/api/user')
-const electronicJournal = require('./routes/api/electronicJournal')
+const electronicJournal = require('./routes/api/electronicJournals')
 const comment = require('./routes/api/comment')
 const company = require('./routes/api/company')
 const notification = require('./routes/api/notification')
@@ -14,9 +23,9 @@ const notification = require('./routes/api/notification')
 // Connect to mongo
 const keys = require('./config/keys')
 mongoose
-	.connect(keys.mongoURI)
-	.then(() => console.log("Connected to MongoDB"))
-	.catch(err => console.log(err))
+  .connect(keys.mongoURI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.log(err))
 
 // Init middleware
 app.use(express.json())
