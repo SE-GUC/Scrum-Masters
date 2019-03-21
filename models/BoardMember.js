@@ -1,16 +1,48 @@
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-class BoardMember {
-  constructor (name, type, nationality, gender, id_type, id_number, birth_date, address, position) {
-    this.name = name
-    this.type = type
-    this.nationality = nationality
-    this.gender = gender
-    this.id_type = id_type
-    this.id_number = id_number
-    this.birth_date = birth_date
-    this.address = address
-    this.position = position
-  };
-};
+const BoardMemberSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  type: {
+    type: String,
+    enum: ["type1", "type2"],
+    required: true
+  },
+  nationality: {
+    type: String,
+    enum: ["Egyptian", "German"],
+    required: true
+  },
+  gender: {
+    type: String,
+    enum: ["Male", "Female"],
+    require: true
+  },
+  id_type: {
+    type: String,
+    enum: ["type1", "type2"],
+    require: true
+  },
+  id_number: {
+    type: String,
+    require: true
+  },
+  birth_date: {
+    type: Date,
+    require: true
+  },
+  address: {
+    type: String,
+    require: true
+  },
+  position: {
+    type: String,
+    enum: ["Manager", "Employee"],
+    required: true
+  }
+});
 
-module.exports = BoardMember
+module.exports = BoardMemberSchema;
