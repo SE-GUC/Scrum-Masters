@@ -15,7 +15,7 @@ mongoose
 
 // Require Router Handlers
 const user = require('./routes/api/user')
-const electronicJournal = require('./routes/api/electronicJournal')
+const electronicJournal = require('./routes/api/electronicJournals')
 const comment = require('./routes/api/comment')
 const company = require('./routes/api/company')
 const notification = require('./routes/api/notification')
