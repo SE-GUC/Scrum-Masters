@@ -10,6 +10,10 @@ router.get('/getfees/:id', userController.viewApplicationFees)
 
 router.post('/', userController.createUser)
 router.post('/assignreviewer/:app_id/:rev_id', userController.assignReviewer)
+ 
+router.post("/assignLawyer/:appId/:lawyerId", userController.assignLaywer)
+
+
 
 router.put('/:id', userController.updateUser)
 router.delete('/:id', userController.deleteUser)
