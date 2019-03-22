@@ -6,7 +6,7 @@ router.use(express.json())
 
 router.get('/', userController.listAllUsers)
 router.get('/:id', userController.getUser)
-router.get('/getfees/:id', userController.viewApplicationFees);
+router.get('/getfees/:id', userController.viewApplicationFees)
 
 router.post('/', userController.createUser)
 router.post('/assignreviewer/:app_id/:rev_id', userController.assignReviewer)

@@ -39,7 +39,7 @@ const UserSchema = new Schema({
   notifications: [{
     type: Schema.ObjectId,
     ref: 'notification'
-  }],
+  }]
 
   // add more attributes as needed later
 

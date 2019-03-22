@@ -1,17 +1,17 @@
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema
 var BoardMemberSchema = require('./BoardMember')
 var companySchema = new Schema({
-  //attributes  f description sumerge
+  // attributes  f description sumerge
   organizational_rule: {
     type: String,
     required: true,
-    enum: ["organizational_rule1", "organizational_rule2"]
+    enum: ['organizational_rule1', 'organizational_rule2']
   },
   legal_form: {
     type: String,
     required: true,
-    enum: ["legal_form1", "legal_form2"]
+    enum: ['legal_form1', 'legal_form2']
   },
   company_name_arabic: {
     type: String,
@@ -23,13 +23,13 @@ var companySchema = new Schema({
   hq_governorate: {
     type: String,
     required: true,
-    enum: ["hq_governorate1", "hq_governorate2"]
+    enum: ['hq_governorate1', 'hq_governorate2']
   },
 
   hq_city: {
     type: String,
     required: true,
-    enum: ["hq_city1", "hq_city2"]
+    enum: ['hq_city1', 'hq_city2']
   },
   hq_address: {
     type: String,
@@ -44,7 +44,7 @@ var companySchema = new Schema({
   capital_currency: {
     type: String,
     required: true,
-    enum: ["EGP", "Euro"]
+    enum: ['EGP', 'Euro']
   },
   capital: {
     type: Number,
@@ -56,21 +56,21 @@ var companySchema = new Schema({
   },
   investor_type: {
     type: String,
-    enum: ["type1", "type2"]
+    enum: ['type1', 'type2']
   },
   investor_gender: {
     type: String,
-    enum: ["Male", "Female"]
+    enum: ['Male', 'Female']
   },
   nationality: {
     type: String,
     required: true,
-    enum: ["Egyptian", "German"]
+    enum: ['Egyptian', 'German']
   },
   investor_id_type: {
     type: String,
     required: true,
-    enum: ["id_type1", "id_type2"]
+    enum: ['id_type1', 'id_type2']
   },
   investor_id_number: {
     type: String,
@@ -93,22 +93,21 @@ var companySchema = new Schema({
   investor_email: {
     type: String
   },
-  board_members: 
+  board_members:
     {
-      type: [BoardMemberSchema],
-    }
-  ,
-  //attributes added
+      type: [BoardMemberSchema]
+    },
+  // attributes added
   company_type: {
     type: String,
-    enum: ["ssc", "spc"]
+    enum: ['ssc', 'spc']
   },
   assigned_status: {
     type: Boolean
   },
   owner: {
     type: Schema.ObjectId,
-    ref: "User"
+    ref: 'User'
   },
   reviewed_statuslawyer: {
     type: Boolean
@@ -118,16 +117,16 @@ var companySchema = new Schema({
   },
   review_reviewer: {
     type: Schema.ObjectId,
-    ref: "User"
+    ref: 'User'
   },
   review_lawyer: {
     type: Schema.ObjectId,
-    ref: "User"
+    ref: 'User'
   },
   comments: [
     {
       type: Schema.ObjectId,
-      ref: "comment"
+      ref: 'comment'
     }
   ],
   fees: {
@@ -136,8 +135,8 @@ var companySchema = new Schema({
   ispaid: {
     type: Boolean
   }
-});
+})
 
-var company = mongoose.model("company", companySchema);
+var company = mongoose.model('company', companySchema)
 
-module.exports = company;
+module.exports = company

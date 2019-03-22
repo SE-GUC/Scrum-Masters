@@ -1,7 +1,7 @@
-const Joi = require("joi");
-const Company = require("../models/company");
+const Joi = require('joi')
+const Company = require('../models/company')
 
-function validateCompany(company) {
+function validateCompany (company) {
   const schema = {
     company_type: Joi.string().required(),
     organizational_rule: Joi.string().required(),
@@ -27,8 +27,8 @@ function validateCompany(company) {
     investor_telephone: Joi.string(),
     investor_fax: Joi.string(),
     investor_email: Joi.string()
-  };
-  if (company.company_type === "ssc") {
+  }
+  if (company.company_type === 'ssc') {
     Object.assign(schema, {
       investor_type: Joi.string().required(),
       board_members: Joi.array()
@@ -46,38 +46,38 @@ function validateCompany(company) {
           })
         )
         .required()
-    });
+    })
   }
 
-  return Joi.validate(company, schema);
+  return Joi.validate(company, schema)
 }
 
 exports.listAllCompanies = (req, res) => {
   Company.find({}, { _id: true })
     .then(company => {
-      return res.json(company);
+      return res.json(company)
     })
     .catch(err => {
-      console.log(err);
-      return res.sendStatus(500);
-    });
-};
+      console.log(err)
+      return res.sendStatus(500)
+    })
+}
 
 exports.getCompany = (req, res) => {
   Company.findById(req.params.id)
     .then(company => {
-      if (!company) return res.status(404).send("company not found");
-      return res.json(company);
+      if (!company) return res.status(404).send('company not found')
+      return res.json(company)
     })
     .catch(err => {
-      console.log(err);
-      return res.sendStatus(500);
-    });
-};
+      console.log(err)
+      return res.sendStatus(500)
+    })
+}
 
 exports.createCompany = (req, res) => {
-  const { error } = validateCompany(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  const { error } = validateCompany(req.body)
+  if (error) return res.status(400).send(error.details[0].message)
 
   Company.findOne(
     { company_name_arabic: req.body.company_name_arabic } || {
@@ -85,70 +85,87 @@ exports.createCompany = (req, res) => {
     }
   )
     .then(company => {
-      if (company)
+      if (company) {
         return res
           .status(400)
-          .send("An application is already created with this company name");
+          .send('An application is already created with this company name')
+      }
 
-      company = {};
-      company = req.body;
+      company = {}
+      company = req.body
       Company.create(company)
         .then(company => {
-          return res.json(company);
+          return res.json(company)
         })
         .catch(err => {
-          console.log(err);
-          return res.sendStatus(500);
-        });
+          console.log(err)
+          return res.sendStatus(500)
+        })
     })
     .catch(err => {
-      console.log(err);
-      return res.sendStatus(500);
-    });
-};
+      console.log(err)
+      return res.sendStatus(500)
+    })
+}
 
 exports.updateCompany = (req, res) => {
-  const { error } = validateCompany(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  const { error } = validateCompany(req.body)
+  if (error) return res.status(400).send(error.details[0].message)
 
   Company.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(company => {
-      if (!company) return res.status(404).send("application not found");
-      return res.json(company);
+      if (!company) return res.status(404).send('application not found')
+      return res.json(company)
     })
     .catch(err => {
-      04;
-      console.log(err);
-      return res.sendStatus(500);
-    });
-};
+      console.log(err)
+      return res.sendStatus(500)
+    })
+}
 
 exports.deleteCompany = (req, res) => {
   Company.findByIdAndRemove(req.params.id)
     .then(company => {
-      if (!company) return res.status(404).send("application not found");
-      return res.json(company);
+      if (!company) return res.status(404).send('application not found')
+      return res.json(company)
     })
     .catch(err => {
-      console.log(err);
-      return res.sendStatus(500);
-    });
-};
+      console.log(err)
+      return res.sendStatus(500)
+    })
+}
 
-exports.addFees= async(req,res)=>{
-  const targetId= req.params.id
+exports.addFees = async (req, res) => {
+  const targetId = req.params.id
   const feesvalue = req.body.feesvalue
-  if(!feesvalue) return res.send(400).status({error:'please enter the fees'})
-  
-  if (typeof feesvalue !== 'number') { return res.status(400).send({ err: 'Invalid value for fees value' }) } 
+  if (!feesvalue) return res.send(400).status({ error: 'please enter the fees' })
+
+  if (typeof feesvalue !== 'number') { return res.status(400).send({ err: 'Invalid value for fees value' }) }
 
   var targetApplication = await Company.findById(targetId)
-  if(!targetApplication) return res.status(404).send("application not found")
-   targetApplication.fees=feesvalue
-   targetApplication.ispaid = true
+  if (!targetApplication) return res.status(404).send('application not found')
+  targetApplication.fees = feesvalue
+  targetApplication.ispaid = true
 
-   const targetcompany = await  Company.findByIdAndUpdate(targetId,targetApplication,{new : true})
+  const targetcompany = await Company.findByIdAndUpdate(targetId, targetApplication, { new: true })
 
   return res.send(targetcompany)
-  
+}
+
+exports.listAllPaidCompanies = async (req, res) => {
+  try {
+    const companies = await Company.find({ ispaid: true }, { new: true })
+    res.json({ data: companies })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+exports.listAllUnreviewedCompanies = async (req, res) => {
+  try {
+    const companies = await Company.find({ reviewed_statusreviewer: undefined }, { new: true })
+    res.json({ data: companies })
+  } catch (error) {
+    console.log(error)
+  }
 }
