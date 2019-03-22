@@ -7,8 +7,10 @@ router.use(express.json());
 router.get("/", companyController.listAllCompanies);
 router.get("/:id", companyController.getCompany);
 
+
 router.post("/", companyController.createCompany);
 router.put("/:id", companyController.updateCompany);
+router.put("/addfees/:id", companyController.addFees);
 router.delete("/:id", companyController.deleteCompany);
 
 module.exports = router;
