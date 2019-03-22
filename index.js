@@ -18,6 +18,7 @@ const user = require('./routes/api/user')
 const electronicJournal = require('./routes/api/electronicJournals')
 const comment = require('./routes/api/comment')
 const company = require('./routes/api/company')
+const companyRequest = require('./routes/api/company-request')
 const notification = require('./routes/api/notification')
 
 // Connect to mongo
@@ -39,6 +40,7 @@ app.use('/api/user', user)
 app.use('/api/electronicJournals', electronicJournal)
 app.use('/api/comment', comment)
 app.use('/api/company', company)
+app.use('/api/company-request', companyRequest)
 app.use('/api/notification', notification)
 
 // Handling 404
