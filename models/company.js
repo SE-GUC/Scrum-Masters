@@ -110,7 +110,10 @@ var companySchema = new Schema({
     type: Schema.ObjectId,
     ref: "User"
   },
-  reviewed_status: {
+  reviewed_statuslawyer: {
+    type: Boolean
+  },
+  reviewed_statusreviewer: {
     type: Boolean
   },
   review_reviewer: {
