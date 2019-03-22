@@ -35,10 +35,14 @@ const UserSchema = new Schema({
   companies: [{
     type: Schema.ObjectId,
     ref: 'company'
-  }]
+  }],
+  notifications: [{
+    type: Schema.ObjectId,
+    ref: 'notification'
+  }],
 
   // add more attributes as needed later
 
 })
 
-module.exports = User = mongoose.model('users', UserSchema)
+module.exports = User = mongoose.model('user', UserSchema)

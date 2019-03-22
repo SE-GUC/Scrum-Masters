@@ -1,8 +1,8 @@
 const Joi = require('joi')
-const User = require('../models/user')
+const User = require('../models/User')
 var Company = require("../models/company")
 var Comment = require("../models/comment")
-
+var Notification = require("../models/Notification")
 
 function validatecommnet (comment){
   const schema={
@@ -181,3 +181,48 @@ exports.createComment=(req,res)=>{
     
    return res.json(targetapplication.comments)
   }
+
+// This is a helper method which will be used whenever a notification needs to be created
+exports.createNotificationForUser = async(notification) => {
+  try {
+    const notif = await Notification.create(notification)
+    if (!notif) return undefined
+    
+    await User.findOneAndUpdate({ _id: notification.owner_id }, { $push: { notifications: notification._id } })
+    return notification
+  } catch (err) {
+    console.log(err)
+    return undefined
+  }
+}
+
+exports.getNotifications = async(req, res) => {
+  User.findById(req.params.id).populate({
+    path: 'notifications',
+    model: 'notification'
+  }).then(user => {
+    if (!user) return res.status(404).send({ error: "User not found" })
+    return res.json(user.notifications)
+  }).catch(err => {
+    console.log(err)
+    return res.sendStatus(500)
+  })
+}
+
+exports.setNotificationViewed = async(req, res) => {
+  Notification.findByIdAndUpdate(req.params.id, { viewed: true }, { new: true })
+  .then(notification => {
+    if (!notification) return res.status(404).send({ error: "Notification not found" })
+    return res.json({ msg: "Success", data: notification })
+  }).catch(err => {
+    console.log(err)
+    return res.sendStatus(500)
+  })
+}
+
+exports.notificationTestCreate = async(req, res) => {
+  const notif = await exports.createNotificationForUser(req.body)
+  console.log(notif)
+  if (!notif) res.sendStatus(500)
+  return res.json(notif)
+}

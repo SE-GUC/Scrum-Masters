@@ -1,33 +1,33 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const Notificationschema = new Schema({
-	owner_id: {
-		type: String,
-		required: true,
-	},
-	object_type: {
-		type: String,
-		required: true,
-	},
-	object_id: {
-		type: String,
-		required: true,
-	},
-	notif_text: {
-		type: String,
-		required: true,
-	},
-	viewed: {
-		type: String,
-		enum:['false','true'],
-		default: 'false',
-		required: true,
-	},
-	date:{
-		type:Date,
-		required:true,
-	}	
+const NotificationSchema = new Schema({
+  owner_id: {
+    type: Schema.ObjectId,
+    ref: 'user',
+    required: true,
+  },
+  target_type: {
+    type: String,
+    enum: ['company'],
+    required: true,
+  },
+  target_id: {
+    type: Schema.ObjectId,
+    required: true,
+  },
+  notif_text: {
+    type: String,
+    required: true,
+  },
+  viewed: {
+    type: Boolean,
+    default: false,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  }  
 })
 
-module.exports = Notification= mongoose.model('notifications', Notificationschema)
+module.exports = Notification = mongoose.model('notification', NotificationSchema)
