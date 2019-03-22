@@ -134,3 +134,21 @@ exports.deleteCompany = (req, res) => {
       return res.sendStatus(500);
     });
 };
+
+exports.addFees= async(req,res)=>{
+  const targetId= req.params.id
+  const feesvalue = req.body.feesvalue
+  if(!feesvalue) return res.send(400).status({error:'please enter the fees'})
+  
+  if (typeof feesvalue !== 'number') { return res.status(400).send({ err: 'Invalid value for fees value' }) } 
+
+  var targetApplication = await Company.findById(targetId)
+  if(!targetApplication) return res.status(404).send("application not found")
+   targetApplication.fees=feesvalue
+   targetApplication.ispaid = true
+
+   const targetcompany = await  Company.findByIdAndUpdate(targetId,targetApplication,{new : true})
+
+  return res.send(targetcompany)
+  
+}

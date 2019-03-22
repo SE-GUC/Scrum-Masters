@@ -182,6 +182,7 @@ exports.createComment=(req,res)=>{
    return res.json(targetapplication.comments)
   }
 
+
 // This is a helper method which will be used whenever a notification needs to be created
 exports.createNotificationForUser = async(notification) => {
   try {
@@ -226,3 +227,35 @@ exports.notificationTestCreate = async(req, res) => {
   if (!notif) res.sendStatus(500)
   return res.json(notif)
 }
+
+exports.viewApplicationFees =async(req,res)=>{
+  const targetId=req.params.id
+  const targetApplication = await Company.findById(targetId)
+  if(!targetApplication) return res.status(404).send({error:'Application not found'})
+
+  const applicationFees=targetApplication.fees
+  if(!applicationFees) return res.send({error:'The fees is not calculated yet'})
+
+  return res.send({Fees:applicationFees})
+
+} 
+
+exports.assignReviewer =async(req,res)=>{
+  const targetId = req.params.app_id
+  const reviewer_id = req.params.rev_id
+
+  var targetApplication = await  Company.findById(targetId)
+
+  if(!targetApplication) return res.status(404).send({error:'Application not found'})
+
+  var targetReviewer= await User.findById(reviewer_id)
+
+  if(!targetReviewer)return res.status(404).send({error:'Reviewer not found'})
+  if(targetApplication.reviewed_statusreviewer) return res.send({error:'this application is already reviewed'})
+
+  const targetApplicationup =await Company.findByIdAndUpdate(targetId,{reviewed_statusreviewer:true,review_reviewer:reviewer_id},{new:true}) 
+  
+  return res.send(targetApplicationup)
+
+}
+
