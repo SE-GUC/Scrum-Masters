@@ -151,4 +151,13 @@ exports.addFees= async(req,res)=>{
 
   return res.send(targetcompany)
   
-}
+};
+exports.listUnassignedApplications =async(req,res)=>{
+  try {
+   const companies= await Company.find({ assigned_status:undefined},{new:true})
+  res.json({data:companies})
+  }
+  catch(error){
+      console.log(error)
+  }
+  }

@@ -5,8 +5,8 @@ const companyController = require("../../controllers/company-controller");
 router.use(express.json());
 
 router.get("/", companyController.listAllCompanies);
+router.get("/listUnassignedApplications",companyController.listUnassignedApplications);
 router.get("/:id", companyController.getCompany);
-
 
 router.post("/", companyController.createCompany);
 router.put("/:id", companyController.updateCompany);
