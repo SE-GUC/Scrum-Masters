@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const BoardMemberSchema = new Schema({
   name: {
@@ -8,22 +8,22 @@ const BoardMemberSchema = new Schema({
   },
   type: {
     type: String,
-    enum: ["type1", "type2"],
+    enum: ['type1', 'type2'],
     required: true
   },
   nationality: {
     type: String,
-    enum: ["Egyptian", "German"],
+    enum: ['Egyptian', 'German'],
     required: true
   },
   gender: {
     type: String,
-    enum: ["Male", "Female"],
+    enum: ['Male', 'Female'],
     require: true
   },
   id_type: {
     type: String,
-    enum: ["type1", "type2"],
+    enum: ['type1', 'type2'],
     require: true
   },
   id_number: {
@@ -40,9 +40,9 @@ const BoardMemberSchema = new Schema({
   },
   position: {
     type: String,
-    enum: ["Manager", "Employee"],
+    enum: ['Manager', 'Employee'],
     required: true
   }
-});
+})
 
-module.exports = BoardMemberSchema;
+module.exports = BoardMemberSchema
