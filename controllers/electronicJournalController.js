@@ -45,7 +45,7 @@ exports.updateElectronicJournal = async (req, res) => {
   try {
     // Validate using destructring = result.error, to simplify the code
     const { error } = validateJournal(req.body)
-    
+
     // If invalid, return 400 - Bad request
     if (error) return res.status(400).send(error.details[0].message)
 

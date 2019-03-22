@@ -1,14 +1,28 @@
-const uuid = require('uuid')
-// Create Comment
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema
 
-class comment {
-  constructor (comment_text, user_id, application_id) {
-    this.comment_text = comment_text
-    this.comment_date = new Date()
-    this.comment_id = uuid.v4()
-    this.application_id = application_id
-    this.user_id = user_id// the one who commented
-  };
-};
+// Comment schema.
+
+var commentSchema = new Schema({
+  comment_text: {
+    type: String,
+    required: true
+  },
+  comment_date: {
+    type: Date
+  },
+  application_id: {
+    type: Schema.ObjectId,
+    required: true,
+    ref: 'company'
+  },
+  user_id: {
+    type: Schema.ObjectId,
+    required: true,
+    ref: 'user' // to be user.
+  }
+})
+
+var comment = mongoose.model('comment', commentSchema)
 
 module.exports = comment

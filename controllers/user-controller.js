@@ -1,8 +1,10 @@
+
 const Joi = require('joi') 
 const User = require('../models/User') 
 var Company = require('../models/company') 
 var Comment = require('../models/comment') 
 var Notification = require('../models/Notification') 
+
 
 function validatecommnet(comment) {
   const schema = {
@@ -80,7 +82,9 @@ exports.createUser = (req, res) => {
       var user = req.body 
       User.create(user)
         .then(user => {
+
           return res.json({ msg: 'User created', data: user }) 
+
         })
         .catch(err => {
           console.log(err) 
@@ -97,10 +101,12 @@ exports.updateUser = (req, res) => {
   const { error } = validateUser(req.body, false) 
   if (error) return res.status(400).send(error.details[0].message) 
 
-  User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  User.findByIdAndUpdate(req.params.id, req.body, { new: false })
     .then(user => {
+
       if (!user) return res.status(404).send('User not found') 
       return res.json({ msg: 'User updated', data: user }) 
+
     })
     .catch(err => {
       console.log(err) 
@@ -111,6 +117,7 @@ exports.updateUser = (req, res) => {
 exports.deleteUser = (req, res) => {
   User.findByIdAndRemove(req.params.id)
     .then(user => {
+
       if (!user) return res.status(404).send('User not found') 
       return res.json({ msg: 'User deleted', data: user }) 
     })
@@ -360,3 +367,4 @@ exports.assignLaywer = async (req, res) => {
       return res.sendStatus(500) 
     }) 
 } 
+
