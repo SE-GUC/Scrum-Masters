@@ -249,12 +249,12 @@ exports.assignReviewer =async(req,res)=>{
   if(!targetApplication) return res.status(404).send({error:'Application not found'})
 
   var targetReviewer= await User.findById(reviewer_id)
-
-  if(!targetReviewer)return res.status(404).send({error:'Reviewer not found'})
+   if(!targetReviewer)return res.status(404).send({error:'Reviewer not found'})
+   if(targetReviewer.type!='reviewer') return res.status(404).send({error:'the assigned user should be reviewer'})
   if(targetApplication.reviewed_statusreviewer) return res.send({error:'this application is already reviewed'})
 
-  const targetApplicationup =await Company.findByIdAndUpdate(targetId,{reviewed_statusreviewer:true,review_reviewer:reviewer_id},{new:true}) 
-  
+  const targetApplicationup =await Company.findByIdAndUpdate(targetId,{review_reviewer:reviewer_id},{new:true}) 
+
   return res.send(targetApplicationup)
 
 }

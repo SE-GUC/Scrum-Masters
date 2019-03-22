@@ -145,7 +145,7 @@ exports.addFees= async(req,res)=>{
   var targetApplication = await Company.findById(targetId)
   if(!targetApplication) return res.status(404).send("application not found")
    targetApplication.fees=feesvalue
-   targetApplication.ispaid = true
+   
 
    const targetcompany = await  Company.findByIdAndUpdate(targetId,targetApplication,{new : true})
 
