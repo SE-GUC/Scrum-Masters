@@ -14,6 +14,10 @@ var CompanyRequestSchema = new Schema({
 	lawyer_id: {
 		type: Schema.ObjectId,
 		ref: 'user'
+	},
+	creation_date: {
+		type: Date,
+		default: Date.now
 	}
 })
 
