@@ -255,7 +255,7 @@ exports.setNotificationViewed = async (req, res) => {
     .catch(err => {
       console.log(err) 
       return res.sendStatus(500) 
-    }) 
+    })
 } 
 
 exports.notificationTestCreate = async (req, res) => {
@@ -366,5 +366,17 @@ exports.assignLaywer = async (req, res) => {
       ) 
       return res.sendStatus(500) 
     }) 
-} 
+}
+
+exports.getassignedlawyer = async(req,res) => {
+  const companyrequest=await CompanyRequest.findOne({_id:req.params.companyid,investor_id:req.params.userid})
+  if(!companyrequest)
+     return res.status(404).send({ error: 'No such Request'})
+  if(!companyrequest.assigned)
+     return res.status(404).send({ error: 'lawyer is not assigned yet'})   
+  const laywer=await User.findOne({_id:companyrequest.lawyer_id},{_id:false,firstName:true,lastName:true,email:true})
+  if(!laywer)
+     return res.status(404).send({ error: 'No such lawyer'})
+  return res.json(laywer) 
+}
 
