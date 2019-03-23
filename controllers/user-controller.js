@@ -368,9 +368,9 @@ exports.assignLaywer = async (req, res) => {
   ) 
 
   notification = {} 
-  notificaton.owner_id = lawyerId 
+  notification.owner_id = lawyerId 
   notification.target_type = 'company' 
-  notification.targiet_id = appId 
+  notification.target_id = appId 
   notification.notif_text = 'You Were Assigned To An Application' 
 
   Notification.create(notification)
