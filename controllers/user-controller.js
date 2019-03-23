@@ -129,6 +129,7 @@ exports.deleteUser = (req, res) => {
 // add comment on a specific company application
 
 exports.createComment = (req, res) => {
+  
   let { comment_text, application_id, user_id } = req.body 
   if (!(comment_text && application_id && user_id)) return res.sendStatus(400) 
   const { error } = validatecommnet(req.body) 
@@ -165,7 +166,42 @@ exports.createComment = (req, res) => {
         '\n\n'
       ) 
       return res.sendStatus(500) 
-    }) 
+    })
+  notification = {} 
+  notification.owner_id = user_id 
+  notification.target_type = 'company' 
+  notification.target_id = application_id 
+  notification.notif_text = 'You have a pending comment on your application' 
+
+  Notification.create(notification)
+    .then(notification => {
+      User.findOneAndUpdate(
+        { _id: user_id },
+        { $push: { notifications: notification._id } }
+      )
+        .then(() => {
+          return res.json({
+            msg: 'User notified',
+            data: notification
+          }) 
+        })
+        .catch(err => {
+          console.log(
+            'Internal server error while adding comment to company list: \n',
+            err,
+            '\n\n'
+          ) 
+          return res.sendStatus(500) 
+        }) 
+    })
+    .catch(err => {
+      console.log(
+        'Internal server error while creating commnet: \n',
+        err,
+        '\n\n'
+      ) 
+      return res.sendStatus(500) 
+    })
 } 
 
 exports.updateComment = async (req, res) => {
