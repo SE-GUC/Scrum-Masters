@@ -1,16 +1,20 @@
-const express = require("express");
-const router = express.Router();
-const companyController = require("../../controllers/company-controller");
+const express = require('express')
+const router = express.Router()
+const companyController = require('../../controllers/company-controller')
 
-router.use(express.json());
+router.use(express.json())
 
-router.get("/", companyController.listAllCompanies);
+
+router.get('/', companyController.listAllCompanies)
 router.get("/listUnassignedApplications",companyController.listUnassignedApplications);
-router.get("/:id", companyController.getCompany);
+router.get('/paidCompanies', companyController.listAllPaidCompanies)
+router.get('/unreviewedCompanies', companyController.listAllUnreviewedCompanies)
+router.get('/:id', companyController.getCompany)
 
-router.post("/", companyController.createCompany);
-router.put("/:id", companyController.updateCompany);
-router.put("/addfees/:id", companyController.addFees);
-router.delete("/:id", companyController.deleteCompany);
+router.post('/', companyController.createCompany)
+router.put('/:id', companyController.updateCompany)
+router.put('/addfees/:id', companyController.addFees)
+router.delete('/:id', companyController.deleteCompany)
 
-module.exports = router;
+module.exports = router
+

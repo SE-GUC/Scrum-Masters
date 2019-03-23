@@ -3,17 +3,15 @@ const express = require('express')
 const router = express.Router()
 var userController = require('../../controllers/user-controller')
 
-router.post('/',userController.createComment)//new --create comment on a application form.
+router.post('/', userController.createComment)// new --create comment on a application form.
 
-router.post('/:id',userController.updateComment)// new --update a comment.
+router.post('/:id', userController.updateComment)// new --update a comment.
 
-router.delete('/:app_id/:comm_id',userController.deleteComment)// new --delete comment.
+router.delete('/:app_id/:comm_id', userController.deleteComment)// new --delete comment.
 
 router.get('/:id', userController.viewComments)
 
 module.exports = router
-
-
 
 // const express = require('express')
 // const router = express.Router()

@@ -9,7 +9,7 @@ const db = require('./config/keys').mongoURI
 
 // Connect to MongoDB
 mongoose
-  .connect(db, { useNewUrlParser: true })
+  .connect(db, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err))
 
@@ -18,14 +18,8 @@ const user = require('./routes/api/user')
 const electronicJournal = require('./routes/api/electronicJournals')
 const comment = require('./routes/api/comment')
 const company = require('./routes/api/company')
+const companyRequest = require('./routes/api/company-request')
 const notification = require('./routes/api/notification')
-
-// Connect to mongo
-const keys = require('./config/keys')
-mongoose
-  .connect(keys.mongoURI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.log(err))
 
 // Init middleware
 app.use(express.json())
@@ -39,6 +33,7 @@ app.use('/api/user', user)
 app.use('/api/electronicJournals', electronicJournal)
 app.use('/api/comment', comment)
 app.use('/api/company', company)
+app.use('/api/company-request', companyRequest)
 app.use('/api/notification', notification)
 
 // Handling 404
