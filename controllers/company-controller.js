@@ -1,8 +1,11 @@
 const Joi = require('joi')
 const Company = require('../models/company')
+const Notification = require('../models/Notification')
+const userController = require('../controllers/user-controller')
 
 function validateCompany (company) {
   const schema = {
+    owner: Joi.string().required(),
     company_type: Joi.string().required(),
     organizational_rule: Joi.string().required(),
     legal_form: Joi.string().required(),
@@ -95,7 +98,14 @@ exports.createCompany = (req, res) => {
       company = req.body
       Company.create(company)
         .then(company => {
-          return res.json(company)
+          User.findByIdAndUpdate(company.owner, { $push: { companies: company._id } })
+            .then(user => {
+              return res.json(company)
+            })
+            .catch(err => {
+              console.log(err)
+              return res.sendStatus(500)
+            })
         })
         .catch(err => {
           console.log(err)
@@ -127,7 +137,15 @@ exports.deleteCompany = (req, res) => {
   Company.findByIdAndRemove(req.params.id)
     .then(company => {
       if (!company) return res.status(404).send('application not found')
-      return res.json(company)
+      
+      User.findByIdAndUpdate(company.owner, { $pull: { companies: company._id } })
+        .then(user => {
+          return res.json(company)
+        })
+        .catch(err => {
+          console.log(err)
+          return res.sendStatus(500)
+        })
     })
     .catch(err => {
       console.log(err)
@@ -138,7 +156,7 @@ exports.deleteCompany = (req, res) => {
 exports.addFees = async (req, res) => {
   const targetId = req.params.id
   const feesvalue = req.body.feesvalue
-  if (!feesvalue) return res.send(400).status({ error: 'please enter the fees' })
+  if (!feesvalue) return res.status(400).send({ error: 'please enter the fees' })
 
   if (typeof feesvalue !== 'number') { return res.status(400).send({ err: 'Invalid value for fees value' }) }
 
@@ -153,7 +171,7 @@ exports.addFees = async (req, res) => {
 
 exports.listUnassignedApplications =async(req,res)=>{
   try {
-   const companies= await Company.find({ assigned_status:undefined},{new:true})
+   const companies= await Company.find({ assigned_status: false },{new:true})
   res.json({data:companies})
   }
   catch(error){
@@ -174,9 +192,33 @@ exports.listAllPaidCompanies = async (req, res) => {
 
 exports.listAllUnreviewedCompanies = async (req, res) => {
   try {
-    const companies = await Company.find({ reviewed_statusreviewer: undefined }, { new: true })
+    const companies = await Company.find({ reviewed_statusreviewer: false }, { new: true })
     res.json({ data: companies })
   } catch (error) {
     console.log(error)
   }
+}
+
+exports.establishCompany = async(req, res) => {
+  Company.findById(req.params.id)
+    .then(company => {
+      if (company.established) return res.status(400).send({ error: "Company is already established" })
+      if (!company.ispaid) return res.status(400).send({ error: "Fees have not been paid" })
+      
+      Company.findByIdAndUpdate(req.params.id, { established: true }, { new: true })
+        .then(async company => {
+          await userController.createNotificationForUser(
+            { owner_id: company.owner, target_type: 'company', target_id: company._id, notif_text: "Your company has been established" }
+          )
+          return res.json({ msg: "Success", data: company })
+        })
+        .catch(err => {
+          console.log(err)
+          return res.sendStatus(500)
+        })
+    })
+    .catch(err => {
+      console.log(err)
+      return res.sendStatus(500)
+    })
 }

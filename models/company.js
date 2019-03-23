@@ -103,17 +103,21 @@ var companySchema = new Schema({
     enum: ['ssc', 'spc']
   },
   assigned_status: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   owner: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   reviewed_statuslawyer: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   reviewed_statusreviewer: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   review_reviewer: {
     type: Schema.ObjectId,
@@ -133,7 +137,12 @@ var companySchema = new Schema({
     type: Number
   },
   ispaid: {
-    type: Boolean
+    type: Boolean,
+    default: false
+  },
+  established: {
+    type: Boolean,
+    default: false
   }
 })
 
