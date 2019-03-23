@@ -366,16 +366,17 @@ exports.assignLaywer = async (req, res) => {
       ) 
       return res.sendStatus(500) 
     }) 
-} 
+}
 
 exports.getassignedlawyer = async(req,res) => {
-  const company=await company.findOne({_id:req.params.companyid,owner_id:req.params.investorid})
-  //id or _id
-  if(!company)
-     return res.status(404).send({ error: 'No such Company'})
-  const laywer=await User.find({_id:company.assignLaywer},{firstName:1,lastName:1,email:1})
+  const companyrequest=await CompanyRequest.findOne({_id:req.params.companyid,investor_id:req.params.userid})
+  if(!companyrequest)
+     return res.status(404).send({ error: 'No such Request'})
+  if(!companyrequest.assigned)
+     return res.status(404).send({ error: 'lawyer is not assigned yet'})   
+  const laywer=await User.findOne({_id:companyrequest.lawyer_id},{_id:false,firstName:true,lastName:true,email:true})
   if(!laywer)
-     return res.status(404).send({ error: 'lawyer is not assigned yet'})
+     return res.status(404).send({ error: 'No such lawyer'})
   return res.json(laywer) 
 }
 
