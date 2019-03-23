@@ -16,5 +16,7 @@ router.put('/:id', companyController.updateCompany)
 router.put('/addfees/:id', companyController.addFees)
 router.delete('/:id', companyController.deleteCompany)
 
+router.post('/establish/:id', companyController.establishCompany)
+
 module.exports = router
 

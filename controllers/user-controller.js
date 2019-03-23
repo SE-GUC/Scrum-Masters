@@ -215,14 +215,14 @@ exports.viewComments = async (req, res) => {
 // This is a helper method which will be used whenever a notification needs to be created
 exports.createNotificationForUser = async notification => {
   try {
-    const notif = await Notification.create(notification) 
-    if (!notif) return undefined 
+    const notif_obj = await Notification.create(notification) 
+    if (!notif_obj) return undefined 
 
     await User.findOneAndUpdate(
-      { _id: notification.owner_id },
-      { $push: { notifications: notification._id } }
+      { _id: notif_obj.owner_id },
+      { $push: { notifications: notif_obj._id } }
     ) 
-    return notification 
+    return notif_obj 
   } catch (err) {
     console.log(err) 
     return undefined 
@@ -379,4 +379,3 @@ exports.getassignedlawyer = async(req,res) => {
      return res.status(404).send({ error: 'No such lawyer'})
   return res.json(laywer) 
 }
-
