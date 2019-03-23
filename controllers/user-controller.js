@@ -168,9 +168,9 @@ exports.createComment = (req, res) => {
       return res.sendStatus(500) 
     })
   notification = {} 
-  notificaton.owner_id = user_id 
+  notification.owner_id = user_id 
   notification.target_type = 'company' 
-  notification.targiet_id = application_id 
+  notification.target_id = application_id 
   notification.notif_text = 'You have a pending comment on your application' 
 
   Notification.create(notification)
