@@ -1,5 +1,7 @@
 # Scrum Masters
 
+Heroku URL: https://sumerge-scrum-masters.herokuapp.com/
+
 ## Install project
 
 -Clone the project
