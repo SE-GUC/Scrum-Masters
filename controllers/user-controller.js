@@ -208,8 +208,8 @@ exports.updateComment = async (req, res) => {
   const comment_id = req.params.id 
   const comment_text = req.body.comment_text 
   if (!comment_text) return res.send({ error: 'comment text is required' }) 
-  if (typeof comment_text !== 'string') {
-    return res.status(400).send({ err: 'Invalid value for comment text' }) 
+ if (typeof comment_text !== 'string') {
+   return res.status(400).send({ err: 'Invalid value for comment text' }) 
   }
   const comment = await Comment.findByIdAndUpdate(
     comment_id,
@@ -217,10 +217,16 @@ exports.updateComment = async (req, res) => {
     { new: true }
   ) 
 
-  if (!comment) return res.status(400).send({ error: 'comment not found' }) 
+  if (!comment) return res.status(404).send({ error: 'comment not found' }) 
 
   return res.status(200).send(comment) 
 } 
+exports.viewSpecific = async(req,res)=>{
+const comment_id = req.params.id
+const comment  = await  Comment.findById(comment_id)
+if(!comment) return res.status(404).send({ error: 'comment not found' }) 
+return res.send(comment) 
+}
 
 exports.deleteComment = async (req, res) => {
   const application_id = req.params.app_id 
@@ -232,7 +238,9 @@ exports.deleteComment = async (req, res) => {
   const targetapplication = await Company.findById(application_id) 
   if (!targetapplication)
     return res.status(404).send({ error: 'application not found ' }) 
-  var deletedComment = targetapplication.comments.remove(comment_id) 
+    const index = targetapplication.comments.indexOf(comment_id)
+  var deletedComment = targetapplication.comments.splice(index, 1)
+  await Company.findByIdAndUpdate(application_id)
   return res.send(deletedComment) 
 } 
 
