@@ -1,7 +1,10 @@
-const functions = require('./fn');
+const uuid = require('uuid')
+
+const functions = require('./fn')
 const Comment = require('./models/comment') 
 var Company = require('./models/company') 
 
+/*
 test('check the company comments',async()=>{
 expect.assertions(1)
 const response = await functions.getComment()
@@ -53,5 +56,53 @@ test('delete comment',async()=>{
 
      expect(comment).toBeFalsy()
 })
+*/
 
+test('create user', async() => {
+  expect.assertions(1)
+  const response = await functions.createUser('investor')
+  expect(response.data.data._id).not.toBeFalsy()
+})
 
+test('get user', async() => {
+  expect.assertions(1)
+  const response = await functions.createUser('investor')
+  const user = await functions.getUser(response.data.data._id)
+  expect(response.data.data._id).toEqual(user.data._id)
+})
+
+test('get all users', async() => {
+  expect.assertions(1)
+  const response = await functions.createUser('investor')
+  const users = await functions.getAllUsers()
+  expect(users.data.data).toContainEqual({ _id: response.data.data._id })
+})
+
+test('update user', async() => {
+  expect.assertions(1)
+  const response = await functions.createUser('investor')
+  const newName = uuid.v4().substring(0, 30)
+  await functions.updateUser(response.data.data._id, {
+    firstName: newName,
+    lastName: response.data.data.lastName,
+    password: response.data.data.password,
+    gender: response.data.data.gender,
+  })
+  const user = await functions.getUser(response.data.data._id)
+  expect(user.data.firstName).toEqual(newName)
+})
+
+test('delete user', async() => {
+  expect.assertions(1)
+  const response = await functions.createUser('investor')
+  await functions.deleteUser(response.data.data._id)
+  const users = await functions.getAllUsers()
+  expect(users.data.data).not.toContainEqual({ _id: response.data.data._id })
+})
+
+test('create company', async() => {
+  expect.assertions(1)
+  const user = await functions.createUser('investor')
+  const company = await functions.createCompany(user.data.data._id)
+  expect(company.data._id).not.toBeFalsy()
+})
