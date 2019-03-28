@@ -148,7 +148,39 @@ exports.createComment = (req, res) => {
         { $push: { comments: comment._id } }
       )
         .then(() => {
-          return res.json({ comment: comment }) 
+          notification = {} 
+          notification.owner_id = user_id 
+          notification.target_type = 'company' 
+          notification.target_id = application_id 
+          notification.notif_text = 'You have a pending comment on your application' 
+        
+          Notification.create(notification)
+            .then(notification => {
+              User.findOneAndUpdate(
+                { _id: user_id },
+                { $push: { notifications: notification._id } }
+              )
+                .then(() => {
+                  return res.json({ comment: comment })
+                })
+                .catch(err => {
+                  console.log(
+                    'Internal server error while adding comment to company list: \n',
+                    err,
+                    '\n\n'
+                  ) 
+                  return res.sendStatus(500) 
+                }) 
+            })
+            .catch(err => {
+              console.log(
+                'Internal server error while creating comment: \n',
+                err,
+                '\n\n'
+              ) 
+              return res.sendStatus(500) 
+            })
+          
         })
         .catch(err => {
           console.log(
@@ -167,41 +199,7 @@ exports.createComment = (req, res) => {
       ) 
       return res.sendStatus(500) 
     })
-  notification = {} 
-  notification.owner_id = user_id 
-  notification.target_type = 'company' 
-  notification.target_id = application_id 
-  notification.notif_text = 'You have a pending comment on your application' 
-
-  Notification.create(notification)
-    .then(notification => {
-      User.findOneAndUpdate(
-        { _id: user_id },
-        { $push: { notifications: notification._id } }
-      )
-        .then(() => {
-          return res.json({
-            msg: 'User notified',
-            data: notification
-          }) 
-        })
-        .catch(err => {
-          console.log(
-            'Internal server error while adding comment to company list: \n',
-            err,
-            '\n\n'
-          ) 
-          return res.sendStatus(500) 
-        }) 
-    })
-    .catch(err => {
-      console.log(
-        'Internal server error while creating commnet: \n',
-        err,
-        '\n\n'
-      ) 
-      return res.sendStatus(500) 
-    })
+ 
 } 
 
 exports.updateComment = async (req, res) => {
