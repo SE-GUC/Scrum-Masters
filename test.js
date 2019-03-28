@@ -20,9 +20,7 @@ test('adding comment',async()=>{
 const user1 = await functions.createUser('investor')
 
 const company = await functions.createCompany(user1.data.data._id)
-console.log(company.data._id)
 const response= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
-console.log(response.data.comment._id)
 const comment = await functions.getCommenttest(response.data.comment._id)
 
 expect(comment).not.toBeNull()
