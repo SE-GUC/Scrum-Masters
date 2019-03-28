@@ -9,7 +9,9 @@ router.post('/:id', userController.updateComment)// new --update a comment.
 
 router.delete('/:app_id/:comm_id', userController.deleteComment)// new --delete comment.
 
+router.get('/viewSpecific/:id', userController.viewSpecific )
 router.get('/:id', userController.viewComments)
+
 
 module.exports = router
 
