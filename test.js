@@ -20,9 +20,9 @@ test('adding comment',async()=>{
 const user1 = await functions.createUser('investor')
 
 const company = await functions.createCompany(user1.data.data._id)
-console.log(company.data._id)
+
 const response= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
-console.log(response.data.comment._id)
+
 const comment = await functions.getCommenttest(response.data.comment._id)
 
 expect(comment).not.toBeNull()
@@ -51,7 +51,7 @@ expect.assertions(1)
 const user1 = await functions.createUser('investor')
 const company = await functions.createCompany(user1.data.data._id)
 const response = await functions.calculateFees(company.data._id)
-console.log(response.data.targetcompany.fees)
+
 const application = await functions.getCompany(company.data._id)
 expect(application.data.fees).toBe(response.data.targetcompany.fees)
 
@@ -118,3 +118,14 @@ test('create company', async() => {
   expect(company.data._id).not.toBeFalsy()
 })
 
+test ('assign reviewer',async()=>{
+  expect.assertions(1)
+  const user = await functions.createUser('investor')
+  const company = await functions.createCompany(user.data.data._id)
+  const reviewer = await functions.createUser('reviewer')
+  const companyafterupdate = await functions.assignreviewer(company.data._id,reviewer.data.data._id)
+
+  expect(companyafterupdate.data.review_reviewer).toBe(reviewer.data.data._id)
+
+
+})
