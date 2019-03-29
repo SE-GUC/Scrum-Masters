@@ -9,7 +9,7 @@ const NotificationSchema = new Schema({
   },
   target_type: {
     type: String,
-    enum: ['company'],
+    enum: ['company', 'user'],
     required: true
   },
   target_id: {
