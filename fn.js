@@ -3,7 +3,37 @@ const uuid = require('uuid')
 
 axios.defaults.adapter = require('axios/lib/adapters/http')
 const functions = {
+  createRequest: async(inv_id) => {
+    const request = await axios.post('http://localhost:3000/api/company-request', {
+      "investor_id": inv_id
+    })
+    return request
+  },
 
+  getAllRequests: async() => {
+    const requests = await axios.get('http://localhost:3000/api/company-request')
+    return requests
+  },
+
+  getRequest: async(id) => {
+    const request = await axios.get('http://localhost:3000/api/company-request/' + id)
+    return request
+  },
+
+  updateUser: async(id, params) => {
+    const user = await axios.put('http://localhost:3000/api/user/' + id, params)
+    return user
+  },
+  
+  assignLawyerRequest: async(requestId,params)=>{
+    const request = await axios.post('http://localhost:3000/api/company-request/assign/'+ requestId,params)
+    return request
+  },
+
+  deleteRequest: async(id) => {
+    const request = await axios.delete('http://localhost:3000/api/company-request/' + id)
+    return request
+  },
 
   getComment: async(app_id)=>{
       const comment = await axios.get('http://localhost:3000/api/comment/'+app_id)
@@ -108,5 +138,41 @@ const functions = {
     })
     return company
   },
+  
+  createNotification: async(user) => {
+    const notification = await axios.post('http://localhost:3000/api/notification', {
+      "owner_id": user,
+      "target_type": "user",
+      "target_id": user,
+      "notif_text": "Test Notification"
+    })
+    return notification
+  },
+  
+  getUserNotifications: async(user) => {
+    const notifications = await axios.get('http://localhost:3000/api/notification/' + user)
+    return notifications
+  },
+  
+  setNotificationViewed: async(id) => {
+    const notification = await axios.delete('http://localhost:3000/api/notification/' + id)
+    return notification
+  },
+  
+  assignReviewer: async(company_id, reviewer_id) => {
+    const company = await axios.post('http://localhost:3000/api/user/assignreviewer/' + company_id + '/' + reviewer_id)
+    return company
+  },
+  
+  assignLawyer: async(company_id, lawyer_id) => {
+    const company = await axios.post('http://localhost:3000/api/user/assignLawyer/' + company_id + '/' + lawyer_id)
+    return company
+  },
+  
+  getAssignedLawyer: async(company_id) => {
+    const lawyer = await axios.get('http://localhost:3000/api/user/getlawyer/' + company_id)
+    return lawyer
+  },
 }
+
 module.exports = functions
