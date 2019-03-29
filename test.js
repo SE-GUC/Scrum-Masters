@@ -20,7 +20,13 @@ test('adding comment',async()=>{
 const user1 = await functions.createUser('investor')
 
 const company = await functions.createCompany(user1.data.data._id)
+<<<<<<< HEAD
 const response= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
+=======
+console.log(company.data._id)
+const response= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
+console.log(response.data.comment._id)
+>>>>>>> 33555d828ad0d8002000c968f3a3983dc59dda71
 const comment = await functions.getCommenttest(response.data.comment._id)
 
 expect(comment).not.toBeNull()
@@ -180,3 +186,4 @@ test('assign lawyer', async() => {
   
   //TODO: finish when company request helpers are created
 })*/
+
