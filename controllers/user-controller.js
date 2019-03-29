@@ -302,7 +302,6 @@ exports.setNotificationViewed = async (req, res) => {
 
 exports.notificationTestCreate = async (req, res) => {
   const notif = await exports.createNotificationForUser(req.body) 
-  console.log(notif) 
   if (!notif) res.sendStatus(500) 
   return res.json(notif) 
 } 
@@ -386,10 +385,7 @@ exports.assignLaywer = async (req, res) => {
         { $push: { notifications: notification._id } }
       )
         .then(() => {
-          return res.json({
-            msg: 'Lawyer Assigned Successfully And A Notification Was Sent',
-            data: notification
-          }) 
+          return res.json(updatedApplication) 
         })
         .catch(err => {
           console.log(
@@ -411,7 +407,7 @@ exports.assignLaywer = async (req, res) => {
 }
 
 exports.getassignedlawyer = async(req,res) => {
-  const companyrequest=await CompanyRequest.findOne({_id:req.params.companyid,investor_id:req.params.userid})
+  const companyrequest=await CompanyRequest.findOne({_id:req.params.companyid})
   if(!companyrequest)
      return res.status(404).send({ error: 'No such Request'})
   if(!companyrequest.assigned)
