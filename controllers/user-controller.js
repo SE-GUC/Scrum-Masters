@@ -148,7 +148,39 @@ exports.createComment = (req, res) => {
         { $push: { comments: comment._id } }
       )
         .then(() => {
-          return res.json({ comment: comment }) 
+          notification = {} 
+          notification.owner_id = user_id 
+          notification.target_type = 'company' 
+          notification.target_id = application_id 
+          notification.notif_text = 'You have a pending comment on your application' 
+        
+          Notification.create(notification)
+            .then(notification => {
+              User.findOneAndUpdate(
+                { _id: user_id },
+                { $push: { notifications: notification._id } }
+              )
+                .then(() => {
+                  return res.json({ comment: comment })
+                })
+                .catch(err => {
+                  console.log(
+                    'Internal server error while adding comment to company list: \n',
+                    err,
+                    '\n\n'
+                  ) 
+                  return res.sendStatus(500) 
+                }) 
+            })
+            .catch(err => {
+              console.log(
+                'Internal server error while creating comment: \n',
+                err,
+                '\n\n'
+              ) 
+              return res.sendStatus(500) 
+            })
+          
         })
         .catch(err => {
           console.log(
@@ -167,49 +199,15 @@ exports.createComment = (req, res) => {
       ) 
       return res.sendStatus(500) 
     })
-  notification = {} 
-  notification.owner_id = user_id 
-  notification.target_type = 'company' 
-  notification.target_id = application_id 
-  notification.notif_text = 'You have a pending comment on your application' 
-
-  Notification.create(notification)
-    .then(notification => {
-      User.findOneAndUpdate(
-        { _id: user_id },
-        { $push: { notifications: notification._id } }
-      )
-        .then(() => {
-          return res.json({
-            msg: 'User notified',
-            data: notification
-          }) 
-        })
-        .catch(err => {
-          console.log(
-            'Internal server error while adding comment to company list: \n',
-            err,
-            '\n\n'
-          ) 
-          return res.sendStatus(500) 
-        }) 
-    })
-    .catch(err => {
-      console.log(
-        'Internal server error while creating commnet: \n',
-        err,
-        '\n\n'
-      ) 
-      return res.sendStatus(500) 
-    })
+ 
 } 
 
 exports.updateComment = async (req, res) => {
   const comment_id = req.params.id 
   const comment_text = req.body.comment_text 
   if (!comment_text) return res.send({ error: 'comment text is required' }) 
-  if (typeof comment_text !== 'string') {
-    return res.status(400).send({ err: 'Invalid value for comment text' }) 
+ if (typeof comment_text !== 'string') {
+   return res.status(400).send({ err: 'Invalid value for comment text' }) 
   }
   const comment = await Comment.findByIdAndUpdate(
     comment_id,
@@ -217,10 +215,16 @@ exports.updateComment = async (req, res) => {
     { new: true }
   ) 
 
-  if (!comment) return res.status(400).send({ error: 'comment not found' }) 
+  if (!comment) return res.status(404).send({ error: 'comment not found' }) 
 
   return res.status(200).send(comment) 
 } 
+exports.viewSpecific = async(req,res)=>{
+const comment_id = req.params.id
+const comment  = await  Comment.findById(comment_id)
+if(!comment) return res.status(404).send({ error: 'comment not found' }) 
+return res.send(comment) 
+}
 
 exports.deleteComment = async (req, res) => {
   const application_id = req.params.app_id 
@@ -232,7 +236,9 @@ exports.deleteComment = async (req, res) => {
   const targetapplication = await Company.findById(application_id) 
   if (!targetapplication)
     return res.status(404).send({ error: 'application not found ' }) 
-  var deletedComment = targetapplication.comments.remove(comment_id) 
+    const index = targetapplication.comments.indexOf(comment_id)
+  var deletedComment = targetapplication.comments.splice(index, 1)
+  await Company.findByIdAndUpdate(application_id)
   return res.send(deletedComment) 
 } 
 
