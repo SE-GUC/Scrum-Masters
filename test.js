@@ -166,7 +166,7 @@ test('assign lawyer', async() => {
   expect(notifications.data).toContainEqual(expect.objectContaining({ target_type: "company", target_id: company.data._id }))
 })
 
-test('get assigned lawyer', async() => {
+/*test('get assigned lawyer', async() => {
   expect.assertions(1)
   
   const investor = await functions.createUser('investor')
@@ -180,7 +180,7 @@ test('get assigned lawyer', async() => {
   
   //TODO: finish when company request helpers are created
 })
-
+*/
 test("getAllRequests",async()=>{
   expect.assertions(1)
   const userRes = await functions.createUser('investor')
