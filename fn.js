@@ -133,33 +133,33 @@ const functions = {
     })
     return company
   },
-  
-  createNotification: async(user) => {
+
+  createNotification: async (user) => {
     const notification = await axios.post('http://localhost:3000/api/notification', {
-      "owner_id": user,
-      "target_type": "user",
-      "target_id": user,
-      "notif_text": "Test Notification"
+      'owner_id': user,
+      'target_type': 'user',
+      'target_id': user,
+      'notif_text': 'Test Notification'
     })
     return notification
   },
-  
-  getUserNotifications: async(user) => {
+
+  getUserNotifications: async (user) => {
     const notifications = await axios.get('http://localhost:3000/api/notification/' + user)
     return notifications
   },
-  
-  setNotificationViewed: async(id) => {
+
+  setNotificationViewed: async (id) => {
     const notification = await axios.delete('http://localhost:3000/api/notification/' + id)
     return notification
   },
-  
-  assignReviewer: async(company_id, reviewer_id) => {
+
+  assignReviewer: async (company_id, reviewer_id) => {
     const company = await axios.post('http://localhost:3000/api/user/assignreviewer/' + company_id + '/' + reviewer_id)
     return company
   },
-  
-  assignLawyer: async(company_id, lawyer_id) => {
+
+  assignLawyer: async (company_id, lawyer_id) => {
     const company = await axios.post('http://localhost:3000/api/user/assignLawyer/' + company_id + '/' + lawyer_id)
     return company
   },
@@ -170,14 +170,14 @@ const functions = {
   },
 
   unassignLawyer: async (company_id) => {
-    const company = await axios.put('http://localhost:3000/api/user/unassignLawyer/'+company_id)
+    const company = await axios.put('http://localhost:3000/api/user/unassignLawyer/' + company_id)
     return company
   },
-  
-  getAssignedLawyer: async(company_id) => {
+
+  getAssignedLawyer: async (company_id) => {
     const lawyer = await axios.get('http://localhost:3000/api/user/getlawyer/' + company_id)
     return lawyer
-  },
+  }
 }
 
 module.exports = functions

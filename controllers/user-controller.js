@@ -289,10 +289,10 @@ exports.setNotificationViewed = async (req, res) => {
 }
 
 exports.notificationTestCreate = async (req, res) => {
-  const notif = await exports.createNotificationForUser(req.body) 
-  if (!notif) res.sendStatus(500) 
-  return res.json(notif) 
-} 
+  const notif = await exports.createNotificationForUser(req.body)
+  if (!notif) res.sendStatus(500)
+  return res.json(notif)
+}
 
 exports.viewApplicationFees = async (req, res) => {
   const targetId = req.params.id

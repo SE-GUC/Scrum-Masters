@@ -157,14 +157,14 @@ var Company = require('./models/company')
 
 // test('assign lawyer', async () => {
 //   expect.assertions(2)
-  
+
 //   const investor = await functions.createUser('investor')
 //   const lawyer = await functions.createUser('lawyer')
 //   const company = await functions.createCompany(investor.data.data._id)
 //   await functions.assignLawyer(company.data._id, lawyer.data.data._id)
 //   const newCompany = await functions.getCompany(company.data._id)
 //   expect(newCompany.data.review_lawyer).toEqual(lawyer.data.data._id)
-  
+
 //   const notifications = await functions.getUserNotifications(lawyer.data.data._id)
 //   expect(notifications.data).toContainEqual(expect.objectContaining({ target_type: "company", target_id: company.data._id }))
 // })
@@ -174,27 +174,26 @@ test('unassign lawyer', async () => {
 
   const investor = await functions.createUser('investor')
   const company = await functions.createCompany(investor.data.data._id)
-console.log(company.data._id)
+  console.log(company.data._id)
   await functions.unassignLawyer(company.data._id)
-  
+
   const newCompany = await functions.getCompany(company.data._id)
-  expect (newCompany.data.review_lawyer).toBeFalsy()
+  expect(newCompany.data.review_lawyer).toBeFalsy()
 })
 
-/*test('get assigned lawyer', async() => {
+/* test('get assigned lawyer', async() => {
   expect.assertions(1)
-  
+
   const investor = await functions.createUser('investor')
   const lawyer = await functions.createUser('lawyer')
   //const company = await functions.createCompany(investor.data.data._id)
   //await functions.assignLawyer(company.data._id, lawyer.data.data._id)
   //change to company request ^^
-  
+
   const assignedLawyer = await functions.getAssignedLawyer(company.data._id)
-  
-  
+
   //TODO: finish when company request helpers are created
-})*/
+}) */
 
 // test("getAllRequests",async()=>{
 //   expect.assertions(1)
