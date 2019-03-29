@@ -20,13 +20,7 @@ test('adding comment',async()=>{
 const user1 = await functions.createUser('investor')
 
 const company = await functions.createCompany(user1.data.data._id)
-<<<<<<< HEAD
 const response= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
-=======
-console.log(company.data._id)
-const response= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
-console.log(response.data.comment._id)
->>>>>>> 33555d828ad0d8002000c968f3a3983dc59dda71
 const comment = await functions.getCommenttest(response.data.comment._id)
 
 expect(comment).not.toBeNull()
@@ -187,3 +181,51 @@ test('assign lawyer', async() => {
   //TODO: finish when company request helpers are created
 })*/
 
+test("getAllRequests",async()=>{
+  expect.assertions(1)
+  const userRes = await functions.createUser('investor')
+  const requestRes = await functions.createRequest(userRes.data.data._id) 
+  const requestsRes = await functions.getAllRequests()
+  expect(requestsRes.data).toContainEqual(requestRes.data.data)
+  
+})
+
+test("getUserRequest",async()=>{
+  expect.assertions(1)
+  const userRes = await functions.createUser('investor')
+  const requestRes = await functions.createRequest(userRes.data.data._id)
+  const request = await functions.getRequest(userRes.data.data._id)
+  expect(request.data[0]._id).toEqual(requestRes.data.data._id)
+})
+
+test('createRequest', async() => {
+  expect.assertions(1)
+  const userRes = await functions.createUser('investor')
+  const requestRes = await functions.createRequest(userRes.data.data._id)
+  expect(requestRes.data.data._id).not.toBeFalsy()
+})
+
+
+test('assignLawyerRequest', async() => {
+  expect.assertions(1)
+  const invRes = await functions.createUser('investor')
+  const requestRes = await functions.createRequest(invRes.data.data._id)
+  const lawyerRes = await functions.createUser('lawyer')
+  await functions.assignLawyerRequest(requestRes.data.data._id,{
+    assigned : true,
+    lawyer_id : lawyerRes.data.data._id
+  })
+  const request = await functions.getRequest(invRes.data.data._id)
+  expect(request.data[0].lawyer_id).toEqual(lawyerRes.data.data._id)
+
+})
+
+
+test('deleteRequest', async() => {
+  expect.assertions(1)
+  const userRes = await functions.createUser('investor')
+  const requestRes = await functions.createRequest(userRes.data.data._id)
+  await functions.deleteRequest(requestRes.data.data._id)
+  const requests = await functions.getAllRequests()
+  expect(requests.data).not.toContainEqual({ _id: requestRes.data.data._id })
+})

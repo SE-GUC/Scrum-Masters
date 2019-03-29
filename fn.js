@@ -3,7 +3,37 @@ const uuid = require('uuid')
 
 axios.defaults.adapter = require('axios/lib/adapters/http')
 const functions = {
+  createRequest: async(inv_id) => {
+    const request = await axios.post('http://localhost:3000/api/company-request', {
+      "investor_id": inv_id
+    })
+    return request
+  },
 
+  getAllRequests: async() => {
+    const requests = await axios.get('http://localhost:3000/api/company-request')
+    return requests
+  },
+
+  getRequest: async(id) => {
+    const request = await axios.get('http://localhost:3000/api/company-request/' + id)
+    return request
+  },
+
+  updateUser: async(id, params) => {
+    const user = await axios.put('http://localhost:3000/api/user/' + id, params)
+    return user
+  },
+  
+  assignLawyerRequest: async(requestId,params)=>{
+    const request = await axios.post('http://localhost:3000/api/company-request/assign/'+ requestId,params)
+    return request
+  },
+
+  deleteRequest: async(id) => {
+    const request = await axios.delete('http://localhost:3000/api/company-request/' + id)
+    return request
+  },
 
   getComment: async(app_id)=>{
       const comment = await axios.get('http://localhost:3000/api/comment/'+app_id)
