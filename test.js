@@ -43,15 +43,15 @@ expect(comment.data.comment_text).toBe('hey user')
 
  })
 
-test('add Fees',async()=>{
+test('calculate and add Fees',async()=>{
 
 expect.assertions(1)
 const user1 = await functions.createUser('investor')
 const company = await functions.createCompany(user1.data.data._id)
-const response = await functions.addFees(company.data._id,13456)
-
+const response = await functions.calculateFees(company.data._id)
+console.log(response.data.targetcompany.fees)
 const application = await functions.getCompany(company.data._id)
-expect(application.data.fees).toBe(13456)
+expect(application.data.fees).toBe(response.data.targetcompany.fees)
 
 })
 
