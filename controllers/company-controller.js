@@ -3,7 +3,58 @@ const Company = require('../models/company')
 const Notification = require('../models/Notification')
 const userController = require('../controllers/user-controller')
 
-function validateCompany (company) {
+
+function validateupdateCompany (company) {
+  const schema = {
+    owner: Joi.string(),
+    company_type: Joi.string(),
+    organizational_rule: Joi.string(),
+    legal_form: Joi.string(),
+    company_name_arabic: Joi.string(),
+    company_name_english: Joi.string(),
+    hq_governorate: Joi.string(),
+    hq_city: Joi.string(),
+    hq_address: Joi.string(),
+    hq_telephone: Joi.string(),
+    hq_fax: Joi.string(),
+    capital_currency: Joi.string(),
+    capital: Joi.number()
+      .min(50000),
+    investor_name: Joi.string(),
+    nationality: Joi.string(),
+    investor_id_type: Joi.string(),
+    investor_id_number: Joi.string(),
+    investor_gender: Joi.string(),
+    investor_birth_date: Joi.date(),
+    investor_address: Joi.string(),
+    investor_telephone: Joi.string(),
+    investor_fax: Joi.string(),
+    investor_email: Joi.string()
+  }
+  if (company.company_type === 'ssc') {
+    Object.assign(schema, {
+      investor_type: Joi.string(),
+      board_members: Joi.array()
+        .items(
+          Joi.object({
+            name: Joi.string(),
+            type: Joi.string(),
+            nationality: Joi.string(),
+            gender: Joi.string(),
+            id_type: Joi.string(),
+            id_number: Joi.number(),
+            birth_date: Joi.date(),
+            address: Joi.string(),
+            position: Joi.string()
+          })
+        )
+    })
+  }
+
+  return Joi.validate(company, schema)
+}
+
+function validatecreateCompany (company) {
   const schema = {
     owner: Joi.string().required(),
     company_type: Joi.string().required(),
@@ -54,7 +105,6 @@ function validateCompany (company) {
 
   return Joi.validate(company, schema)
 }
-
 exports.listAllCompanies = (req, res) => {
   Company.find({}, { _id: true })
     .then(company => {
@@ -79,7 +129,7 @@ exports.getCompany = (req, res) => {
 }
 
 exports.createCompany = (req, res) => {
-  const { error } = validateCompany(req.body)
+  const { error } = validatecreateCompany(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
   Company.findOne(
@@ -119,7 +169,7 @@ exports.createCompany = (req, res) => {
 }
 
 exports.updateCompany = (req, res) => {
-  const { error } = validateCompany(req.body)
+  const { error } = validateupdateCompany(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
   Company.findByIdAndUpdate(req.params.id, req.body, { new: true })

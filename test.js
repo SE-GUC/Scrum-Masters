@@ -179,8 +179,8 @@ test('assign lawyer', async() => {
   
   
   //TODO: finish when company request helpers are created
-})*/
-
+})
+*/
 test("getAllRequests",async()=>{
   expect.assertions(1)
   const userRes = await functions.createUser('investor')
@@ -229,3 +229,52 @@ test('deleteRequest', async() => {
   const requests = await functions.getAllRequests()
   expect(requests.data).not.toContainEqual({ _id: requestRes.data.data._id })
 })
+
+
+//Company tests 
+
+
+test('create company', async() => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const company = await functions.createCompany(investor.data.data._id)
+  expect(company.data._id).toBeTruthy()
+})
+
+test('get company', async() => {
+    expect.assertions(1)
+    const investor=await functions.createUser('investor')
+    const company=await functions.createCompany(investor.data.data._id)
+    const response=await functions.getCompany(company.data._id)
+    expect(company.data).toEqual(response.data)
+  })
+
+test('delete company',async()=>
+{ 
+    expect.assertions(1)
+    const investor=await functions.createUser('investor')
+    const company=await functions.createCompany(investor.data.data._id)
+    await functions.deletecompany(company.data._id)
+    const all=await functions.getallcompaines()
+    expect(all.data).not.toContainEqual(company.data._id)
+})
+
+test('update company',async()=>
+{ 
+    expect.assertions(1)
+    const investor=await functions.createUser('investor')
+    const company=await functions.createCompany(investor.data.data._id)
+    const data={
+      "company_name_arabic":"updated",
+    }
+    const updated=await functions.updatecompany(company.data._id,data)
+    expect(updated.data.company_name_arabic).toBe('updated')
+}),
+test('list all compaines',async()=>
+{ 
+    expect.assertions(1)
+    const investor=await functions.createUser('investor')
+    const company=await functions.createCompany(investor.data.data._id)
+    const all =await functions.getallcompaines()
+    expect(all.data).toContainEqual({ _id: company.data._id })
+  })
