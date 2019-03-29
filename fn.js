@@ -35,25 +35,28 @@ const functions = {
     return request
   },
 
-  getComment: async()=>{
-      const comment = await axios.get('http://localhost:3000/api/comment/5c93936e94ddee69b0dd5684')
+  getComment: async(app_id)=>{
+      const comment = await axios.get('http://localhost:3000/api/comment/'+app_id)
       return comment 
   },
-  createComment: async()=>{
-      const comment =await axios.post('http://localhost:3000/api/comment',{comment_text:"anaaa", application_id:"5c93936e94ddee69b0dd5684", user_id:"5c93960a2e72ce25d8cf6a56" })
+  createComment: async(comment_text,app_id,user_id)=>{
+      const comment =await axios.post('http://localhost:3000/api/comment',
+      {comment_text:comment_text,
+       application_id:app_id,
+       user_id:user_id })
       return comment
   },
-  updateComment:async()=>{
-      const comment = await axios.post('http://localhost:3000/api/comment/5c9d03bc6ae0230e20fbd5c1',{"comment_text":"heyupdated"})
+  updateComment:async(comment_id,comment_text)=>{
+      const comment = await axios.post('http://localhost:3000/api/comment/'+comment_id,{"comment_text":comment_text})
       return comment
     
   },
-  deleteComment:async()=>{
-      const comment=await axios.delete('http://localhost:3000/api/comment/5c93936e94ddee69b0dd5684/5c9d074ec1bf5011acdd568e')
+  deleteComment:async(app_id,comment_id)=>{
+      const comment=await axios.delete('http://localhost:3000/api/comment/'+app_id+'/'+comment_id)
       return comment
   },
-  addFees:async()=>{
-       const company = await axios.put('http://localhost:3000/api/company/addfees/5c93936e94ddee69b0dd5684',{"feesvalue": 123456789})
+  calculateFees:async(app_id)=>{
+       const company = await axios.put('http://localhost:3000/api/company/calculatefees/'+app_id)
        return company
   },
   getCompany:async(id)=>{

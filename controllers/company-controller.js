@@ -153,21 +153,21 @@ exports.deleteCompany = (req, res) => {
     })
 }
 
-exports.addFees = async (req, res) => {
-  const targetId = req.params.id
-  const feesvalue = req.body.feesvalue
-  if (!feesvalue) return res.status(400).send({ error: 'please enter the fees' })
+// exports.addFees = async (req, res) => {
+//   const targetId = req.params.id
+//   const feesvalue = req.body.feesvalue
+//   if (!feesvalue) return res.status(400).send({ error: 'please enter the fees' })
 
-  if (typeof feesvalue !== 'number') { return res.status(400).send({ err: 'Invalid value for fees value' }) }
+//   if (typeof feesvalue !== 'number') { return res.status(400).send({ err: 'Invalid value for fees value' }) }
 
-  var targetApplication = await Company.findById(targetId)
-  if (!targetApplication) return res.status(404).send('application not found')
-  targetApplication.fees = feesvalue
+//   var targetApplication = await Company.findById(targetId)
+//   if (!targetApplication) return res.status(404).send('application not found')
+//   targetApplication.fees = feesvalue
 
-  const targetcompany = await Company.findByIdAndUpdate(targetId, targetApplication, { new: true })
+//   const targetcompany = await Company.findByIdAndUpdate(targetId, targetApplication, { new: true })
 
-  return res.send(targetcompany)
-}
+//   return res.send(targetcompany)
+// }
 
 exports.listUnassignedApplications =async(req,res)=>{
   try {
@@ -221,4 +221,18 @@ exports.establishCompany = async(req, res) => {
       console.log(err)
       return res.sendStatus(500)
     })
+}
+
+exports.calculateCompanyFees = async(req,res)=>{
+
+const company_id = req.params.id
+const company = await Company.findById(company_id)
+if(! company ) return res.status(404).send('application not found')
+const companyCapital= company.capital
+const fees = ((1/1000)*(companyCapital))+((1/400)*companyCapital)+56
+company.fees=fees
+const targetcompany = await Company.findByIdAndUpdate(company_id,company, { new: true })
+return res.json({targetcompany})
+
+
 }

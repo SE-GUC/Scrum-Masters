@@ -4,21 +4,24 @@ const functions = require('./fn')
 const Comment = require('./models/comment') 
 var Company = require('./models/company') 
 
-/*
+
 test('check the company comments',async()=>{
 expect.assertions(1)
-const response = await functions.getComment()
-//console.log(response.data[0].application_id);
-
-const index = response.data[0].application_id
-const company= await functions.getCompany(index)
-expect(company.data.comments).not.toBeNull()
+const user1 = await functions.createUser('investor')
+const company = await functions.createCompany(user1.data.data._id)
+const commentcreated= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
+const newcompany= await functions.getCompany(company.data._id) 
+const array = newcompany.data.comments 
+expect(array).toContainEqual(commentcreated.data.comment._id)
 })
 
 test('adding comment',async()=>{
     expect.assertions(1)  
+const user1 = await functions.createUser('investor')
 
-const response= await functions.createComment()
+const company = await functions.createCompany(user1.data.data._id)
+console.log(company.data._id)
+const response= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
 console.log(response.data.comment._id)
 const comment = await functions.getCommenttest(response.data.comment._id)
 
@@ -28,36 +31,42 @@ expect(comment).not.toBeNull()
 test('update comment', async()=>{
 
 expect.assertions(1)  
+const user1 = await functions.createUser('investor')
+const company = await functions.createCompany(user1.data.data._id)
 
-const response= await functions.updateComment()
-console.log(response)
+const commentcreated= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
+
+const response= await functions.updateComment(commentcreated.data.comment._id,'hey user')
+
 const comment = await functions.getCommenttest(response.data._id)
 
-expect(comment.data.comment_text).toBe("heyupdated")
+expect(comment.data.comment_text).toBe('hey user')
 
 
-})
+ })
 
-test('add Fees',async()=>{
+test('calculate and add Fees',async()=>{
 
 expect.assertions(1)
-const response = await functions.addFees()
-const application = await functions.getCompany(response.data._id)
-expect(application.data.fees).toBe(123456789)
+const user1 = await functions.createUser('investor')
+const company = await functions.createCompany(user1.data.data._id)
+const response = await functions.calculateFees(company.data._id)
+console.log(response.data.targetcompany.fees)
+const application = await functions.getCompany(company.data._id)
+expect(application.data.fees).toBe(response.data.targetcompany.fees)
 
 })
 
 test('delete comment',async()=>{    
     expect.assertions(1) 
-    
-   const response= await functions.deleteComment()
-   console.log(response.data)
+const user1 = await functions.createUser('investor')
+const company = await functions.createCompany(user1.data.data._id)
+const commentcreated= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
+   const response= await functions.deleteComment(company.data._id,commentcreated.data.comment._id)
     const comment = await functions.getCommenttest(response.data[0])
 
      expect(comment).toBeFalsy()
 })
-
-
 
 
 test('create user', async() => {
@@ -108,7 +117,7 @@ test('create company', async() => {
   const company = await functions.createCompany(user.data.data._id)
   expect(company.data._id).not.toBeFalsy()
 })
-*/
+
 test("getAllRequests",async()=>{
   expect.assertions(1)
   const userRes = await functions.createUser('investor')
@@ -157,5 +166,4 @@ test('deleteRequest', async() => {
   const requests = await functions.getAllRequests()
   expect(requests.data).not.toContainEqual({ _id: requestRes.data.data._id })
 })
-
 
