@@ -25,8 +25,8 @@ const functions = {
       const comment=await axios.delete('http://localhost:3000/api/comment/'+app_id+'/'+comment_id)
       return comment
   },
-  addFees:async(app_id,feesvalue)=>{
-       const company = await axios.put('http://localhost:3000/api/company/addfees/'+app_id,{"feesvalue":feesvalue})
+  calculateFees:async(app_id)=>{
+       const company = await axios.put('http://localhost:3000/api/company/calculatefees/'+app_id)
        return company
   },
   getCompany:async(id)=>{
