@@ -417,3 +417,54 @@ exports.getassignedlawyer = async(req,res) => {
      return res.status(404).send({ error: 'No such lawyer'})
   return res.json(laywer) 
 }
+
+exports.unassignReviewer = async (req, res) => {
+  try {
+    const targetId = req.params.appId
+
+    var targetApplication = await Company.findById(targetId)
+
+    if (!targetApplication) {
+      return res.status(404).send({ error: 'Application not found' })
+    }
+
+    if (targetApplication.reviewed_reviewer === null) {
+      return res.send({ error: 'This application is already unreviewed' })
+    }
+
+    const targetApplicationup = await Company.findByIdAndUpdate(
+      targetId,
+      { review_reviewer: undefined, reviewed_statusreviewer: undefined },
+      { new: true }
+    )
+
+    return res.send(targetApplicationup)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+exports.unassignLaywer = async (req, res) => {
+  try {
+    const appId = req.params.appId
+
+    var application = await Company.findById(appId)
+    if (!application) {
+      return res.status(404).send({ error: 'Application not found' })
+    }
+
+    if (application.review_lawyer === null) {
+      return res.status(400).send({
+        error: 'The lawyer is already unassigned to this application'
+      })
+    }
+    const updatedApplication = await Company.findByIdAndUpdate(
+      appId,
+      { review_lawyer: undefined, reviewed_statuslawyer: undefined },
+      { new: true }
+    )
+    return res.json(updatedApplication)
+  } catch (error) {
+    console.log(error)
+  }
+}

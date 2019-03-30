@@ -11,8 +11,7 @@ test('update Electronic Journal',async()=>{
   const company = await functions.createCompany(user.data.data._id)
   const EJ= await functions.createElectronicJournal('electronicJournalcompany',company.data.company_name_english)
   const response=  functions.updateElectronicJournal(EJ.data.data._id,"Egegege",company.data.company_name_english)
-  const ej= await functions.getElectronicJournal(response.data.data._id)
-  expect(ej.data.companyDescription).toBe('Egegege')
+  expect(response.data.companyDescription).toBe('Egegege')
 })
 test('delete Electronic Journal',async()=>{    
   expect.assertions(1)
@@ -393,8 +392,22 @@ test('list all compaines',async()=>
     const updated=await functions.updatecompany(company.data._id,data)
     const all=await functions.listAllUnreviewedCompanies()
     expect(all.data).not.toContainEqual(expect.objectContaining({  _id: company.data._id  }))
-
-
 })
 
+test('unassign reviewer', async () => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const company = await functions.createCompany(investor.data.data._id)
+  await functions.unassignReviewer(company.data._id)
+  const newCompany = await functions.getCompany(company.data._id)
+  expect (newCompany.data.review_reviewer).toBeFalsy()
+})
 
+test('unassign lawyer', async () => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const company = await functions.createCompany(investor.data.data._id)
+  await functions.unassignLawyer(company.data._id)
+  const newCompany = await functions.getCompany(company.data._id)
+  expect(newCompany.data.review_lawyer).toBeFalsy()
+})

@@ -240,6 +240,15 @@ const functions = {
     const company=await axios.post(`http://localhost:3000/api/company/establish/${id}`)
     return company
   },
+  unassignReviewer: async (company_id) => {
+    const company = await axios.put('http://localhost:3000/api/user/unassignreviewer/' + company_id)
+    return company
+  },
+
+  unassignLawyer: async (company_id) => {
+    const company = await axios.put('http://localhost:3000/api/user/unassignLawyer/' + company_id)
+    return company
+  }
 }
 
 module.exports = functions
