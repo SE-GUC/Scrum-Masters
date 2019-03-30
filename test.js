@@ -55,7 +55,7 @@ const company = await functions.createCompany(user1.data.data._id)
 const commentcreated= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
 const newcompany= await functions.getCompany(company.data._id) 
 const array = newcompany.data.comments 
-expect(array).toContainEqual(commentcreated.data.comment._id,)
+expect(array).toContainEqual(commentcreated.data.comment._id)
 })
 
 test('adding comment',async()=>{
