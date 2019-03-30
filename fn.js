@@ -17,9 +17,9 @@ const functions = {
     const electronicJournal = await axios.get('http://localhost:3000/api/electronicJournals/')
   
     return electronicJournal
-  
+
     },
-    // check update
+    
     updateElectronicJournal: async(id, companyDescription,companyName)=>{
       try{
     const electronicJournal = await axios.put('http://localhost:3000/api/electronicJournals/'+id,
@@ -39,7 +39,7 @@ const functions = {
     
       return electronicJournal
     },
-      // check create
+     
    createElectronicJournal: async(companyDescription,companyName)=>{
     const electronicJournal = await axios.post('http://localhost:3000/api/electronicJournals/',
     {companyDescription:companyDescription,
