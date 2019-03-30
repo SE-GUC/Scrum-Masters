@@ -1,136 +1,128 @@
 const uuid = require('uuid')
 
 const functions = require('./fn')
-const Comment = require('./models/comment') 
-var Company = require('./models/company') 
+const Comment = require('./models/comment')
+var Company = require('./models/company')
 
-
-test('update Electronic Journal',async()=>{
+test('update Electronic Journal', async () => {
   expect.assertions(1)
   const user = await functions.createUser('investor')
   const company = await functions.createCompany(user.data.data._id)
-  const EJ= await functions.createElectronicJournal('electronicJournalcompany',company.data.company_name_english)
-  const response=  functions.updateElectronicJournal(EJ.data.data._id,"Egegege",company.data.company_name_english)
-  const ej= await functions.getElectronicJournal(response.data.data._id)
+  const EJ = await functions.createElectronicJournal('electronicJournalcompany', company.data.company_name_english)
+  const response = functions.updateElectronicJournal(EJ.data.data._id, 'Egegege', company.data.company_name_english)
+  const ej = await functions.getElectronicJournal(response.data.data._id)
   expect(ej.data.companyDescription).toBe('Egegege')
 })
-test('delete Electronic Journal',async()=>{    
+test('delete Electronic Journal', async () => {
   expect.assertions(1)
   const user = await functions.createUser('investor')
   const company = await functions.createCompany(user.data.data._id)
-  const EJ=await functions.createElectronicJournal('electronicJournalcompany',company.data.company_name_english)
-  const response=await functions.deleteElectronicJournal(EJ.data.data._id)
-  const ej=await functions.listAllElectronicJournals()
+  const EJ = await functions.createElectronicJournal('electronicJournalcompany', company.data.company_name_english)
+  const response = await functions.deleteElectronicJournal(EJ.data.data._id)
+  const ej = await functions.listAllElectronicJournals()
   expect(ej).not.toContainEqual(response)
 })
 
-test('list  all electronic journal',async()=>{
+test('list  all electronic journal', async () => {
   expect.assertions(1)
   const user = await functions.createUser('investor')
   const company = await functions.createCompany(user.data.data._id)
-  const EJ=await functions.createElectronicJournal('EJJ',company.data.company_name_english)
+  const EJ = await functions.createElectronicJournal('EJJ', company.data.company_name_english)
   const ej = await functions.listAllElectronicJournals()
   expect(ej.data.data).toContainEqual(EJ.data.data)
 })
-test('get electronic journal',async()=>{
+test('get electronic journal', async () => {
   expect.assertions(1)
   const user = await functions.createUser('investor')
   const company = await functions.createCompany(user.data.data._id)
-  const EJ=await functions.createElectronicJournal('ejj',company.data.company_name_english)
-  const response=await functions.getElectronicJournal(EJ.data.data._id)
+  const EJ = await functions.createElectronicJournal('ejj', company.data.company_name_english)
+  const response = await functions.getElectronicJournal(EJ.data.data._id)
   expect(EJ.data.data).toEqual(response.data)
 })
-test('create electronic journal',async()=>{
+test('create electronic journal', async () => {
   expect.assertions(1)
   const user = await functions.createUser('investor')
   const company = await functions.createCompany(user.data.data._id)
-  const EJ=await functions.createElectronicJournal('eeejjj',company.data.company_name_english)
+  const EJ = await functions.createElectronicJournal('eeejjj', company.data.company_name_english)
   expect(EJ.data.data).not.toBeFalsy()
 })
 
-test('check the company comments',async()=>{
-expect.assertions(1)
-const user1 = await functions.createUser('investor')
-const company = await functions.createCompany(user1.data.data._id)
-const commentcreated= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
-const newcompany= await functions.getCompany(company.data._id) 
-const array = newcompany.data.comments 
-expect(array).toContainEqual(commentcreated.data.comment._id)
+test('check the company comments', async () => {
+  expect.assertions(1)
+  const user1 = await functions.createUser('investor')
+  const company = await functions.createCompany(user1.data.data._id)
+  const commentcreated = await functions.createComment('the comment is created succ', company.data._id, user1.data.data._id)
+  const newcompany = await functions.getCompany(company.data._id)
+  const array = newcompany.data.comments
+  expect(array).toContainEqual(commentcreated.data.comment._id)
 })
 
-test('adding comment',async()=>{
-    expect.assertions(1)  
-const user1 = await functions.createUser('investor')
+test('adding comment', async () => {
+  expect.assertions(1)
+  const user1 = await functions.createUser('investor')
 
-const company = await functions.createCompany(user1.data.data._id)
-const response= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
-const comment = await functions.getCommenttest(response.data.comment._id)
+  const company = await functions.createCompany(user1.data.data._id)
+  const response = await functions.createComment('the comment is created succ', company.data._id, user1.data.data._id)
+  const comment = await functions.getCommenttest(response.data.comment._id)
 
-expect(comment).not.toBeNull()
-
+  expect(comment).not.toBeNull()
 })
-test('update comment', async()=>{
+test('update comment', async () => {
+  expect.assertions(1)
+  const user1 = await functions.createUser('investor')
+  const company = await functions.createCompany(user1.data.data._id)
 
-expect.assertions(1)  
-const user1 = await functions.createUser('investor')
-const company = await functions.createCompany(user1.data.data._id)
+  const commentcreated = await functions.createComment('the comment is created succ', company.data._id, user1.data.data._id)
 
-const commentcreated= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
+  const response = await functions.updateComment(commentcreated.data.comment._id, 'hey user')
 
-const response= await functions.updateComment(commentcreated.data.comment._id,'hey user')
+  const comment = await functions.getCommenttest(response.data._id)
 
-const comment = await functions.getCommenttest(response.data._id)
-
-expect(comment.data.comment_text).toBe('hey user')
-
-
- })
-
-test('calculate and add Fees',async()=>{
-
-expect.assertions(1)
-const user1 = await functions.createUser('investor')
-const company = await functions.createCompany(user1.data.data._id)
-const response = await functions.calculateFees(company.data._id)
-
-const application = await functions.getCompany(company.data._id)
-expect(application.data.fees).toBe(response.data.targetcompany.fees)
-
+  expect(comment.data.comment_text).toBe('hey user')
 })
 
-test('delete comment',async()=>{    
-    expect.assertions(1) 
-const user1 = await functions.createUser('investor')
-const company = await functions.createCompany(user1.data.data._id)
-const commentcreated= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
-   const response= await functions.deleteComment(company.data._id,commentcreated.data.comment._id)
-    const comment = await functions.getCommenttest(response.data[0])
+test('calculate and add Fees', async () => {
+  expect.assertions(1)
+  const user1 = await functions.createUser('investor')
+  const company = await functions.createCompany(user1.data.data._id)
+  const response = await functions.calculateFees(company.data._id)
 
-     expect(comment).toBeFalsy()
+  const application = await functions.getCompany(company.data._id)
+  expect(application.data.fees).toBe(response.data.targetcompany.fees)
 })
 
+test('delete comment', async () => {
+  expect.assertions(1)
+  const user1 = await functions.createUser('investor')
+  const company = await functions.createCompany(user1.data.data._id)
+  const commentcreated = await functions.createComment('the comment is created succ', company.data._id, user1.data.data._id)
+  const response = await functions.deleteComment(company.data._id, commentcreated.data.comment._id)
+  const comment = await functions.getCommenttest(response.data[0])
 
-test('create user', async() => {
+  expect(comment).toBeFalsy()
+})
+
+test('create user', async () => {
   expect.assertions(1)
   const response = await functions.createUser('investor')
   expect(response.data.data._id).not.toBeFalsy()
 })
 
-test('get user', async() => {
+test('get user', async () => {
   expect.assertions(1)
   const response = await functions.createUser('investor')
   const user = await functions.getUser(response.data.data._id)
   expect(response.data.data._id).toEqual(user.data._id)
 })
 
-test('get all users', async() => {
+test('get all users', async () => {
   expect.assertions(1)
   const response = await functions.createUser('investor')
   const users = await functions.getAllUsers()
   expect(users.data.data).toContainEqual({ _id: response.data.data._id })
 })
 
-test('update user', async() => {
+test('update user', async () => {
   expect.assertions(1)
   const response = await functions.createUser('investor')
   const newName = uuid.v4().substring(0, 30)
@@ -138,13 +130,13 @@ test('update user', async() => {
     firstName: newName,
     lastName: response.data.data.lastName,
     password: response.data.data.password,
-    gender: response.data.data.gender,
+    gender: response.data.data.gender
   })
   const user = await functions.getUser(response.data.data._id)
   expect(user.data.firstName).toEqual(newName)
 })
 
-test('delete user', async() => {
+test('delete user', async () => {
   expect.assertions(1)
   const response = await functions.createUser('investor')
   await functions.deleteUser(response.data.data._id)
@@ -152,27 +144,25 @@ test('delete user', async() => {
   expect(users.data.data).not.toContainEqual({ _id: response.data.data._id })
 })
 
-test('create company', async() => {
+test('create company', async () => {
   expect.assertions(1)
   const user = await functions.createUser('investor')
   const company = await functions.createCompany(user.data.data._id)
   expect(company.data._id).not.toBeFalsy()
 })
 
-test ('assign reviewer 2',async()=>{
-  //TODO: this is done below... check if the same later
+test('assign reviewer 2', async () => {
+  // TODO: this is done below... check if the same later
   expect.assertions(1)
   const user = await functions.createUser('investor')
   const company = await functions.createCompany(user.data.data._id)
   const reviewer = await functions.createUser('reviewer')
-  const companyafterupdate = await functions.assignreviewer(company.data._id,reviewer.data.data._id)
+  const companyafterupdate = await functions.assignreviewer(company.data._id, reviewer.data.data._id)
 
   expect(companyafterupdate.data.review_reviewer).toBe(reviewer.data.data._id)
-
-
 })
 
-test('create notification', async() => {
+test('create notification', async () => {
   expect.assertions(2)
   const user = await functions.createUser('investor')
   const notification = await functions.createNotification(user.data.data._id)
@@ -181,7 +171,7 @@ test('create notification', async() => {
   expect(newUser.data.notifications).toContainEqual(notification.data._id)
 })
 
-test('get notifications', async() => {
+test('get notifications', async () => {
   expect.assertions(1)
   const user = await functions.createUser('investor')
   const notification = await functions.createNotification(user.data.data._id)
@@ -189,7 +179,7 @@ test('get notifications', async() => {
   expect(response.data).toContainEqual(expect.objectContaining({ _id: notification.data._id }))
 })
 
-test('set notification viewed', async() => {
+test('set notification viewed', async () => {
   expect.assertions(1)
   const user = await functions.createUser('investor')
   const notification = await functions.createNotification(user.data.data._id)
@@ -198,7 +188,7 @@ test('set notification viewed', async() => {
   expect(response.data).toContainEqual(expect.objectContaining({ _id: notification.data._id, viewed: true }))
 })
 
-test('assign reviewer', async() => {
+test('assign reviewer', async () => {
   expect.assertions(1)
   const investor = await functions.createUser('investor')
   const reviewer = await functions.createUser('reviewer')
@@ -208,42 +198,41 @@ test('assign reviewer', async() => {
   expect(newCompany.data.review_reviewer).toEqual(reviewer.data.data._id)
 })
 
-test('assign lawyer', async() => {
+test('assign lawyer', async () => {
   expect.assertions(2)
-  
+
   const investor = await functions.createUser('investor')
   const lawyer = await functions.createUser('lawyer')
   const company = await functions.createCompany(investor.data.data._id)
   await functions.assignLawyer(company.data._id, lawyer.data.data._id)
   const newCompany = await functions.getCompany(company.data._id)
   expect(newCompany.data.review_lawyer).toEqual(lawyer.data.data._id)
-  
+
   const notifications = await functions.getUserNotifications(lawyer.data.data._id)
-  expect(notifications.data).toContainEqual(expect.objectContaining({ target_type: "company", target_id: company.data._id }))
+  expect(notifications.data).toContainEqual(expect.objectContaining({ target_type: 'company', target_id: company.data._id }))
 })
 
-test('get assigned lawyer for request', async() => {
+test('get assigned lawyer for request', async () => {
   expect.assertions(1)
-  
+
   const investor = await functions.createUser('investor')
   const lawyer = await functions.createUser('lawyer')
   const request = await functions.createRequest(investor.data.data._id)
   await functions.assignLawyerRequest(request.data.data._id, { lawyer_id: lawyer.data.data._id })
   const assignedLawyer = await functions.getAssignedLawyer(request.data.data._id)
-  
+
   expect(lawyer.data.data).toEqual(expect.objectContaining(assignedLawyer.data))
 })
 
-test("getAllRequests",async()=>{
+test('getAllRequests', async () => {
   expect.assertions(1)
   const userRes = await functions.createUser('investor')
-  const requestRes = await functions.createRequest(userRes.data.data._id) 
+  const requestRes = await functions.createRequest(userRes.data.data._id)
   const requestsRes = await functions.getAllRequests()
   expect(requestsRes.data).toContainEqual(requestRes.data.data)
-  
 })
 
-test("getUserRequest",async()=>{
+test('getUserRequest', async () => {
   expect.assertions(1)
   const userRes = await functions.createUser('investor')
   const requestRes = await functions.createRequest(userRes.data.data._id)
@@ -251,30 +240,27 @@ test("getUserRequest",async()=>{
   expect(request.data[0]._id).toEqual(requestRes.data.data._id)
 })
 
-test('createRequest', async() => {
+test('createRequest', async () => {
   expect.assertions(1)
   const userRes = await functions.createUser('investor')
   const requestRes = await functions.createRequest(userRes.data.data._id)
   expect(requestRes.data.data._id).not.toBeFalsy()
 })
 
-
-test('assignLawyerRequest', async() => {
+test('assignLawyerRequest', async () => {
   expect.assertions(1)
   const invRes = await functions.createUser('investor')
   const requestRes = await functions.createRequest(invRes.data.data._id)
   const lawyerRes = await functions.createUser('lawyer')
-  await functions.assignLawyerRequest(requestRes.data.data._id,{
-    assigned : true,
-    lawyer_id : lawyerRes.data.data._id
+  await functions.assignLawyerRequest(requestRes.data.data._id, {
+    assigned: true,
+    lawyer_id: lawyerRes.data.data._id
   })
   const request = await functions.getRequest(invRes.data.data._id)
   expect(request.data[0].lawyer_id).toEqual(lawyerRes.data.data._id)
-
 })
 
-
-test('deleteRequest', async() => {
+test('deleteRequest', async () => {
   expect.assertions(1)
   const userRes = await functions.createUser('investor')
   const requestRes = await functions.createRequest(userRes.data.data._id)
@@ -283,50 +269,46 @@ test('deleteRequest', async() => {
   expect(requests.data).not.toContainEqual({ _id: requestRes.data.data._id })
 })
 
-//Company tests 
+// Company tests
 
-
-test('create company', async() => {
+test('create company', async () => {
   expect.assertions(1)
   const investor = await functions.createUser('investor')
   const company = await functions.createCompany(investor.data.data._id)
   expect(company.data._id).toBeTruthy()
 })
 
-test('get company', async() => {
-    expect.assertions(1)
-    const investor=await functions.createUser('investor')
-    const company=await functions.createCompany(investor.data.data._id)
-    const response=await functions.getCompany(company.data._id)
-    expect(company.data).toEqual(response.data)
-  })
-
-test('delete company',async()=>
-{ 
-    expect.assertions(1)
-    const investor=await functions.createUser('investor')
-    const company=await functions.createCompany(investor.data.data._id)
-    await functions.deletecompany(company.data._id)
-    const all=await functions.getallcompaines()
-    expect(all.data).not.toContainEqual(company.data._id)
+test('get company', async () => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const company = await functions.createCompany(investor.data.data._id)
+  const response = await functions.getCompany(company.data._id)
+  expect(company.data).toEqual(response.data)
 })
 
-test('update company',async()=>
-{ 
-    expect.assertions(1)
-    const investor=await functions.createUser('investor')
-    const company=await functions.createCompany(investor.data.data._id)
-    const data={
-      "company_name_arabic":"updated",
-    }
-    const updated=await functions.updatecompany(company.data._id,data)
-    expect(updated.data.company_name_arabic).toBe('updated')
+test('delete company', async () => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const company = await functions.createCompany(investor.data.data._id)
+  await functions.deletecompany(company.data._id)
+  const all = await functions.getallcompaines()
+  expect(all.data).not.toContainEqual(company.data._id)
+})
+
+test('update company', async () => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const company = await functions.createCompany(investor.data.data._id)
+  const data = {
+    'company_name_arabic': 'updated'
+  }
+  const updated = await functions.updatecompany(company.data._id, data)
+  expect(updated.data.company_name_arabic).toBe('updated')
 }),
-test('list all compaines',async()=>
-{ 
-    expect.assertions(1)
-    const investor=await functions.createUser('investor')
-    const company=await functions.createCompany(investor.data.data._id)
-    const all =await functions.getallcompaines()
-    expect(all.data).toContainEqual({ _id: company.data._id })
-  })
+test('list all compaines', async () => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const company = await functions.createCompany(investor.data.data._id)
+  const all = await functions.getallcompaines()
+  expect(all.data).toContainEqual({ _id: company.data._id })
+})

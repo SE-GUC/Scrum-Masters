@@ -11,10 +11,8 @@ router.get('/getlawyer/:companyid', userController.getassignedlawyer)
 
 router.post('/', userController.createUser)
 router.post('/assignreviewer/:app_id/:rev_id', userController.assignReviewer)
- 
-router.post("/assignLawyer/:appId/:lawyerId", userController.assignLaywer)
 
-
+router.post('/assignLawyer/:appId/:lawyerId', userController.assignLaywer)
 
 router.put('/:id', userController.updateUser)
 router.delete('/:id', userController.deleteUser)

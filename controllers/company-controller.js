@@ -3,7 +3,6 @@ const Company = require('../models/company')
 const Notification = require('../models/Notification')
 const userController = require('../controllers/user-controller')
 
-
 function validateupdateCompany (company) {
   const schema = {
     owner: Joi.string(),
@@ -187,7 +186,7 @@ exports.deleteCompany = (req, res) => {
   Company.findByIdAndRemove(req.params.id)
     .then(company => {
       if (!company) return res.status(404).send('application not found')
-      
+
       User.findByIdAndUpdate(company.owner, { $pull: { companies: company._id } })
         .then(user => {
           return res.json(company)
@@ -219,17 +218,14 @@ exports.deleteCompany = (req, res) => {
 //   return res.send(targetcompany)
 // }
 
-exports.listUnassignedApplications =async(req,res)=>{
+exports.listUnassignedApplications = async (req, res) => {
   try {
-   const companies= await Company.find({ assigned_status: false },{new:true})
-  res.json({data:companies})
+    const companies = await Company.find({ assigned_status: false }, { new: true })
+    res.json({ data: companies })
+  } catch (error) {
+    console.log(error)
   }
-  catch(error){
-      console.log(error)
-  }
-  }
-
-
+}
 
 exports.listAllPaidCompanies = async (req, res) => {
   try {
@@ -249,18 +245,18 @@ exports.listAllUnreviewedCompanies = async (req, res) => {
   }
 }
 
-exports.establishCompany = async(req, res) => {
+exports.establishCompany = async (req, res) => {
   Company.findById(req.params.id)
     .then(company => {
-      if (company.established) return res.status(400).send({ error: "Company is already established" })
-      if (!company.ispaid) return res.status(400).send({ error: "Fees have not been paid" })
-      
+      if (company.established) return res.status(400).send({ error: 'Company is already established' })
+      if (!company.ispaid) return res.status(400).send({ error: 'Fees have not been paid' })
+
       Company.findByIdAndUpdate(req.params.id, { established: true }, { new: true })
         .then(async company => {
           await userController.createNotificationForUser(
-            { owner_id: company.owner, target_type: 'company', target_id: company._id, notif_text: "Your company has been established" }
+            { owner_id: company.owner, target_type: 'company', target_id: company._id, notif_text: 'Your company has been established' }
           )
-          return res.json({ msg: "Success", data: company })
+          return res.json({ msg: 'Success', data: company })
         })
         .catch(err => {
           console.log(err)
@@ -273,16 +269,13 @@ exports.establishCompany = async(req, res) => {
     })
 }
 
-exports.calculateCompanyFees = async(req,res)=>{
-
-const company_id = req.params.id
-const company = await Company.findById(company_id)
-if(! company ) return res.status(404).send('application not found')
-const companyCapital= company.capital
-const fees = ((1/1000)*(companyCapital))+((1/400)*companyCapital)+56
-company.fees=fees
-const targetcompany = await Company.findByIdAndUpdate(company_id,company, { new: true })
-return res.json({targetcompany})
-
-
+exports.calculateCompanyFees = async (req, res) => {
+  const company_id = req.params.id
+  const company = await Company.findById(company_id)
+  if (!company) return res.status(404).send('application not found')
+  const companyCapital = company.capital
+  const fees = ((1 / 1000) * (companyCapital)) + ((1 / 400) * companyCapital) + 56
+  company.fees = fees
+  const targetcompany = await Company.findByIdAndUpdate(company_id, company, { new: true })
+  return res.json({ targetcompany })
 }
