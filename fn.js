@@ -3,9 +3,39 @@ const uuid = require('uuid')
 
 axios.defaults.adapter = require('axios/lib/adapters/http')
 const functions = {
+  createRequest: async(inv_id) => {
+    const request = await axios.post('http://localhost:3000/api/company-request', {
+      "investor_id": inv_id
+    })
+    return request
+  },
 
-    getElectronicJournal: async (id) => {
+  getAllRequests: async() => {
+    const requests = await axios.get('http://localhost:3000/api/company-request')
+    return requests
+  },
+  
+  getRequest: async(id) => {
+    const request = await axios.get('http://localhost:3000/api/company-request/' + id)
+    return request
+  },
 
+  updateUser: async(id, params) => {
+    const user = await axios.put('http://localhost:3000/api/user/' + id, params)
+    return user
+  },
+  
+  assignLawyerRequest: async(requestId,params)=>{
+    const request = await axios.post('http://localhost:3000/api/company-request/assign/'+ requestId,params)
+    return request
+  },
+
+  deleteRequest: async(id) => {
+    const request = await axios.delete('http://localhost:3000/api/company-request/' + id)
+    return request
+  },
+    
+  getElectronicJournal: async (id) => {
   const electronicJournal = await axios.get('http://localhost:3000/api/electronicJournals/'+id)
 
   return electronicJournal
@@ -67,13 +97,13 @@ const functions = {
       const comment=await axios.delete('http://localhost:3000/api/comment/'+app_id+'/'+comment_id)
       return comment
   },
+  assignreviewer:async(app_id,rev_id)=>{
+        const targetapplication = await axios.post('http://localhost:3000/api/user/assignreviewer/'+app_id+'/'+rev_id)
+        return targetapplication
+  },
   calculateFees:async(app_id)=>{
        const company = await axios.put('http://localhost:3000/api/company/calculatefees/'+app_id)
        return company
-  },
-  getCompany:async(id)=>{
-    const company = await axios.get('http://localhost:3000/api/company/'+id)
-    return company
   },
   getCommenttest:async(id)=>{
     try{  
@@ -115,37 +145,81 @@ const functions = {
     const user = await axios.delete('http://localhost:3000/api/user/' + id)
     return user
   },
+  createNotification: async(user) => {
+    const notification = await axios.post('http://localhost:3000/api/notification', {
+      "owner_id": user,
+      "target_type": "user",
+      "target_id": user,
+      "notif_text": "Test Notification"
+    })
+    return notification
+  },
+  
+  getUserNotifications: async(user) => {
+    const notifications = await axios.get('http://localhost:3000/api/notification/' + user)
+    return notifications
+  },
+  
+  setNotificationViewed: async(id) => {
+    const notification = await axios.delete('http://localhost:3000/api/notification/' + id)
+    return notification
+  },
+  
+  assignReviewer: async(company_id, reviewer_id) => {
+    const company = await axios.post('http://localhost:3000/api/user/assignreviewer/' + company_id + '/' + reviewer_id)
+    return company
+  },
+  
+  assignLawyer: async(company_id, lawyer_id) => {
+    const company = await axios.post('http://localhost:3000/api/user/assignLawyer/' + company_id + '/' + lawyer_id)
+    return company
+  },
+  
+  getAssignedLawyer: async(company_id) => {
+    const lawyer = await axios.get('http://localhost:3000/api/user/getlawyer/' + company_id)
+    return lawyer
+  },
+
   
   createCompany: async(owner) => {
     const company = await axios.post('http://localhost:3000/api/company', {
-      "organizational_rule": "organizational_rule2",
+      "owner" :owner,
+      "company_type" :"spc",
+      "organizational_rule" : "organizational_rule1",
       "legal_form": "legal_form1",
-      "company_name_arabic": uuid.v4(),
-      "company_name_english": uuid.v4(),
-      "hq_governorate": "hq_governorate2",
-      "hq_city": "hq_city2",
-      "hq_address": "company_address3",
-      "hq_telephone": "company_number3",
-      "hq_fax": "company_fax3",
+      "company_name_arabic":uuid.v4(),
+      "company_name_english":uuid.v4(),
+      "hq_governorate": "hq_governorate1",
+      "hq_city": "hq_city1",
+      "hq_address":"cairo",
       "capital_currency": "EGP",
-      "capital": 50000,
-      "investor_name": "Test Investor",
-      "investor_gender": "Male",
-      "nationality": "German",
-      "investor_id_type": "id_type2",
-      "investor_id_number": "101010",
-      "investor_birth_date": "1997-11-13T22:00:00.000Z",
-      "investor_address": "investor_address",
-      "investor_telephone": "investor_number",
-      "investor_fax": "investor_fax",
-      "investor_email": "investor_email1",
-      "company_type": "ssc",
-      "investor_type": "type1",
-      "board_members": [ ],
-      "owner": owner
+      "capital":"60000",
+      "investor_name": "omar",
+      "nationality": "Egyptian",
+      "investor_id_type": "id_type1",
+      "investor_id_number": "test",
+      "investor_birth_date": "3/28/2019",
+      "investor_address": "test"
     })
     return company
   },
 
+  getCompany:async(id)=>{
+    const company = await axios.get(`http://localhost:3000/api/company/${id}`)
+    return company
+  },
+  deletecompany:async(id)=>{
+    const company =await axios.delete(`http://localhost:3000/api/company/${id}`)
+    return company
+  },
+  getallcompaines:async()=>{
+    const company =await axios.get('http://localhost:3000/api/company')
+    return company
+  },
+  updatecompany:async(id,data)=>{
+    const company= await axios.put(`http://localhost:3000/api/company/${id}`,data)
+    return company
+  }
 }
+
 module.exports = functions
