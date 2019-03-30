@@ -190,6 +190,7 @@ test('get assigned lawyer for request', async() => {
   const assignedLawyer = await functions.getAssignedLawyer(request.data.data._id)
   
   expect(lawyer.data.data).toEqual(expect.objectContaining(assignedLawyer.data))
+}),
 
 
 test("getAllRequests",async()=>{
@@ -352,6 +353,5 @@ test('list all compaines',async()=>
 
 
 })
-
 
 
