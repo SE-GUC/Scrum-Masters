@@ -55,6 +55,10 @@ const functions = {
       const comment=await axios.delete('http://localhost:3000/api/comment/'+app_id+'/'+comment_id)
       return comment
   },
+  assignreviewer:async(app_id,rev_id)=>{
+        const targetapplication = await axios.post('http://localhost:3000/api/user/assignreviewer/'+app_id+'/'+rev_id)
+        return targetapplication
+  },
   calculateFees:async(app_id)=>{
        const company = await axios.put('http://localhost:3000/api/company/calculatefees/'+app_id)
        return company

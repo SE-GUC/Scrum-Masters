@@ -49,7 +49,7 @@ expect.assertions(1)
 const user1 = await functions.createUser('investor')
 const company = await functions.createCompany(user1.data.data._id)
 const response = await functions.calculateFees(company.data._id)
-console.log(response.data.targetcompany.fees)
+
 const application = await functions.getCompany(company.data._id)
 expect(application.data.fees).toBe(response.data.targetcompany.fees)
 
@@ -116,6 +116,19 @@ test('create company', async() => {
   expect(company.data._id).not.toBeFalsy()
 })
 
+test ('assign reviewer 2',async()=>{
+  //TODO: this is done below... check if the same later
+  expect.assertions(1)
+  const user = await functions.createUser('investor')
+  const company = await functions.createCompany(user.data.data._id)
+  const reviewer = await functions.createUser('reviewer')
+  const companyafterupdate = await functions.assignreviewer(company.data._id,reviewer.data.data._id)
+
+  expect(companyafterupdate.data.review_reviewer).toBe(reviewer.data.data._id)
+
+
+})
+
 test('create notification', async() => {
   expect.assertions(2)
   const user = await functions.createUser('investor')
@@ -166,21 +179,18 @@ test('assign lawyer', async() => {
   expect(notifications.data).toContainEqual(expect.objectContaining({ target_type: "company", target_id: company.data._id }))
 })
 
-/*test('get assigned lawyer', async() => {
+test('get assigned lawyer for request', async() => {
   expect.assertions(1)
   
   const investor = await functions.createUser('investor')
   const lawyer = await functions.createUser('lawyer')
-  //const company = await functions.createCompany(investor.data.data._id)
-  //await functions.assignLawyer(company.data._id, lawyer.data.data._id)
-  //change to company request ^^
+  const request = await functions.createRequest(investor.data.data._id)
+  await functions.assignLawyerRequest(request.data.data._id, { lawyer_id: lawyer.data.data._id })
+  const assignedLawyer = await functions.getAssignedLawyer(request.data.data._id)
   
-  const assignedLawyer = await functions.getAssignedLawyer(company.data._id)
-  
-  
-  //TODO: finish when company request helpers are created
+  expect(lawyer.data.data).toEqual(expect.objectContaining(assignedLawyer.data))
 })
-*/
+
 test("getAllRequests",async()=>{
   expect.assertions(1)
   const userRes = await functions.createUser('investor')
@@ -229,7 +239,6 @@ test('deleteRequest', async() => {
   const requests = await functions.getAllRequests()
   expect(requests.data).not.toContainEqual({ _id: requestRes.data.data._id })
 })
-
 
 //Company tests 
 
