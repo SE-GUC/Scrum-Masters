@@ -172,7 +172,27 @@ const functions = {
   updatecompany:async(id,data)=>{
     const company= await axios.put(`http://localhost:3000/api/company/${id}`,data)
     return company
-  }
+  },
+  listUnassignedApplications:async()=>{
+    const company=await axios.get(`http://localhost:3000/api/company/listUnassignedApplications`)
+    return company
+  },
+  listAllUnreviewedCompanies:async()=>{
+    const company=await axios.get(`http://localhost:3000/api/company/unreviewedCompanies`)
+    return company
+  },
+  calculatefees:async(id)=>{
+    const company=await axios.put(`http://localhost:3000/api/company/calculatefees/${id}`)
+    return company
+  },
+  listpaidCompanies:async()=>{
+    const company=await axios.get(`http://localhost:3000/api/company/paidCompanies`)
+    return company
+  },
+  establishcompany:async(id)=>{
+    const company=await axios.post(`http://localhost:3000/api/company/establish/${id}`)
+    return company
+  },
 }
 
 module.exports = functions
