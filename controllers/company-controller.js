@@ -29,7 +29,12 @@ function validateupdateCompany (company) {
     investor_address: Joi.string(),
     investor_telephone: Joi.string(),
     investor_fax: Joi.string(),
-    investor_email: Joi.string()
+    investor_email: Joi.string(),
+    ispaid:Joi.boolean(),//TO Do Just for tests no and will remove it later
+    assigned_status:Joi.boolean(),//TO Do Just for tests no and will remove it later
+    reviewed_statusreviewer:Joi.boolean()//TO Do Just for tests no and will remove it later
+
+
   }
   if (company.company_type === 'ssc') {
     Object.assign(schema, {
@@ -222,7 +227,7 @@ exports.deleteCompany = (req, res) => {
 exports.listUnassignedApplications =async(req,res)=>{
   try {
    const companies= await Company.find({ assigned_status: false },{new:true})
-  res.json({data:companies})
+  res.json(companies)
   }
   catch(error){
       console.log(error)
@@ -234,7 +239,7 @@ exports.listUnassignedApplications =async(req,res)=>{
 exports.listAllPaidCompanies = async (req, res) => {
   try {
     const companies = await Company.find({ ispaid: true }, { new: true })
-    res.json({ data: companies })
+    res.json( companies)
   } catch (error) {
     console.log(error)
   }
@@ -243,7 +248,7 @@ exports.listAllPaidCompanies = async (req, res) => {
 exports.listAllUnreviewedCompanies = async (req, res) => {
   try {
     const companies = await Company.find({ reviewed_statusreviewer: false }, { new: true })
-    res.json({ data: companies })
+    res.json(companies)
   } catch (error) {
     console.log(error)
   }
@@ -282,7 +287,7 @@ const companyCapital= company.capital
 const fees = ((1/1000)*(companyCapital))+((1/400)*companyCapital)+56
 company.fees=fees
 const targetcompany = await Company.findByIdAndUpdate(company_id,company, { new: true })
-return res.json({targetcompany})
+return res.json(targetcompany)
 
 
 }

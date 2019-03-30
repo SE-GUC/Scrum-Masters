@@ -223,6 +223,7 @@ test('assign lawyer', async() => {
 })
 
 test('get assigned lawyer for request', async() => {
+
   expect.assertions(1)
   
   const investor = await functions.createUser('investor')
@@ -232,7 +233,8 @@ test('get assigned lawyer for request', async() => {
   const assignedLawyer = await functions.getAssignedLawyer(request.data.data._id)
   
   expect(lawyer.data.data).toEqual(expect.objectContaining(assignedLawyer.data))
-})
+}),
+
 
 test("getAllRequests",async()=>{
   expect.assertions(1)
@@ -330,3 +332,69 @@ test('list all compaines',async()=>
     const all =await functions.getallcompaines()
     expect(all.data).toContainEqual({ _id: company.data._id })
   })
+
+  test('list all Unassigned Applications',async()=>
+{ 
+    expect.assertions()
+    const investor=await functions.createUser('investor')
+    const company=await functions.createCompany(investor.data.data._id)
+    const data={
+      "assigned_status":"true"
+    }
+    const updated=await functions.updatecompany(company.data._id,data)
+    const all=await functions.listUnassignedApplications()
+    expect(all.data).not.toContainEqual(expect.objectContaining({  _id: company.data._id  }))
+
+
+})
+
+  test('calculate fees',async()=>
+  { 
+      expect.assertions(1)
+      const investor=await functions.createUser('investor')
+      const company=await functions.createCompany(investor.data.data._id)
+      await functions.calculateFees(company.data._id)
+      const updated=await functions.getCompany(company.data._id)
+      expect(updated.data.fees).toBeDefined()
+  
+  })
+  test('list all paid compaines',async()=>
+  {
+        expect.assertions()
+        const investor=await functions.createUser('investor')
+        const company=await functions.createCompany(investor.data.data._id)
+        const data={
+          "ispaid":"true"
+        }
+        const updated=await functions.updatecompany(company.data._id,data)
+        const all=await functions.listpaidCompanies()
+        expect(all.data).toContainEqual(expect.objectContaining({  _id: company.data._id  })) 
+  })
+  test('establish company',async()=>
+  {
+        expect.assertions()
+        const investor=await functions.createUser('investor')
+        const company=await functions.createCompany(investor.data.data._id)
+        const data={
+          "ispaid":"true"
+        }
+        const update=await functions.updatecompany(company.data._id,data)
+        const establish=await functions.establishcompany(company.data._id)
+        expect(establish.data.data.established).toBe(true)
+  })
+  test('list All Unreviewed Companies',async()=>
+{ 
+    expect.assertions()
+    const investor=await functions.createUser('investor')
+    const company=await functions.createCompany(investor.data.data._id)
+    const data={
+      "reviewed_statusreviewer":"true"
+    }
+    const updated=await functions.updatecompany(company.data._id,data)
+    const all=await functions.listAllUnreviewedCompanies()
+    expect(all.data).not.toContainEqual(expect.objectContaining({  _id: company.data._id  }))
+
+
+})
+
+

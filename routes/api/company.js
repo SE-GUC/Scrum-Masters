@@ -6,7 +6,7 @@ router.use(express.json())
 
 
 router.get('/', companyController.listAllCompanies)
-router.get("/listUnassignedApplications",companyController.listUnassignedApplications);
+router.get('/listUnassignedApplications',companyController.listUnassignedApplications)
 router.get('/paidCompanies', companyController.listAllPaidCompanies)
 router.get('/unreviewedCompanies', companyController.listAllUnreviewedCompanies)
 router.get('/:id', companyController.getCompany)
