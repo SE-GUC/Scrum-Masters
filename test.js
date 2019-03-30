@@ -5,6 +5,30 @@ const Comment = require('./models/comment')
 var Company = require('./models/company') 
 
 
+test('update Electronic Journal',async()=>{
+  expect.assertions(1)
+  const user = await functions.createUser('investor')
+  const company = await functions.createCompany(user.data.data._id)
+        
+  const EJ=await functions.createElectronicJournal('electronicJournalcompany',company.data.company_name_english)
+   
+  const response=await functions.updateElectronicJournal(EJ.data.data._id,"Egegege",company.data.company_name_english)
+  
+  const ej=await functions.getElectronicJournal(response.data.data._id)
+   
+  expect(ej.data.companyDescription).toBe('Egegege')
+})
+test('delete Electronic Journal',async()=>{    
+  expect.assertions(1)
+  const user = await functions.createUser('investor')
+  const company = await functions.createCompany(user.data.data._id)
+  const EJ=await functions.createElectronicJournal('electronicJournalcompany',company.data.company_name_english)
+  const response=await functions.deleteElectronicJournal(EJ.data.data._id)
+  const ej=await functions.listAllElectronicJournals()
+  expect(ej).not.toContainEqual(response)
+})
+
+
 test('check the company comments',async()=>{
 expect.assertions(1)
 const user1 = await functions.createUser('investor')
@@ -12,7 +36,7 @@ const company = await functions.createCompany(user1.data.data._id)
 const commentcreated= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
 const newcompany= await functions.getCompany(company.data._id) 
 const array = newcompany.data.comments 
-expect(array).toContainEqual(commentcreated.data.comment._id)
+expect(array).toContainEqual(commentcreated.data.comment._id,)
 })
 
 test('adding comment',async()=>{

@@ -4,8 +4,50 @@ const uuid = require('uuid')
 axios.defaults.adapter = require('axios/lib/adapters/http')
 const functions = {
 
+    getElectronicJournal: async (id) => {
 
-  getComment: async(app_id)=>{
+  const electronicJournal = await axios.get('http://localhost:3000/api/electronicJournals/'+id)
+
+  return electronicJournal
+
+  },
+  
+  listAllElectronicJournals : async () => {
+
+    const electronicJournal = await axios.get('http://localhost:3000/api/electronicJournals/')
+  
+    return electronicJournal
+  
+    },
+    // check update
+    updateElectronicJournal: async(id, companyDescription,companyName)=>{
+      try{
+    const electronicJournal = await axios.put('http://localhost:3000/api/electronicJournals/'+id,
+    {companyDescription:companyDescription,
+    companyName:companyName})
+    
+    return electronicJournal
+      }
+      catch(err){
+      return undefined
+  }
+      
+      
+   },
+    deleteElectronicJournal: async(id)=>{
+    const electronicJournal = await axios.delete('http://localhost:3000/api/electronicJournals/'+id)
+    
+      return electronicJournal
+    },
+      // check create
+   createElectronicJournal: async(companyDescription,companyName)=>{
+    const electronicJournal = await axios.post('http://localhost:3000/api/electronicJournals/',
+    {companyDescription:companyDescription,
+     companyName:companyName})
+    return electronicJournal
+   },
+
+  getComment:async(app_id)=>{
       const comment = await axios.get('http://localhost:3000/api/comment/'+app_id)
       return comment 
   },
@@ -104,5 +146,6 @@ const functions = {
     })
     return company
   },
+
 }
 module.exports = functions
