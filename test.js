@@ -5,6 +5,49 @@ const Comment = require('./models/comment')
 var Company = require('./models/company') 
 
 
+test('update Electronic Journal',async()=>{
+  expect.assertions(1)
+  const user = await functions.createUser('investor')
+  const company = await functions.createCompany(user.data.data._id)
+  const EJ= await functions.createElectronicJournal('electronicJournalcompany',company.data.company_name_english)
+  const response=  functions.updateElectronicJournal(EJ.data.data._id,"Egegege",company.data.company_name_english)
+  const ej= await functions.getElectronicJournal(response.data.data._id)
+  expect(ej.data.companyDescription).toBe('Egegege')
+})
+test('delete Electronic Journal',async()=>{    
+  expect.assertions(1)
+  const user = await functions.createUser('investor')
+  const company = await functions.createCompany(user.data.data._id)
+  const EJ=await functions.createElectronicJournal('electronicJournalcompany',company.data.company_name_english)
+  const response=await functions.deleteElectronicJournal(EJ.data.data._id)
+  const ej=await functions.listAllElectronicJournals()
+  expect(ej).not.toContainEqual(response)
+})
+
+test('list  all electronic journal',async()=>{
+  expect.assertions(1)
+  const user = await functions.createUser('investor')
+  const company = await functions.createCompany(user.data.data._id)
+  const EJ=await functions.createElectronicJournal('EJJ',company.data.company_name_english)
+  const ej = await functions.listAllElectronicJournals()
+  expect(ej.data.data).toContainEqual(EJ.data.data)
+})
+test('get electronic journal',async()=>{
+  expect.assertions(1)
+  const user = await functions.createUser('investor')
+  const company = await functions.createCompany(user.data.data._id)
+  const EJ=await functions.createElectronicJournal('ejj',company.data.company_name_english)
+  const response=await functions.getElectronicJournal(EJ.data.data._id)
+  expect(EJ.data.data).toEqual(response.data)
+})
+test('create electronic journal',async()=>{
+  expect.assertions(1)
+  const user = await functions.createUser('investor')
+  const company = await functions.createCompany(user.data.data._id)
+  const EJ=await functions.createElectronicJournal('eeejjj',company.data.company_name_english)
+  expect(EJ.data.data).not.toBeFalsy()
+})
+
 test('check the company comments',async()=>{
 expect.assertions(1)
 const user1 = await functions.createUser('investor')

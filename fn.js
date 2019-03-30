@@ -14,7 +14,7 @@ const functions = {
     const requests = await axios.get('http://localhost:3000/api/company-request')
     return requests
   },
-
+  
   getRequest: async(id) => {
     const request = await axios.get('http://localhost:3000/api/company-request/' + id)
     return request
@@ -34,8 +34,50 @@ const functions = {
     const request = await axios.delete('http://localhost:3000/api/company-request/' + id)
     return request
   },
+    
+  getElectronicJournal: async (id) => {
+  const electronicJournal = await axios.get('http://localhost:3000/api/electronicJournals/'+id)
 
-  getComment: async(app_id)=>{
+  return electronicJournal
+
+  },
+  
+  listAllElectronicJournals : async () => {
+
+    const electronicJournal = await axios.get('http://localhost:3000/api/electronicJournals/')
+  
+    return electronicJournal
+
+    },
+    
+    updateElectronicJournal: async(id, companyDescription,companyName)=>{
+      try{
+    const electronicJournal = await axios.put('http://localhost:3000/api/electronicJournals/'+id,
+    {companyDescription:companyDescription,
+    companyName:companyName})
+    
+    return electronicJournal
+      }
+      catch(err){
+      return undefined
+  }
+      
+      
+   },
+    deleteElectronicJournal: async(id)=>{
+    const electronicJournal = await axios.delete('http://localhost:3000/api/electronicJournals/'+id)
+    
+      return electronicJournal
+    },
+     
+   createElectronicJournal: async(companyDescription,companyName)=>{
+    const electronicJournal = await axios.post('http://localhost:3000/api/electronicJournals/',
+    {companyDescription:companyDescription,
+     companyName:companyName})
+    return electronicJournal
+   },
+
+  getComment:async(app_id)=>{
       const comment = await axios.get('http://localhost:3000/api/comment/'+app_id)
       return comment 
   },
@@ -161,6 +203,7 @@ const functions = {
     })
     return company
   },
+
   getCompany:async(id)=>{
     const company = await axios.get(`http://localhost:3000/api/company/${id}`)
     return company
