@@ -51,8 +51,8 @@ const functions = {
       return comment
     
   },
-  deleteComment:async(app_id,comment_id)=>{
-      const comment=await axios.delete('http://localhost:3000/api/comment/'+app_id+'/'+comment_id)
+  deleteComment:async(comment_id)=>{
+      const comment=await axios.delete('http://localhost:3000/api/comment/'+comment_id)
       return comment
   },
   assignreviewer:async(app_id,rev_id)=>{

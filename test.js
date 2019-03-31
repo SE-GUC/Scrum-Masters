@@ -60,7 +60,7 @@ test('delete comment',async()=>{
 const user1 = await functions.createUser('investor')
 const company = await functions.createCompany(user1.data.data._id)
 const commentcreated= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
-   const response= await functions.deleteComment(company.data._id,commentcreated.data.comment._id)
+   const response= await functions.deleteComment(commentcreated.data.comment._id)
     const comment = await functions.getCommenttest(response.data[0])
 
      expect(comment).toBeFalsy()
