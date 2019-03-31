@@ -80,7 +80,7 @@ exports.deleteElectronicJournal = async (req, res) => {
 
 function validateJournal (electronicJournal) {
   const schema = {
-    companyName: Joi.string().min(3).max(20).required(),
+    companyName: Joi.string().min(3).max(200).required(),
     companyDescription: Joi.string().min(3).max(1000),
     companyDate: Joi.date()
   }

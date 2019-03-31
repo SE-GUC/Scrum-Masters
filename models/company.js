@@ -96,7 +96,8 @@ var companySchema = new Schema({
   board_members:
     {
       type: [BoardMemberSchema]
-    },
+    },
+
   // attributes added
   company_type: {
     type: String,

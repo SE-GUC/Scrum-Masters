@@ -148,7 +148,39 @@ exports.createComment = (req, res) => {
         { $push: { comments: comment._id } }
       )
         .then(() => {
-          return res.json({ comment: comment }) 
+          notification = {} 
+          notification.owner_id = user_id 
+          notification.target_type = 'company' 
+          notification.target_id = application_id 
+          notification.notif_text = 'You have a pending comment on your application' 
+        
+          Notification.create(notification)
+            .then(notification => {
+              User.findOneAndUpdate(
+                { _id: user_id },
+                { $push: { notifications: notification._id } }
+              )
+                .then(() => {
+                  return res.json({ comment: comment })
+                })
+                .catch(err => {
+                  console.log(
+                    'Internal server error while adding comment to company list: \n',
+                    err,
+                    '\n\n'
+                  ) 
+                  return res.sendStatus(500) 
+                }) 
+            })
+            .catch(err => {
+              console.log(
+                'Internal server error while creating comment: \n',
+                err,
+                '\n\n'
+              ) 
+              return res.sendStatus(500) 
+            })
+          
         })
         .catch(err => {
           console.log(
@@ -167,49 +199,15 @@ exports.createComment = (req, res) => {
       ) 
       return res.sendStatus(500) 
     })
-  notification = {} 
-  notification.owner_id = user_id 
-  notification.target_type = 'company' 
-  notification.target_id = application_id 
-  notification.notif_text = 'You have a pending comment on your application' 
-
-  Notification.create(notification)
-    .then(notification => {
-      User.findOneAndUpdate(
-        { _id: user_id },
-        { $push: { notifications: notification._id } }
-      )
-        .then(() => {
-          return res.json({
-            msg: 'User notified',
-            data: notification
-          }) 
-        })
-        .catch(err => {
-          console.log(
-            'Internal server error while adding comment to company list: \n',
-            err,
-            '\n\n'
-          ) 
-          return res.sendStatus(500) 
-        }) 
-    })
-    .catch(err => {
-      console.log(
-        'Internal server error while creating commnet: \n',
-        err,
-        '\n\n'
-      ) 
-      return res.sendStatus(500) 
-    })
+ 
 } 
 
 exports.updateComment = async (req, res) => {
   const comment_id = req.params.id 
   const comment_text = req.body.comment_text 
   if (!comment_text) return res.send({ error: 'comment text is required' }) 
-  if (typeof comment_text !== 'string') {
-    return res.status(400).send({ err: 'Invalid value for comment text' }) 
+ if (typeof comment_text !== 'string') {
+   return res.status(400).send({ err: 'Invalid value for comment text' }) 
   }
   const comment = await Comment.findByIdAndUpdate(
     comment_id,
@@ -217,22 +215,31 @@ exports.updateComment = async (req, res) => {
     { new: true }
   ) 
 
-  if (!comment) return res.status(400).send({ error: 'comment not found' }) 
+  if (!comment) return res.status(404).send({ error: 'comment not found' }) 
 
   return res.status(200).send(comment) 
 } 
+exports.viewSpecific = async(req,res)=>{
+const comment_id = req.params.id
+const comment  = await  Comment.findById(comment_id)
+if(!comment) return res.status(404).send({ error: 'comment not found' }) 
+return res.send(comment) 
+}
 
 exports.deleteComment = async (req, res) => {
-  const application_id = req.params.app_id 
+  //const application_id = req.params.app_id 
   const comment_id = req.params.comm_id 
   const deletedcomment = await Comment.findByIdAndRemove(comment_id) 
   if (!deletedcomment)
     return res.status(404).send({ error: 'comment not found ' }) 
 
-  const targetapplication = await Company.findById(application_id) 
+  const targetapplication = await Company.findById(deletedcomment.application_id) 
   if (!targetapplication)
     return res.status(404).send({ error: 'application not found ' }) 
-  var deletedComment = targetapplication.comments.remove(comment_id) 
+    const index = targetapplication.comments.indexOf(comment_id)
+  var deletedComment = targetapplication.comments.splice(index, 1)
+  //await Company.findByIdAndUpdate(deletedcomment.application_id)
+  await Company.findByIdAndUpdate(deletedcomment.application_id, { $pull: { comments: deletedComment[0] } })
   return res.send(deletedComment) 
 } 
 
@@ -296,7 +303,6 @@ exports.setNotificationViewed = async (req, res) => {
 
 exports.notificationTestCreate = async (req, res) => {
   const notif = await exports.createNotificationForUser(req.body) 
-  console.log(notif) 
   if (!notif) res.sendStatus(500) 
   return res.json(notif) 
 } 
@@ -380,10 +386,7 @@ exports.assignLaywer = async (req, res) => {
         { $push: { notifications: notification._id } }
       )
         .then(() => {
-          return res.json({
-            msg: 'Lawyer Assigned Successfully And A Notification Was Sent',
-            data: notification
-          }) 
+          return res.json(updatedApplication) 
         })
         .catch(err => {
           console.log(
@@ -405,7 +408,7 @@ exports.assignLaywer = async (req, res) => {
 }
 
 exports.getassignedlawyer = async(req,res) => {
-  const companyrequest=await CompanyRequest.findOne({_id:req.params.companyid,investor_id:req.params.userid})
+  const companyrequest=await CompanyRequest.findOne({_id:req.params.companyid})
   if(!companyrequest)
      return res.status(404).send({ error: 'No such Request'})
   if(!companyrequest.assigned)
@@ -414,4 +417,83 @@ exports.getassignedlawyer = async(req,res) => {
   if(!laywer)
      return res.status(404).send({ error: 'No such lawyer'})
   return res.json(laywer) 
+}
+
+exports.publishPaidApplication = async(req,res) => {
+  const appId = req.params.appId
+  const adminId = req.params.adminId
+
+  var targetApplication = await Company.findById(appId)
+
+  if (!targetApplication)
+    return res.status(404).send({ error: 'Application not found'})
+
+  var targetAdmin = await User.findById(adminId)
+
+  if(!targetAdmin)
+    return res.status(404).send({ error: 'Admin not found'})
+
+  if (targetApplication.established == true)
+    return res.send({ error: 'This application is already established'})
+  
+  if(targetApplication.ispaid == false)
+    return res.send({ error: 'This application is not paid yet'})
+
+  if(targetAdmin.type != 'admin')
+    return res.status(404).send({ error: 'User should be of type admin to publish a company'})
+  
+  const published = await Company.findByIdAndUpdate(appId, {established: true},{new:true})
+
+  return res.send(published)
+}
+
+exports.unassignReviewer = async (req, res) => {
+  try {
+    const targetId = req.params.appId
+
+    var targetApplication = await Company.findById(targetId)
+
+    if (!targetApplication) {
+      return res.status(404).send({ error: 'Application not found' })
+    }
+
+    if (targetApplication.reviewed_reviewer === null) {
+      return res.send({ error: 'This application is already unreviewed' })
+    }
+
+    const targetApplicationup = await Company.findByIdAndUpdate(
+      targetId,
+      { review_reviewer: undefined, reviewed_statusreviewer: undefined },
+      { new: true }
+    )
+
+    return res.send(targetApplicationup)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+exports.unassignLaywer = async (req, res) => {
+  try {
+    const appId = req.params.appId
+
+    var application = await Company.findById(appId)
+    if (!application) {
+      return res.status(404).send({ error: 'Application not found' })
+    }
+
+    if (application.review_lawyer === null) {
+      return res.status(400).send({
+        error: 'The lawyer is already unassigned to this application'
+      })
+    }
+    const updatedApplication = await Company.findByIdAndUpdate(
+      appId,
+      { review_lawyer: undefined, reviewed_statuslawyer: undefined },
+      { new: true }
+    )
+    return res.json(updatedApplication)
+  } catch (error) {
+    console.log(error)
+  }
 }
