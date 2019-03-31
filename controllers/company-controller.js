@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const Company = require('../models/company')
 const Notification = require('../models/Notification')
+const ElectronicJournal = require('../models/ElectronicJournal')
 const userController = require('../controllers/user-controller')
 
 function validateCompany (company) {
@@ -169,24 +170,6 @@ exports.addFees = async (req, res) => {
   return res.send(targetcompany)
 }
 
-exports.checkapproval = ( req, res) => {
-  Company.findById(req.params.id).then(company =>{
-    if(!company) return res.status(404).send('application not found')
-    var la = company.reviewed_statusreviewer
-    var ra = company.reviewed_statuslawyer
-    if( la && ra){
-        ej = {}
-        ej.companyName = company.company_name_english
-        ej.companyDescription = ''
-        ej.companyAcceptancedate = new Date()
-    }
-  })
-  .catch(err => {
-    console.log(err)
-    return res.sendStatus(500)
-  })
-}
-
 exports.listUnassignedApplications =async(req,res)=>{
   try {
    const companies= await Company.find({ assigned_status: false },{new:true})
@@ -228,7 +211,14 @@ exports.establishCompany = async(req, res) => {
           await userController.createNotificationForUser(
             { owner_id: company.owner, target_type: 'company', target_id: company._id, notif_text: "Your company has been established" }
           )
-          return res.json({ msg: "Success", data: company })
+          ElectronicJournal.create({ companyName: company.company_name_arabic })
+          .then(ej => {
+            return res.json({ msg: "Success", data: company })
+          })
+          .catch(err => {
+            console.log(err)
+            return res.sendStatus(500)
+          })
         })
         .catch(err => {
           console.log(err)
