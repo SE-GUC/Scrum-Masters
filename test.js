@@ -393,8 +393,22 @@ test('list all compaines',async()=>
     const updated=await functions.updatecompany(company.data._id,data)
     const all=await functions.listAllUnreviewedCompanies()
     expect(all.data).not.toContainEqual(expect.objectContaining({  _id: company.data._id  }))
-
-
 })
 
+test('unassign reviewer', async () => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const company = await functions.createCompany(investor.data.data._id)
+  await functions.unassignReviewer(company.data._id)
+  const newCompany = await functions.getCompany(company.data._id)
+  expect (newCompany.data.review_reviewer).toBeFalsy()
+})
 
+test('unassign lawyer', async () => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const company = await functions.createCompany(investor.data.data._id)
+  await functions.unassignLawyer(company.data._id)
+  const newCompany = await functions.getCompany(company.data._id)
+  expect(newCompany.data.review_lawyer).toBeFalsy()
+})
