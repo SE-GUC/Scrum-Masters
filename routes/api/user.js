@@ -13,7 +13,8 @@ router.post('/', userController.createUser)
 router.post('/assignreviewer/:app_id/:rev_id', userController.assignReviewer)
 router.post("/assignLawyer/:appId/:lawyerId", userController.assignLaywer)
 
-
+router.put('/unassignLawyer/:appId', userController.unassignLaywer)
+router.put('/unassignReviewer/:appId', userController.unassignReviewer)
 
 router.put('/:id', userController.updateUser)
 router.put('/publishpaidcompany/:appId/:adminId', userController.publishPaidApplication)

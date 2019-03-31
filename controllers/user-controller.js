@@ -227,18 +227,19 @@ return res.send(comment)
 }
 
 exports.deleteComment = async (req, res) => {
-  const application_id = req.params.app_id 
+  //const application_id = req.params.app_id 
   const comment_id = req.params.comm_id 
   const deletedcomment = await Comment.findByIdAndRemove(comment_id) 
   if (!deletedcomment)
     return res.status(404).send({ error: 'comment not found ' }) 
 
-  const targetapplication = await Company.findById(application_id) 
+  const targetapplication = await Company.findById(deletedcomment.application_id) 
   if (!targetapplication)
     return res.status(404).send({ error: 'application not found ' }) 
     const index = targetapplication.comments.indexOf(comment_id)
   var deletedComment = targetapplication.comments.splice(index, 1)
-  await Company.findByIdAndUpdate(application_id)
+  //await Company.findByIdAndUpdate(deletedcomment.application_id)
+  await Company.findByIdAndUpdate(deletedcomment.application_id, { $pull: { comments: deletedComment[0] } })
   return res.send(deletedComment) 
 } 
 
@@ -444,4 +445,55 @@ exports.publishPaidApplication = async(req,res) => {
   const published = await Company.findByIdAndUpdate(appId, {established: true},{new:true})
 
   return res.send(published)
+}
+
+exports.unassignReviewer = async (req, res) => {
+  try {
+    const targetId = req.params.appId
+
+    var targetApplication = await Company.findById(targetId)
+
+    if (!targetApplication) {
+      return res.status(404).send({ error: 'Application not found' })
+    }
+
+    if (targetApplication.reviewed_reviewer === null) {
+      return res.send({ error: 'This application is already unreviewed' })
+    }
+
+    const targetApplicationup = await Company.findByIdAndUpdate(
+      targetId,
+      { review_reviewer: undefined, reviewed_statusreviewer: undefined },
+      { new: true }
+    )
+
+    return res.send(targetApplicationup)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+exports.unassignLaywer = async (req, res) => {
+  try {
+    const appId = req.params.appId
+
+    var application = await Company.findById(appId)
+    if (!application) {
+      return res.status(404).send({ error: 'Application not found' })
+    }
+
+    if (application.review_lawyer === null) {
+      return res.status(400).send({
+        error: 'The lawyer is already unassigned to this application'
+      })
+    }
+    const updatedApplication = await Company.findByIdAndUpdate(
+      appId,
+      { review_lawyer: undefined, reviewed_statuslawyer: undefined },
+      { new: true }
+    )
+    return res.json(updatedApplication)
+  } catch (error) {
+    console.log(error)
+  }
 }

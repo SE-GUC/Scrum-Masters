@@ -51,18 +51,11 @@ const functions = {
     },
     
     updateElectronicJournal: async(id, companyDescription,companyName)=>{
-      try{
     const electronicJournal = await axios.put('http://localhost:3000/api/electronicJournals/'+id,
     {companyDescription:companyDescription,
     companyName:companyName})
     
     return electronicJournal
-      }
-      catch(err){
-      return undefined
-  }
-      
-      
    },
     deleteElectronicJournal: async(id)=>{
     const electronicJournal = await axios.delete('http://localhost:3000/api/electronicJournals/'+id)
@@ -93,8 +86,8 @@ const functions = {
       return comment
     
   },
-  deleteComment:async(app_id,comment_id)=>{
-      const comment=await axios.delete('http://localhost:3000/api/comment/'+app_id+'/'+comment_id)
+  deleteComment:async(comment_id)=>{
+      const comment=await axios.delete('http://localhost:3000/api/comment/'+comment_id)
       return comment
   },
   assignreviewer:async(app_id,rev_id)=>{
@@ -246,6 +239,15 @@ const functions = {
     const company=await axios.post(`http://localhost:3000/api/company/establish/${id}`)
     return company
   },
+  unassignReviewer: async (company_id) => {
+    const company = await axios.put('http://localhost:3000/api/user/unassignreviewer/' + company_id)
+    return company
+  },
+
+  unassignLawyer: async (company_id) => {
+    const company = await axios.put('http://localhost:3000/api/user/unassignLawyer/' + company_id)
+    return company
+  }
 }
 
 module.exports = functions

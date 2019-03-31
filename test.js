@@ -10,9 +10,10 @@ test('update Electronic Journal',async()=>{
   const user = await functions.createUser('investor')
   const company = await functions.createCompany(user.data.data._id)
   const EJ= await functions.createElectronicJournal('electronicJournalcompany',company.data.company_name_english)
-  const response=  functions.updateElectronicJournal(EJ.data.data._id,"Egegege",company.data.company_name_english)
+  const newValue = uuid.v4()
+  const response=  await functions.updateElectronicJournal(EJ.data.data._id,newValue,company.data.company_name_english)
   const ej= await functions.getElectronicJournal(response.data.data._id)
-  expect(ej.data.companyDescription).toBe('Egegege')
+  expect(ej.data.companyDescription).toBe(newValue)
 })
 test('delete Electronic Journal',async()=>{    
   expect.assertions(1)
@@ -94,7 +95,7 @@ const company = await functions.createCompany(user1.data.data._id)
 const response = await functions.calculateFees(company.data._id)
 
 const application = await functions.getCompany(company.data._id)
-expect(application.data.fees).toBe(response.data.targetcompany.fees)
+expect(application.data.fees).toBe(response.data.fees)
 
 })
 
@@ -103,7 +104,7 @@ test('delete comment',async()=>{
 const user1 = await functions.createUser('investor')
 const company = await functions.createCompany(user1.data.data._id)
 const commentcreated= await functions.createComment('the comment is created succ',company.data._id,user1.data.data._id)
-   const response= await functions.deleteComment(company.data._id,commentcreated.data.comment._id)
+   const response= await functions.deleteComment(commentcreated.data.comment._id)
     const comment = await functions.getCommenttest(response.data[0])
 
      expect(comment).toBeFalsy()
@@ -393,11 +394,9 @@ test('list all compaines',async()=>
     const updated=await functions.updatecompany(company.data._id,data)
     const all=await functions.listAllUnreviewedCompanies()
     expect(all.data).not.toContainEqual(expect.objectContaining({  _id: company.data._id  }))
-
-
 })
 
-  test('Admin publish paid application',async()=>
+test('Admin publish paid application',async()=>
 {
   expect.assertions()
   const investor=await functions.createUser('investor')
@@ -413,3 +412,20 @@ test('list all compaines',async()=>
   expect(publish.data.established).toBe(true)
 })
 
+test('unassign reviewer', async () => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const company = await functions.createCompany(investor.data.data._id)
+  await functions.unassignReviewer(company.data._id)
+  const newCompany = await functions.getCompany(company.data._id)
+  expect (newCompany.data.review_reviewer).toBeFalsy()
+})
+
+test('unassign lawyer', async () => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const company = await functions.createCompany(investor.data.data._id)
+  await functions.unassignLawyer(company.data._id)
+  const newCompany = await functions.getCompany(company.data._id)
+  expect(newCompany.data.review_lawyer).toBeFalsy()
+})
