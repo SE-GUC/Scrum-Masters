@@ -227,18 +227,19 @@ return res.send(comment)
 }
 
 exports.deleteComment = async (req, res) => {
-  const application_id = req.params.app_id 
+  //const application_id = req.params.app_id 
   const comment_id = req.params.comm_id 
   const deletedcomment = await Comment.findByIdAndRemove(comment_id) 
   if (!deletedcomment)
     return res.status(404).send({ error: 'comment not found ' }) 
 
-  const targetapplication = await Company.findById(application_id) 
+  const targetapplication = await Company.findById(deletedcomment.application_id) 
   if (!targetapplication)
     return res.status(404).send({ error: 'application not found ' }) 
     const index = targetapplication.comments.indexOf(comment_id)
   var deletedComment = targetapplication.comments.splice(index, 1)
-  await Company.findByIdAndUpdate(application_id)
+  //await Company.findByIdAndUpdate(deletedcomment.application_id)
+  await Company.findByIdAndUpdate(deletedcomment.application_id, { $pull: { comments: deletedComment[0] } })
   return res.send(deletedComment) 
 } 
 
