@@ -138,6 +138,12 @@ const functions = {
     const user = await axios.delete('http://localhost:3000/api/user/' + id)
     return user
   },
+
+  publishPaidApplication: async(appId,adminId) => {
+    const company = await axios.put('http://localhost:3000/api/user/publishpaidcompany/'+ appId + '/' + adminId)
+    return company 
+  },
+
   createNotification: async(user) => {
     const notification = await axios.post('http://localhost:3000/api/notification', {
       "owner_id": user,

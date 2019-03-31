@@ -33,8 +33,8 @@ function validateupdateCompany (company) {
     investor_email: Joi.string(),
     ispaid:Joi.boolean(),//TO Do Just for tests no and will remove it later
     assigned_status:Joi.boolean(),//TO Do Just for tests no and will remove it later
-    reviewed_statusreviewer:Joi.boolean()//TO Do Just for tests no and will remove it later
-
+    reviewed_statusreviewer:Joi.boolean(),//TO Do Just for tests no and will remove it later
+    established:Joi.boolean()
 
   }
   if (company.company_type === 'ssc') {

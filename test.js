@@ -396,6 +396,22 @@ test('list all compaines',async()=>
     expect(all.data).not.toContainEqual(expect.objectContaining({  _id: company.data._id  }))
 })
 
+test('Admin publish paid application',async()=>
+{
+  expect.assertions()
+  const investor=await functions.createUser('investor')
+  const admin=await functions.createUser('admin')
+  const company=await functions.createCompany(investor.data.data._id)
+  const data={
+    "ispaid":"true"
+  }
+  
+  const updatedCompany=await functions.updatecompany(company.data._id,data)
+  const publish=await functions.publishPaidApplication(company.data._id,admin.data.data._id)
+  var x = publish.data.established
+  expect(publish.data.established).toBe(true)
+})
+
 test('unassign reviewer', async () => {
   expect.assertions(1)
   const investor = await functions.createUser('investor')
