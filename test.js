@@ -10,9 +10,10 @@ test('update Electronic Journal',async()=>{
   const user = await functions.createUser('investor')
   const company = await functions.createCompany(user.data.data._id)
   const EJ= await functions.createElectronicJournal('electronicJournalcompany',company.data.company_name_english)
-  const response=  functions.updateElectronicJournal(EJ.data.data._id,"Egegege",company.data.company_name_english)
+  const newValue = uuid.v4()
+  const response=  await functions.updateElectronicJournal(EJ.data.data._id,newValue,company.data.company_name_english)
   const ej= await functions.getElectronicJournal(response.data.data._id)
-  expect(ej.data.companyDescription).toBe('Egegege')
+  expect(ej.data.companyDescription).toBe(newValue)
 })
 test('delete Electronic Journal',async()=>{    
   expect.assertions(1)
@@ -94,7 +95,7 @@ const company = await functions.createCompany(user1.data.data._id)
 const response = await functions.calculateFees(company.data._id)
 
 const application = await functions.getCompany(company.data._id)
-expect(application.data.fees).toBe(response.data.targetcompany.fees)
+expect(application.data.fees).toBe(response.data.fees)
 
 })
 
