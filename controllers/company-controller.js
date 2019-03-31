@@ -263,7 +263,7 @@ exports.establishCompany = async(req, res) => {
       
       Company.findByIdAndUpdate(req.params.id, { established: true }, { new: true })
         .then(async company => {
-          await userController.createNotificationForUser(
+           userController.createNotificationForUser(
             { owner_id: company.owner, target_type: 'company', target_id: company._id, notif_text: "Your company has been established" }
           )
           ElectronicJournal.create({ companyName: company.company_name_arabic })
