@@ -51,18 +51,11 @@ const functions = {
     },
     
     updateElectronicJournal: async(id, companyDescription,companyName)=>{
-      try{
     const electronicJournal = await axios.put('http://localhost:3000/api/electronicJournals/'+id,
     {companyDescription:companyDescription,
     companyName:companyName})
     
     return electronicJournal
-      }
-      catch(err){
-      return undefined
-  }
-      
-      
    },
     deleteElectronicJournal: async(id)=>{
     const electronicJournal = await axios.delete('http://localhost:3000/api/electronicJournals/'+id)
