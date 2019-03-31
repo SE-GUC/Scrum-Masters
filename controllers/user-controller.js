@@ -435,6 +435,9 @@ exports.publishPaidApplication = async(req,res) => {
   if (targetApplication.established == true)
     return res.send({ error: 'This application is already established'})
   
+  if(targetApplication.ispaid == false)
+    return res.send({ error: 'This application is not paid yet'})
+
   if(targetAdmin.type != 'admin')
     return res.status(404).send({ error: 'User should be of type admin to publish a company'})
   

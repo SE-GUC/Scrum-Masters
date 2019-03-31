@@ -397,4 +397,18 @@ test('list all compaines',async()=>
 
 })
 
+  test('Admin publish paid application',async()=>
+{
+  expect.assertions()
+  const investor=await functions.createUser('investor')
+  const admin=await functions.createUser('admin')
+  const company=await functions.createCompany(investor.data.data._id)
+  const data={
+    "ispaid":"true",
+    "established":"false"
+  }
+  const updated=await functions.updatecompany(company.data._id,data)
+  const publish=await functions.publishPaidApplication(company.data._id,admin.data._id)
+  expect(publish.data.data.established).toBe(true)
+})
 

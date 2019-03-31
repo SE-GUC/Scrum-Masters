@@ -147,7 +147,7 @@ const functions = {
   },
 
   publishPaidApplication: async(appId,adminId) => {
-    const company = await axios.put('http://localhost:3000/api/user/establishpaidcompany/'+ appId, adminId)
+    const company = await axios.put('http://localhost:3000/api/user/publishpaidcompany/'+ appId, adminId)
     return company 
   },
 

@@ -16,7 +16,7 @@ router.post("/assignLawyer/:appId/:lawyerId", userController.assignLaywer)
 
 
 router.put('/:id', userController.updateUser)
-router.put('/establishpaidcompany/:appId/:adminId', userController.publishPaidApplication)
+router.put('/publishpaidcompany/:appId/:adminId', userController.publishPaidApplication)
 
 router.delete('/:id', userController.deleteUser)
 
