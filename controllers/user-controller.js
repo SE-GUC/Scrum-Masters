@@ -417,3 +417,28 @@ exports.getassignedlawyer = async(req,res) => {
      return res.status(404).send({ error: 'No such lawyer'})
   return res.json(laywer) 
 }
+
+exports.publishPaidApplication = async(req,res) => {
+  const appId = req.params.appId
+  const adminId = req.params.adminId
+
+  var targetApplication = await Company.findById(appId)
+
+  if (!targetApplication)
+    return res.status(404).send({ error: 'Application not found'})
+
+  var targetAdmin = await User.findById(adminId)
+
+  if(!targetAdmin)
+    return res.status(404).send({ error: 'Admin not found'})
+
+  if (targetApplication.established == true)
+    return res.send({ error: 'This application is already established'})
+  
+  if(targetAdmin.type != 'admin')
+    return res.status(404).send({ error: 'User should be of type admin to publish a company'})
+  
+  const published = await Company.findByIdAndUpdate(appId, {established: true})
+
+  return res.send(published)
+}
