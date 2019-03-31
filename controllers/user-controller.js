@@ -441,7 +441,7 @@ exports.publishPaidApplication = async(req,res) => {
   if(targetAdmin.type != 'admin')
     return res.status(404).send({ error: 'User should be of type admin to publish a company'})
   
-  const published = await Company.findByIdAndUpdate(appId, {established: true})
+  const published = await Company.findByIdAndUpdate(appId, {established: true},{new:true})
 
   return res.send(published)
 }

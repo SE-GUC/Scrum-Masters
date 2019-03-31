@@ -4,7 +4,7 @@ const functions = require('./fn')
 const Comment = require('./models/comment') 
 var Company = require('./models/company') 
 
-/*
+
 test('update Electronic Journal',async()=>{
   expect.assertions(1)
   const user = await functions.createUser('investor')
@@ -396,7 +396,7 @@ test('list all compaines',async()=>
 
 
 })
-*/
+
   test('Admin publish paid application',async()=>
 {
   expect.assertions()
@@ -406,10 +406,10 @@ test('list all compaines',async()=>
   const data={
     "ispaid":"true"
   }
-  var x = data
- // console.log(x)
+  
   const updatedCompany=await functions.updatecompany(company.data._id,data)
   const publish=await functions.publishPaidApplication(company.data._id,admin.data.data._id)
+  var x = publish.data.established
   expect(publish.data.established).toBe(true)
 })
 
