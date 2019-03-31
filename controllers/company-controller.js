@@ -1,6 +1,7 @@
 const Joi = require('joi')
 const Company = require('../models/company')
 const Notification = require('../models/Notification')
+const ElectronicJournal = require('../models/ElectronicJournal')
 const userController = require('../controllers/user-controller')
 
 
@@ -265,7 +266,14 @@ exports.establishCompany = async(req, res) => {
           await userController.createNotificationForUser(
             { owner_id: company.owner, target_type: 'company', target_id: company._id, notif_text: "Your company has been established" }
           )
-          return res.json({ msg: "Success", data: company })
+          ElectronicJournal.create({ companyName: company.company_name_arabic })
+          .then(ej => {
+            return res.json({ msg: "Success", data: company })
+          })
+          .catch(err => {
+            console.log(err)
+            return res.sendStatus(500)
+          })
         })
         .catch(err => {
           console.log(err)
