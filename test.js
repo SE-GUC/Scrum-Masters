@@ -331,7 +331,8 @@ test('list all compaines',async()=>
     const investor=await functions.createUser('investor')
     const company=await functions.createCompany(investor.data.data._id)
     const all =await functions.getallcompaines()
-    expect(all.data).toContainEqual({ _id: company.data._id })
+    expect(all.data).toContainEqual({ _id: company.data._id,company_name_english:company.data.company_name_english,company_name_arabic:company.data.company_name_arabic })
+    
   })
 
   test('list all Unassigned Applications',async()=>
@@ -345,7 +346,7 @@ test('list all compaines',async()=>
     const updated=await functions.updatecompany(company.data._id,data)
     const all=await functions.listUnassignedApplications()
     expect(all.data).not.toContainEqual(expect.objectContaining({  _id: company.data._id  }))
-
+   
 
 })
 

@@ -112,7 +112,7 @@ function validatecreateCompany (company) {
   return Joi.validate(company, schema)
 }
 exports.listAllCompanies = (req, res) => {
-  Company.find({}, { _id: true })
+  Company.find({}, { _id: true ,company_name_english: true , company_name_arabic : true})
     .then(company => {
       return res.json(company)
     })
@@ -227,7 +227,7 @@ exports.deleteCompany = (req, res) => {
 
 exports.listUnassignedApplications =async(req,res)=>{
   try {
-   const companies= await Company.find({ assigned_status: false },{new:true})
+   const companies= await Company.find({ assigned_status: false })
   res.json(companies)
   }
   catch(error){
