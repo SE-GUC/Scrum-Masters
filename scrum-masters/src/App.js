@@ -5,10 +5,9 @@ import "bootstrap";
 import { BrowserRouter, Route } from "react-router-dom";
 import Navigationbar from "./Compnents/navigationbar";
 import AllCompanies from "./Compnents/allCompanies";
-
+import SignUp from "./Compnents/signup";
 import CompanyForm from "./Compnents/CompanyForm";
 import CompanyUpdate from "./Compnents/CompanyUpdate";
-
 import AllUnassignedCompanies from './Compnents/unassignedCompanies'
 
 import Home from "./Compnents/Home";
@@ -23,14 +22,10 @@ class App extends Component {
           <Navigationbar />
           <Route exact path="/" component={Home} />
           <Route exact path="/allCompanies" component={AllCompanies} />
-
-
+          <Route exact path="/signup" component={SignUp} />
           <Route exact path="/companyform" component={CompanyForm} />
-
           <Route exact path="/CompanyUpdate" component={CompanyUpdate} />
-
           <Route exact path="/unassignedCompanies" component={AllUnassignedCompanies} />
-
         </div>
       </BrowserRouter>
     );
