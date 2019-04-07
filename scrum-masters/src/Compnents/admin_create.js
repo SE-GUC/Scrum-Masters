@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 const axios = require("axios");
 
 
@@ -10,8 +9,8 @@ class admin_create extends Component {
     super(porps);
     this.state={
       msg:"",
-      firstname:"",
-      lastname:"",
+      firstName:"",
+      lastName:"",
       email:"",
       password:"",
       gender:"",
@@ -32,8 +31,6 @@ class admin_create extends Component {
         "type":this.state.type,
         "gender":this.state.gender
 
-      }).then(res=>{
-        //this.setState({msg:res.data.data.msg})
       })
       .catch(err => {
         console.log(err);
