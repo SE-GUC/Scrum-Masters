@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-//import logo from './logo.svg';
 import Navigationbar from "./navigationbar";
+import SuccessAlert from  './SuccessAlert'
+import ErrorAlert from './ErrorAlert'
+
 import {
   Nav,
   Navbar,
@@ -24,15 +26,17 @@ import {
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
-class AllCompanies extends Component {
+class AllUnassignedCompanies extends Component {
   state = {
     count: 0,
-    company: []
+    company: [],
+    lawyerId: "5caa32e5a18bd1622048e8b7",
+    alert : ''
   };
 
-  showCompnies = () => {
+  showUnassignedCompnies = () => {
     axios
-      .get("http://localhost:3001/api/company")
+      .get("http://localhost:3001/api/company/listUnassignedApplications")
       .then(companies => {
         this.setState({ company: companies.data });
         this.setState({ count: this.state.count + 1 });
@@ -40,6 +44,19 @@ class AllCompanies extends Component {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  handler = async e => {
+    
+    try{
+    const company = await axios.post('http://localhost:3001/api/user/assignLawyer/' + e + '/' + this.state.lawyerId) 
+      this.setState({alert:"Success"})
+    } catch(error) {
+       
+      this.setState({alert:"Error"})
+     console.log(this.state.alert)
+     
+    }
   };
 
   rendercompanies = () => {
@@ -55,12 +72,20 @@ class AllCompanies extends Component {
         <ul>
           {this.state.company.map(companies => (
             <li key={companies._id}>
-              <ListGroup.Item action href="#link1" action variant="danger">
+              <ListGroup.Item
+                action
+                href="#link1"
+                action
+                variant="secondary"
+                onClick ={() => this.handler(companies._id)}
+                
+              >
                 {" "}
                 <strong style={{ color: "steelblue" }}>
                   Company Name:
                 </strong>{" "}
-                {companies.company_name_english}
+                {companies.company_name_arabic  }
+                
               </ListGroup.Item>{" "}
             </li>
           ))}
@@ -72,6 +97,7 @@ class AllCompanies extends Component {
   render() {
     return (
       <div>
+        
         <span
           style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
           className="badge"
@@ -80,16 +106,21 @@ class AllCompanies extends Component {
         </span>
         <br />
         <Button
-          onClick={this.showCompnies}
+          onClick={this.showUnassignedCompnies}
           className=" m-2"
           variant="outline-secondary"
         >
-          Show Companies
+        
+          Show Unassigned Companies
         </Button>
         {this.rendercompanies()}
+        <hr/>
+        {this.state.alert=="Success"?<SuccessAlert/>:null}
+        {this.state.alert=="Error"?<ErrorAlert/>:null}
+        <hr/>
       </div>
     );
   }
 }
 
-export default AllCompanies;
+export default AllUnassignedCompanies;
