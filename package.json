@@ -26,6 +26,9 @@
     "joi": "^14.3.1",
     "jshint": "^2.10.1",
     "mongoose": "^5.4.19",
+    "react-alert": "^5.4.0",
+    "react-alert-template-basic": "^1.0.0",
+    "reactjs": "^1.0.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
