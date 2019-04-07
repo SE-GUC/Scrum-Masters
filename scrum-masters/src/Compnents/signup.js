@@ -1,8 +1,4 @@
 import React, { Component } from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 
 import {
     Nav,
@@ -27,44 +23,38 @@ import {
   const axios = require("axios");
   axios.defaults.adapter = require("axios/lib/adapters/http");
   class signup extends Component {
-     constructor(probs){
+     constructor(props){
         super(props);
       
       this.state = {
       count: 0,
       User: [],
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
       password: "",
       gender: "",
-      "type": "investor"
+      "type": "investor",
+      msg: ""
     }
 }
 
     sign=()=>{
-        var payload={
-            "first_name": this.state.first_name,
-            "last_name":this.state.last_name,
+      console.log(this.state)
+        var payload={   
+            "firstName": this.state.first_name,
+            "lastName":this.state.last_name,
             "email":this.state.email,
             "password":this.state.password,
-            "gender":this.state.gender
+            "gender":this.state.gender,
+            "type":"investor"
             }
         axios.post('http://localhost:3001/api/user',payload)
         .then(users=>{
-            // users.data ===payload m3rfsh eza ynf3 a3mlha keda wala la2 l moustafa
-            this.setState({users:users.data})
-            
+            this.setState({users:users.data, msg:"Success"})
+          }).catch(err=>{
+            this.setState({msg:err.response.data})
           })
-            // if(users.data.code == 200){
-            // console.log("registration successfull");
-            // var loginscreen=[];
-            // loginscreen.push(<Login parentContext={this}/>);
-            // var loginmessage = "Not Registered yet.Go to registration";
-            // this.props.setState({loginscreen:loginscreen,
-            // loginmessage:loginmessage,
-            // buttonLabel:"Register",
-            // isLogin:true
              
         .catch(err => {
             console.log(err);
@@ -75,44 +65,46 @@ import {
     render   ()  {
         return (
             <div>
-              
+                <span
+                  style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
+                  className="badge"
+                >
+                  Signup
+                </span>
                 <div>
-                <AppBar
-                   title="SignUp"
-                 />
-                 <TextField
-                   hintText="Enter your First Name"
+                 Enter your First Name: <input type="text"
                    floatingLabelText="First Name"
-                   onChange = {(event,newValue) => this.setState({first_name:newValue})}
+                   onChange = {(e) => this.setState({first_name:e.target.value})}
              />
-             <TextField
-             hintText="Enter your Last Name"
+             Enter your Last Name: <input type="text"
              floatingLabelText="Last Name"
-             onChange = {(event,newValue) => this.setState({last_name:newValue})}
+             onChange = {(e) => this.setState({last_name:e.target.value})}
              />
               <br/>
-           <TextField
-             hintText="Enter your Email"
+           Enter your Email: <input type="text"
              type="email"
              floatingLabelText="Email"
-             onChange = {(event,newValue) => this.setState({email:newValue})}
+             onChange = {(e) => this.setState({email:e.target.value})}
              />
              <br/>
-           <TextField
+           Enter your Password: <input type="text"
              type = "password"
-             hintText="Enter your Password"
              floatingLabelText="Password"
-             onChange = {(event,newValue) => this.setState({password:newValue})}
+             onChange = {(e) => this.setState({password:e.target.value})}
              />
            <br/>
-           <TextField
+           please specify your gender: <select type="text"
              type = "gender"
-             hintText="please specify your gender"
              floatingLabelText="Gender"
-             onChange = {(event,newValue) => this.setState({gender:newValue})}
-             />
+             onChange = {(e) => this.setState({gender:e.target.value})}>
+              <option value=""></option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+             </select>
            <br/>
-           <RaisedButton label="Sign" primary={true} style={style} onClick={(event) => this.handleClick(this.sign())}/>
+           <button primary={true} style={style} onClick={(event) => this.sign()}>Signup</button>
+           <br/>
+           {this.state.msg}
           </div>
          
       </div>
