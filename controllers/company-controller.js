@@ -227,7 +227,7 @@ exports.deleteCompany = (req, res) => {
 
 exports.listUnassignedApplications =async(req,res)=>{
   try {
-   const companies= await Company.find({ assigned_status: false },{new:true})
+   const companies= await Company.find({ assigned_status: false })
   res.json(companies)
   }
   catch(error){

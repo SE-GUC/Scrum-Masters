@@ -35,7 +35,7 @@ class AllCompanies extends Component {
         <ul>
           {this.state.company.map(companies => (
             <li key={companies._id}>
-              <ListGroup.Item action href="#link1" action variant="secondary">
+              <ListGroup.Item action href="#link1" action variant="danger">
                 {" "}
                 <strong style={{ color: "steelblue" }}>
                   Company Name:
