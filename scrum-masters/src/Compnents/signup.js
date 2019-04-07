@@ -50,7 +50,7 @@ import {
             "password":this.state.password,
             "gender":this.state.gender
             }
-        axios.post('http://localhost:3000/api/user',payload)
+        axios.post('http://localhost:3001/api/user',payload)
         .then(users=>{
             // users.data ===payload m3rfsh eza ynf3 a3mlha keda wala la2 l moustafa
             this.setState({users:users.data})
