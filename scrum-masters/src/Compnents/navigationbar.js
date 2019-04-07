@@ -13,6 +13,7 @@ const navigationbar = () => {
             <Nav.Link href="#link">Notifications</Nav.Link>
             <Nav.Link href="#link">Assigned Companies</Nav.Link>
             <Nav.Link href="/allCompanies">All Companies</Nav.Link>
+            <Nav.Link href="/applicationReview">Review your applications</Nav.Link> 
 
             <NavDropdown title="" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Sign out</NavDropdown.Item>
