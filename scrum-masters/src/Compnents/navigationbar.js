@@ -13,6 +13,7 @@ const navigationbar = () => {
             <Nav.Link href="#link">Notifications</Nav.Link>
             <Nav.Link href="/unassignedCompanies">Unassigned Companies</Nav.Link>
             <Nav.Link href="/allCompanies">All Companies</Nav.Link>
+            <Nav.Link href="/applicationReview">Review your applications</Nav.Link> 
             <Nav.Link href="/signup">SignUp investor</Nav.Link>
 
             <NavDropdown title="" id="basic-nav-dropdown">
