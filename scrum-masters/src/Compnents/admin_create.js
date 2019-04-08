@@ -22,20 +22,24 @@ class admin_create extends Component {
 
   createaccount=()=>
   {
+    const data={
+      "firstName":this.state.firstname,
+      "lastName":this.state.lastname,
+      "password":this.state.password,
+      "email":this.state.email,
+      "type":this.state.usertype,
+      "gender":this.state.gender
+
+    }
     axios
-      .post("http://localhost:3001/api/user",{
-        "firstName":this.state.firstname,
-        "lastName":this.state.lastname,
-        "password":this.state.password,
-        "email":this.state.email,
-        "type":this.state.type,
-        "gender":this.state.gender
+      .post("http://localhost:3001/api/user",data)
+      .then(res=>{
+        this.setState({msg:res.data.msg})
 
       })
       .catch(err => {
-        console.log(err);
-        //this.setState({msg:res.data.data.msg})
-        
+        this.setState({msg:"some error happend"})
+        console.log(err);      
       })
 
   }
@@ -81,7 +85,7 @@ class admin_create extends Component {
         
          
           <button type="button" className="create lawyer" onClick={this.createaccount.bind(this)}>Create</button>
-        
+           <h> {this.state.msg}</h>
         
         </dev>
         </div>       
