@@ -1,27 +1,7 @@
 import React, { Component } from 'react';
+const axios = require("axios");
+axios.defaults.adapter = require("axios/lib/adapters/http")
 
-import {
-    Nav,
-    Navbar,
-    NavDropdown,
-    Popover,
-    Badge,
-    Spinner,
-    Tabs,
-    ButtonToolbar,
-    Button,
-    ListGroup,
-    Table,
-    ButtonGroup,
-    Row,
-    Col,
-    Grid,
-    Panel,
-    FormGroup,
-    FormControl
-  } from "react-bootstrap";
-  const axios = require("axios");
-  axios.defaults.adapter = require("axios/lib/adapters/http");
   class signup extends Component {
      constructor(props){
         super(props);
@@ -81,19 +61,19 @@ import {
              onChange = {(e) => this.setState({last_name:e.target.value})}
              />
               <br/>
-           Enter your Email: <input type="text"
+           Enter your Email: <input
              type="email"
              floatingLabelText="Email"
              onChange = {(e) => this.setState({email:e.target.value})}
              />
              <br/>
-           Enter your Password: <input type="text"
+           Enter your Password: <input
              type = "password"
              floatingLabelText="Password"
              onChange = {(e) => this.setState({password:e.target.value})}
              />
            <br/>
-           please specify your gender: <select type="text"
+           please specify your gender: <select
              type = "gender"
              floatingLabelText="Gender"
              onChange = {(e) => this.setState({gender:e.target.value})}>

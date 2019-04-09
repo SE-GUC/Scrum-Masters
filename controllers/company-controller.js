@@ -134,6 +134,7 @@ exports.getCompany = (req, res) => {
     })
 }
 
+
 exports.createCompany = (req, res) => {
   const { error } = validatecreateCompany(req.body)
   if (error) return res.status(400).send(error.details[0].message)
@@ -233,7 +234,7 @@ exports.listUnassignedApplications =async(req,res)=>{
   catch(error){
       console.log(error)
   }
-  }
+}
 
 
 
@@ -298,4 +299,49 @@ const targetcompany = await Company.findByIdAndUpdate(company_id,company, { new:
 return res.json(targetcompany)
 
 
+}
+
+exports.listUserCreatedApplications = async (req, res) => {
+  if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+    try {
+      // it's an ObjectID
+      const companies = await Company.find({ owner: req.params.id })
+      res.json(companies)
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+    // nope
+    console.log("Wrong ID format")
+  }
+}
+
+exports.listLawyerAssignedApplications = async (req, res) => {
+  if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+    try {
+      // it's an ObjectID
+      const companies = await Company.find({ review_lawyer: req.params.id })
+      res.json(companies)
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+    // nope
+    console.log('Wrong ID format')
+  }
+}
+
+exports.listReviewerAssignedApplications = async (req, res) => {
+  try {
+    if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+      // it's an ObjectID
+      const companies = await Company.find({ review_reviewer: req.params.id })
+      res.json(companies)
+    } else {
+      // nope
+      console.log('Wrong ID format')
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }

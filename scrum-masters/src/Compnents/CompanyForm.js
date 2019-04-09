@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-//import logo from './logo.svg';
-import { Badge, Button, ListGroup, Form, Col } from "react-bootstrap";
-import { objectTypeIndexer } from "@babel/types";
+import { Badge, Button, Form, Col } from "react-bootstrap";
 
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");

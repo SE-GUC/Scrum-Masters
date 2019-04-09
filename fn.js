@@ -247,6 +247,21 @@ const functions = {
   unassignLawyer: async (company_id) => {
     const company = await axios.put('http://localhost:3001/api/user/unassignLawyer/' + company_id)
     return company
+  },
+
+  userCreatedCompanies: async (userId) => {
+    const company = await axios.get('http://localhost:3001/api/company/userCreatedApplications/' + userId)
+    return company
+  },
+
+  lawyerAssignedApplications: async (userId) => {
+    const company = await axios.get('http://localhost:3001/api/company/lawyerAssignedApplications/' + userId)
+    return company
+  },
+
+  reviewerAssignedApplications: async (userId) => {
+    const company = await axios.get('http://localhost:3001/api/company/reviewerAssignedApplications/' + userId)
+    return company
   }
 }
 
