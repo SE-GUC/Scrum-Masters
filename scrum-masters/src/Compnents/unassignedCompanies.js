@@ -1,27 +1,11 @@
 import React, { Component } from "react";
-import Navigationbar from "./navigationbar";
 import SuccessAlert from  './SuccessAlert'
 import ErrorAlert from './ErrorAlert'
 
 import {
-  Nav,
-  Navbar,
-  NavDropdown,
-  Popover,
   Badge,
-  Spinner,
-  Tabs,
-  ButtonToolbar,
   Button,
-  ListGroup,
-  Table,
-  ButtonGroup,
-  Row,
-  Col,
-  Grid,
-  Panel,
-  FormGroup,
-  FormControl
+  ListGroup
 } from "react-bootstrap";
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
@@ -48,8 +32,8 @@ class AllUnassignedCompanies extends Component {
 
   handler = async e => {
     
-    try{
-    const company = await axios.post('http://localhost:3001/api/user/assignLawyer/' + e + '/' + this.state.lawyerId) 
+    try {
+      await axios.post('http://localhost:3001/api/user/assignLawyer/' + e + '/' + this.state.lawyerId) 
       this.setState({alert:"Success"})
     } catch(error) {
        
@@ -75,7 +59,6 @@ class AllUnassignedCompanies extends Component {
               <ListGroup.Item
                 action
                 href="#link1"
-                action
                 variant="secondary"
                 onClick ={() => this.handler(companies._id)}
                 
@@ -115,8 +98,8 @@ class AllUnassignedCompanies extends Component {
         </Button>
         {this.rendercompanies()}
         <hr/>
-        {this.state.alert=="Success"?<SuccessAlert/>:null}
-        {this.state.alert=="Error"?<ErrorAlert/>:null}
+        {this.state.alert==="Success"?<SuccessAlert/>:null}
+        {this.state.alert==="Error"?<ErrorAlert/>:null}
         <hr/>
       </div>
     );

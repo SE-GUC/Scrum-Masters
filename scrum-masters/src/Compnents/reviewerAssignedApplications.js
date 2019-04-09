@@ -34,7 +34,7 @@ class reviewerAssignedApplications extends Component {
         <ul>
           {this.state.applications.map(application => (
             <li key={application._id}>
-              <ListGroup.Item action href="#link1" action variant="secondary">
+              <ListGroup.Item action href="#link1" variant="secondary">
                 <strong style={{ color: "steelblue" }}>
                   Company Name:
                 </strong>{" "}
