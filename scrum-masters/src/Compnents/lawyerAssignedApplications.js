@@ -4,10 +4,10 @@ const axios = require('axios')
 axios.default.adapter = require ('axios/lib/adapters/http')
 
 class lawyerAssignedApplications extends Component {
-  state = {
-    applications: [],
-    isApplicationsShown: false
-  }
+    state = {
+     applications: [],
+     isApplicationsShown: false
+    }
 
   showAssignedApplications = () => {
     axios
@@ -57,7 +57,7 @@ class lawyerAssignedApplications extends Component {
         <Button 
           onClick={this.showAssignedApplications}
           className=" m-2"
-          variant="outline-secondary"
+          variant="outline-secondary" 
         >
           Show Assigned Applications
         </Button>
