@@ -4,7 +4,7 @@
   "description": "\"# Scrum Masters\"",
   "main": "index.js",
   "scripts": {
-    "client-install": "npm install --prefix client",
+    "client-install": "npm install --prefix scrum-masters",
     "start": "node index.js",
     "server": "nodemon index.js",
     "test": "jest",
