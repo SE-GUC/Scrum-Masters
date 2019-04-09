@@ -13,6 +13,9 @@ import AllUnassignedCompanies from './Compnents/unassignedCompanies'
 
 import Home from "./Compnents/Home";
 import admin_create from "./Compnents/admin_create";
+import lawyerAssignedApplications from "./Compnents/lawyerAssignedApplications";
+import reviewerAssignedApplications from "./Compnents/reviewerAssignedApplications.js";
+import userCreatedApplications from "./Compnents/userCreatedApplications";
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
@@ -30,6 +33,9 @@ class App extends Component {
           <Route exact path="/CompanyUpdate" component={CompanyUpdate} />
           <Route exact path="/unassignedCompanies" component={AllUnassignedCompanies} />
           <Route exact path="/admin_create" component={admin_create} />
+          <Route exact path="/lawyerAssignedApplication" component={lawyerAssignedApplications} />
+          <Route exact path="/reviewerAssignedApplication" component={reviewerAssignedApplications} />
+          <Route exact path="/userCreatedApplication" component={userCreatedApplications} />
         </div>
       </BrowserRouter>
     );

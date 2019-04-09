@@ -15,7 +15,9 @@ const navigationbar = () => {
             <Nav.Link href="/allCompanies">All Companies</Nav.Link>
             <Nav.Link href="/applicationReview">Review your applications</Nav.Link> 
             <Nav.Link href="/signup">SignUp investor</Nav.Link>
-
+            <Nav.Link href='/lawyerAssignedApplication'>lawyerAssignedApplications</Nav.Link>
+            <Nav.Link href='/reviewerAssignedApplication'>reviewerAssignedApplications</Nav.Link>
+            <Nav.Link href='/userCreatedApplication'>userCreatedApplications</Nav.Link>
             <NavDropdown title="" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Sign out</NavDropdown.Item>
               <NavDropdown.Item href="/companyform">

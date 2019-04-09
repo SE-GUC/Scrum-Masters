@@ -6,9 +6,12 @@ router.use(express.json())
 
 
 router.get('/', companyController.listAllCompanies)
-router.get('/listUnassignedApplications',companyController.listUnassignedApplications)
+router.get('/listUnassignedApplications', companyController.listUnassignedApplications)
 router.get('/paidCompanies', companyController.listAllPaidCompanies)
 router.get('/unreviewedCompanies', companyController.listAllUnreviewedCompanies)
+router.get('/userCreatedApplications/:id', companyController.listUserCreatedApplications)
+router.get('/lawyerAssignedApplications/:id', companyController.listLawyerAssignedApplications)
+router.get('/reviewerAssignedApplications/:id', companyController.listReviewerAssignedApplications)
 router.get('/:id', companyController.getCompany)
 
 router.post('/', companyController.createCompany)
