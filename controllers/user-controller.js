@@ -407,7 +407,7 @@ exports.assignLaywer = async (req, res) => {
 exports.getassignedlawyer = async (req, res) => {
   const company = await Company.findOne({ _id: req.params.companyid });
   if (!company) return res.status(404).send({ error: "No such Company." });
-  if (!company.assigned_status)
+  if (!company.review_lawyer)
     return res
       .status(404)
       .send({ error: "No lawyer was assigned to this application yet." });
