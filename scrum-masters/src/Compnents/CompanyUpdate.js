@@ -1,9 +1,13 @@
 import React, { Component } from "react";
-const axios = require("axios");
+import { Badge, Button, Form, Col } from "react-bootstrap";
 
-class Company extends Component{
+const axios = require("axios");
+axios.defaults.adapter = require("axios/lib/adapters/http");
+
+class CompanyUpdate extends Component{
     id = '5ca8e9465c3ff610702e3068'
     state = {
+        company : [],
         company_type: '',
         organizational_rule: '',
         legal_form: '',
@@ -85,86 +89,226 @@ class Company extends Component{
             investor_fax : this.state.investor_fax
 
           } );
-    }
+    };
+    check = () => {
+        if (this.state.company.length === 0)
+          return (
+            <Badge style={{ fontSize: 15 }} variant="Danger">
+              {this.state.error}
+            </Badge>
+          );
+        else
+          return (
+            <Badge style={{ fontSize: 15 }} variant="primary">
+              YOUR FORM IS SUBMITED
+            </Badge>
+          );
+      };
 
     render(){
         const id = '5ca8e9465c3ff610702e3068'
         return(
-            <div>
-              {this.getCompany(id)}
-              <form onSubmit = {this.handleSubmit(id)}>
-              <input name = 'Company Name English' value={this.state.company_name_english} onChange={(e) => {this.setState({company_name_english: e.target.value})}} />
-              <input name = 'Company Name Arabic' value={this.state.company_name_arabic} onChange={(e) => {this.setState({company_name_arabic: e.target.value})}} />
-              <br></br>
-              <select name = 'Headquarters governorate' value = {this.state.hq_governorate} onChange={(e) => {this.setState({hq_governorate: e.target.value})}}>
-                  <option value = 'hq_governorate1'>hq_governorate1</option>
-                  <option value = 'hq_governorate2'>hq_governorate2</option>
-              </select>
-              <br></br>  
-              <select name = 'Organizational rule' value = {this.state.organizational_rule} onChange={(e) => {this.setState({organizational_rule: e.target.value})}}>
-                  <option value = 'hq_governorate1'>organizational_rule1</option>
-                  <option value = 'hq_governorate2'>organizational_rule2</option>
-              </select>
-              <br></br>
-              <select name = 'Headquarters city' value = {this.state.hq_city} onChange={(e) => {this.setState({hq_city: e.target.value})}}>
-                  <option value = 'hq_governorate1'>hq_city1</option>
-                  <option value = 'hq_governorate2'>hq_city2</option>
-              </select>  
-              <br></br>
-              <input name = 'Headquarters address' value={this.state.hq_address} onChange={(e) => {this.setState({hq_address: e.target.value})}} />
-              <br></br>
-              <input name = 'Headquarters telephone' value={this.state.hq_telephone} onChange={(e) => {this.setState({hq_telephone: e.target.value})}} />
-              <br></br>
-              <input name = 'Headquarters fax' value={this.state.hq_fax} onChange={(e) => {this.setState({hq_fax: e.target.value})}} />
-              <br></br>
-              <select name = 'Capital currency' value = {this.state.capital_currency} onChange={(e) => {this.setState({capital_currency: e.target.value})}}>
-                  <option value = 'EGP'>EGP</option>
-                  <option value = 'Euro'>Euro</option>
-              </select>  
-              <br></br>
-              <input name = 'capital' value={this.state.capital} onChange={(e) => {this.setState({capital: e.target.value})}} />
-              <br></br>
-              <input name = 'Investor Name' value={this.state.investor_name} onChange={(e) => {this.setState({investor_name: e.target.value})}} />
-              <br></br>
-              <select name = 'Investor type' value = {this.state.investor_type} onChange={(e) => {this.setState({investor_type: e.target.value})}}>
-                  <option value = 'type1'>type1</option>
-                  <option value = 'type2'>type2</option>
-              </select>  
-              <br></br>
-              <select name = 'Investor gender' value = {this.state.investor_gender} onChange={(e) => {this.setState({investor_gender: e.target.value})}}>
-                  <option value = 'Male'>Male</option>
-                  <option value = 'Female'>Female</option>
-              </select> 
-              <br></br>
-              <select name = 'Nationality' value = {this.state.nationality} onChange={(e) => {this.setState({nationality: e.target.value})}}>
-                  <option value = 'Egyptian'>Egyptian</option>
-                  <option value = 'German'>German</option>
-              </select>  
-              <br></br>
-              <select name = 'Investor ID type' value = {this.state.investor_id_type} onChange={(e) => {this.setState({investor_id_type: e.target.value})}}>
-                  <option value = 'id_type1'>id_type1</option>
-                  <option value = 'id_type2'>id_type2</option>
-              </select>   
-              <br></br>
-              <input name = 'Investor ID number' value={this.state.investor_id_number} onChange={(e) => {this.setState({investor_id_number: e.target.value})}} />
-              <br></br>
-              <input name = 'Investor Birthdate' value={this.state.investor_birth_date} onChange={(e) => {this.setState({investor_birth_date: e.target.value})}} />
-              <br></br>
-              <input name = 'Investor Address' value={this.state.investor_address} onChange={(e) => {this.setState({investor_address: e.target.value})}} />
-              <br></br>
-              <input name = 'Investor telephone' value={this.state.investor_telephone} onChange={(e) => {this.setState({investor_telephone: e.target.value})}} />
-              <br></br>
-              <input name = 'Investor fax' value={this.state.investor_fax} onChange={(e) => {this.setState({investor_fax: e.target.value})}} />
-              <br></br>
-              <input name = 'Investor Email' value={this.state.investor_email} onChange={(e) => {this.setState({investor_email: e.target.value})}} />
-              </form>
+        <div>
+        
+        <span
+          style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
+          className="badge"
+        >
+        Company Update
+        </span>
+        <Form className=" m-4">
+            <Form.Row>
+            <Form.Group as={Col} controlId="arabicname">
+              <Form.Label>Company name in Arabic</Form.Label>
+              <Form.Control
+                type="textarea"
+                defaultValue = {this.state.company_name_arabic}
+                onChange={(e) => {this.setState({company_name_arabic: e.target.value})}}
+              />
+            </Form.Group>
+            <Form.Group as={Col} controlId="englishname">
+              <Form.Label>Company name in English</Form.Label>
+              <Form.Control
+                type="textarea"
+                defaultValue = {this.state.company_name_english}
+                onChange={(e) => {this.setState({company_name_english: e.target.value})}}
+              />
+            </Form.Group>
+          </Form.Row>
+          <Form.Group controlId="rule">
+            <Form.Label>Select The Organizational Rule </Form.Label>
+            <Form.Control as="select"  defaultValue = {this.state.organizational_rule} onChange={(e) =>{this.setState({organizational_rule: e.target.value})}}>
+              <option />
+              <option>organizational_rule1</option>
+              <option>organizational_rule2</option>
+            </Form.Control>
+            </Form.Group>
+          <Form.Row>
+            <Form.Group as={Col} controlId="hqgov">
+              <Form.Label>
+                Select The Company HeadQuarters Governement{" "}
+              </Form.Label>
+              <Form.Control as="select" defaultValue = {this.state.hq_governorate} onChange={(e) => {this.setState({hq_governorate: e.target.value})}}>
+                <option />
+                <option>hq_governorate1</option>
+                <option>hq_governorate2</option>
+              </Form.Control>
+            </Form.Group>
 
+            <Form.Group as={Col} controlId="hqcity">
+              <Form.Label>Select The Company HeadQuarters city </Form.Label>
+              <Form.Control as="select" defaultValue = {this.state.hq_city} onChange={(e) => {this.setState({hq_city : e.target.value})}}>
+                <option />
+                <option>hq_city1</option>
+                <option>hq_city2</option>
+              </Form.Control>
+            </Form.Group>
+          
+        </Form.Row>
+        <Form.Group as = {Col} controlId = "hqaddress">
+            <Form.Label>Update the HQ address</Form.Label>
+            <Form.Control 
+            type = "textarea"
+            defaultValue = {this.state.hq_address}
+            onChange = {(e)=> {this.setState({hq_address :e.target.value})}}
+            />
+        </Form.Group>
+        <Form.Group as ={Col} controlId = "hqtelephone">
+            <Form.Label>Update the HQ telephone</Form.Label>
 
-              
-            </div>
+            <Form.control
+
+            type = "textarea"
+            defaultValue = {this.state.hq_telephone}
+            onChange = {(e) => {this.setState({hq_telephone :e.target.value})}}
+            />
+        </Form.Group>
+        <Form.Group as = {Col} ControlId = "hqfax">
+            <Form.Label>Update the HQ fax</Form.Label>
+            <Form.Control
+            type = "textarea"
+            defaultValue = {this.state.hq_fax}
+            onChange = {(e) => {this.setState({hq_fax : e.target.value})}}
+            />
+        </Form.Group>
+        <Form.Group as = {Col} controlId = "cc">
+            <Form.Label>Change the capital currency</Form.Label>
+            <Form.Control as="select" defaultValue = {this.state.capital_currency} onChange = {(e) => {this.setState({capital_currency :e.target.value})}}>
+            <option/>
+            <option>hq_city1</option>
+            <option>hq_city2</option>
+
+            </Form.Control>
+        </Form.Group>
+        <Form.Group as = {Col} controlId = "capital">
+            <Form.Label>Change the capital</Form.Label>
+            <Form.Control
+            type = "textarea"
+            defaultValue = {this.state.capital}
+            onChange = {(e) => {this.setState({capital : e.target.value})}}/>
+
+        </Form.Group>
+        <Form.Group as ={Col} controlId = "in">
+            <Form.Label>Update the investor's Name</Form.Label>
+            <Form.Control
+            type = "textarea"
+            defaultValue = {this.state.investor_name}
+            onChange = {(e) => {this.setState({investor_name : e.target.value})}}/>
+
+        </Form.Group>
+        <Form.Group as = {Col} controlId = "cac">
+            <Form.Label>Change the investor type</Form.Label>
+            <Form.Control as="select" defaultValue = {this.state.investor_type} onChange = {(e) => {this.setState({investor_type :e.target.value})}}>
+            <option/>
+            <option>type1</option>
+            <option>type2</option>
+
+            </Form.Control>
+        </Form.Group>
+        <Form.Group as = {Col} controlId = "ig">
+            <Form.Label>Change the investor gender</Form.Label>
+            <Form.Control as="select" defaultValue = {this.state.investor_gender} onChange = {(e) => {this.setState({investor_gender :e.target.value})}}>
+            <option/>
+            <option>Male</option>
+            <option>Female</option>
+
+            </Form.Control>
+        </Form.Group>
+        <Form.Group as = {Col} controlId = "nat">
+            <Form.Label>Change the nationality</Form.Label>
+            <Form.Control as="select" defaultValue = {this.state.nationality} onChange = {(e) => {this.setState({nationality :e.target.value})}}>
+            <option/>
+            <option>Egyptian</option>
+            <option>German</option>
+
+            </Form.Control>
+        </Form.Group>
+        
+        <Form.Group as = {Col} controlId = "iit">
+            <Form.Label>Change the investor id type</Form.Label>
+            <Form.Control as="select" defaultValue = {this.state.investor_id_type} onChange = {(e) => {this.setState({investor_id_type :e.target.value})}}>
+            <option/>
+            <option>id_type1</option>
+            <option>id_type2</option>
+
+            </Form.Control>
+        </Form.Group>
+        <Form.Group as ={Col} controlId = "iin">
+            <Form.Label>Update the investor's ID number</Form.Label>
+            <Form.Control
+            type = "textarea"
+            defaultValue = {this.state.investor_id_type}
+            onChange = {(e) => {this.setState({investor_id_type : e.target.value})}}/>
+
+        </Form.Group>
+        <Form.Group as ={Col} controlId = "idd">
+            <Form.Label>Update the investor's birthdate</Form.Label>
+            <Form.Control
+            type = "Date"
+            defaultValue = {this.state.investor_birth_date}
+            onChange = {(e) => {this.setState({investor_birth_date : e.target.value})}}/>
+
+        </Form.Group>
+        <Form.Group as ={Col} controlId = "ia">
+            <Form.Label>Update the investor's address</Form.Label>
+            <Form.Control
+            type = "Date"
+            defaultValue = {this.state.investor_address}
+            onChange = {(e) => {this.setState({investor_address : e.target.value})}}/>
+
+        </Form.Group><Form.Group as ={Col} controlId = "it">
+            <Form.Label>Update the investor's telephone</Form.Label>
+            <Form.Control
+            type = "Date"
+            defaultValue = {this.state.investor_telephone}
+            onChange = {(e) => {this.setState({investor_telephone: e.target.value})}}/>
+
+        </Form.Group><Form.Group as ={Col} controlId = "if">
+            <Form.Label>Update the investor's fax</Form.Label>
+            <Form.Control
+            type = "Date"
+            defaultValue = {this.state.investor_fax}
+            onChange = {(e) => {this.setState({investor_fax : e.target.value})}}/>
+
+        </Form.Group><Form.Group as ={Col} controlId = "ie">
+            <Form.Label>Update the investor's email</Form.Label>
+            <Form.Control
+            type = "Date"
+            defaultValue = {this.state.investor_email}
+            onChange = {(e) => {this.setState({investor_email: e.target.value})}}/>
+
+        </Form.Group>
+        <Button onClick={this.handleSubmit(id)} variant="primary">
+            Submit
+          </Button>
+          <br />
+          {this.check()}
+        </Form>
+        
+        </div>
         )
     }
     
 }
 
-export default Company
+export default CompanyUpdate;
