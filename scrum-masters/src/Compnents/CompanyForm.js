@@ -8,7 +8,7 @@ class CompanyForm extends Component {
   state = {
     company: [],
     error: "",
-    owner: "5ca7904ae79c412a704bfd7d",
+    owner: "5ca79058e79c412a704bfda6",
     arabicname: "",
     englishname: "",
     orgrule: "",
