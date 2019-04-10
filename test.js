@@ -331,7 +331,8 @@ test('list all compaines',async()=>
     const investor=await functions.createUser('investor')
     const company=await functions.createCompany(investor.data.data._id)
     const all =await functions.getallcompaines()
-    expect(all.data).toContainEqual({ _id: company.data._id })
+    expect(all.data).toContainEqual({ _id: company.data._id,company_name_english:company.data.company_name_english,company_name_arabic:company.data.company_name_arabic })
+    
   })
 
   test('list all Unassigned Applications',async()=>
@@ -345,7 +346,7 @@ test('list all compaines',async()=>
     const updated=await functions.updatecompany(company.data._id,data)
     const all=await functions.listUnassignedApplications()
     expect(all.data).not.toContainEqual(expect.objectContaining({  _id: company.data._id  }))
-
+   
 
 })
 
@@ -428,4 +429,40 @@ test('unassign lawyer', async () => {
   await functions.unassignLawyer(company.data._id)
   const newCompany = await functions.getCompany(company.data._id)
   expect(newCompany.data.review_lawyer).toBeFalsy()
+})
+
+test('List my created Applications', async() => {
+  expect.assertions(1)
+  const investor=await functions.createUser('investor')
+  const company=await functions.createCompany(investor.data.data._id)
+  const response=await functions.userCreatedCompanies(investor.data.data._id)
+  expect(response.data).toContainEqual(company.data)
+})
+
+test('List lawyer assigned Applications', async() => {
+  expect.assertions(1)
+  const investor=await functions.createUser('investor')
+  const company=await functions.createCompany(investor.data.data._id)
+  const response=await functions.userCreatedCompanies(investor.data.data._id)
+  expect(response.data).toContainEqual(company.data)
+})
+
+test('List lawyer assigned Applications', async() => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const lawyer = await functions.createUser('lawyer')
+  const company = await functions.createCompany(investor.data.data._id)
+  const newCompany = await functions.assignLawyer(company.data._id, lawyer.data.data._id)
+  const response=await functions.lawyerAssignedApplications(lawyer.data.data._id)
+  expect(response.data).toContainEqual(newCompany.data)
+})
+
+test('List lawyer assigned Applications', async() => {
+  expect.assertions(1)
+  const investor = await functions.createUser('investor')
+  const reviewer = await functions.createUser('reviewer')
+  const company = await functions.createCompany(investor.data.data._id)
+  const newCompany = await functions.assignReviewer(company.data._id, reviewer.data.data._id)
+  const response = await functions.reviewerAssignedApplications(reviewer.data.data._id)
+  expect(response.data).toContainEqual(newCompany.data)
 })

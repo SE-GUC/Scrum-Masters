@@ -30,6 +30,7 @@ function validateUser(user, creating) {
     gender: Joi.string()
       .valid(['male', 'female'])
       .required()
+
   } 
   if (creating) {
     Object.assign(schema, {
@@ -70,15 +71,16 @@ exports.getUser = (req, res) => {
 
 exports.createUser = (req, res) => {
   const { error } = validateUser(req.body, true) 
-  if (error) return res.status(400).send(error.details[0].message) 
+  if (error){ 
+    return res.status(400).send(error.details[0].message) }
 
   User.findOne({ email: req.body.email })
     .then(user => {
-      if (user)
+      if (user){
         return res
           .status(400)
           .send('A user is already registered with this email') 
-
+      }
       var user = req.body 
       User.create(user)
         .then(user => {

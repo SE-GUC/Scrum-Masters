@@ -112,7 +112,7 @@ function validatecreateCompany (company) {
   return Joi.validate(company, schema)
 }
 exports.listAllCompanies = (req, res) => {
-  Company.find({}, { _id: true })
+  Company.find({}, { _id: true ,company_name_english: true , company_name_arabic : true})
     .then(company => {
       return res.json(company)
     })
@@ -133,6 +133,7 @@ exports.getCompany = (req, res) => {
       return res.sendStatus(500)
     })
 }
+
 
 exports.createCompany = (req, res) => {
   const { error } = validatecreateCompany(req.body)
@@ -227,13 +228,13 @@ exports.deleteCompany = (req, res) => {
 
 exports.listUnassignedApplications =async(req,res)=>{
   try {
-   const companies= await Company.find({ assigned_status: false },{new:true})
+   const companies= await Company.find({ assigned_status: false })
   res.json(companies)
   }
   catch(error){
       console.log(error)
   }
-  }
+}
 
 
 
@@ -298,4 +299,49 @@ const targetcompany = await Company.findByIdAndUpdate(company_id,company, { new:
 return res.json(targetcompany)
 
 
+}
+
+exports.listUserCreatedApplications = async (req, res) => {
+  if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+    try {
+      // it's an ObjectID
+      const companies = await Company.find({ owner: req.params.id })
+      res.json(companies)
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+    // nope
+    console.log("Wrong ID format")
+  }
+}
+
+exports.listLawyerAssignedApplications = async (req, res) => {
+  if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+    try {
+      // it's an ObjectID
+      const companies = await Company.find({ review_lawyer: req.params.id })
+      res.json(companies)
+    } catch (error) {
+      console.log(error)
+    }
+  } else {
+    // nope
+    console.log('Wrong ID format')
+  }
+}
+
+exports.listReviewerAssignedApplications = async (req, res) => {
+  try {
+    if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+      // it's an ObjectID
+      const companies = await Company.find({ review_reviewer: req.params.id })
+      res.json(companies)
+    } else {
+      // nope
+      console.log('Wrong ID format')
+    }
+  } catch (error) {
+    console.log(error)
+  }
 }

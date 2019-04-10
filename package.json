@@ -4,9 +4,12 @@
   "description": "\"# Scrum Masters\"",
   "main": "index.js",
   "scripts": {
+    "client-install": "npm install --prefix scrum-masters",
     "start": "node index.js",
     "server": "nodemon index.js",
-    "test": "jest"
+    "test": "jest",
+    "client": "npm start --prefix scrum-masters",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -21,10 +24,15 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "joi": "^14.3.1",
     "jshint": "^2.10.1",
     "mongoose": "^5.4.19",
+    "react-alert": "^5.4.0",
+    "react-alert-template-basic": "^1.0.0",
+    "reactjs": "^1.0.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
