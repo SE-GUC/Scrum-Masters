@@ -1,6 +1,5 @@
 const Joi = require('joi')
 const Company = require('../models/company')
-const Notification = require('../models/Notification')
 const ElectronicJournal = require('../models/ElectronicJournal')
 const userController = require('../controllers/user-controller')
 

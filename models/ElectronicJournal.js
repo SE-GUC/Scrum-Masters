@@ -3,9 +3,14 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const ElectronicJournalSchema = new Schema({
+  companyId: {
+    type: Schema.ObjectId,
+    ref: 'company'
+  },
   companyName: {
     type: String,
-    required: true
+    required: true,
+    ref: 'company'
   },
   companyDescription: {
     type: String
