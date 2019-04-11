@@ -1,4 +1,5 @@
 const Joi = require('joi')
+Joi.objectId = require('joi-objectid')(Joi)
 const ElectronicJournal = require('../models/ElectronicJournal')
 
 exports.test = async (req, res) => {
@@ -80,6 +81,7 @@ exports.deleteElectronicJournal = async (req, res) => {
 
 function validateJournal (electronicJournal) {
   const schema = {
+    companyId: Joi.objectId(),
     companyName: Joi.string().min(3).max(200).required(),
     companyDescription: Joi.string().min(3).max(1000),
     companyDate: Joi.date()

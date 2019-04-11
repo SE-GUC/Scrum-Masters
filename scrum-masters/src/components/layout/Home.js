@@ -3,7 +3,7 @@ import React from "react";
 const Home = () => {
   return (
     <div>
-      <p>home</p>
+      <h2>The landing page of the greatest Sumerge website</h2>
     </div>
   );
 };

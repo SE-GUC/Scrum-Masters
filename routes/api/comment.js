@@ -1,16 +1,16 @@
-
 const express = require('express')
 const router = express.Router()
-var userController = require('../../controllers/user-controller')
+var commentController = require('../../controllers/commentController')
 
-router.post('/', userController.createComment)// new --create comment on a application form.
+router.get('/', commentController.listAllComments)
+router.get('/viewSpecific/:id', commentController.viewSpecific)
+router.get('/:id', commentController.viewComments)
 
-router.post('/:id', userController.updateComment)// new --update a comment.
+router.post('/', commentController.createComment)// new --create comment on a application form.
+router.post('/:id', commentController.updateComment)// new --update a comment.
 
-router.delete('/:comm_id', userController.deleteComment)// new --delete comment.
+router.delete('/:comm_id', commentController.deleteComment)// new --delete comment.
 
-router.get('/viewSpecific/:id', userController.viewSpecific)
-router.get('/:id', userController.viewComments)
 
 module.exports = router
 

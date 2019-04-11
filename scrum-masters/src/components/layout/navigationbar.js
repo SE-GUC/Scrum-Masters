@@ -30,19 +30,17 @@ const navigationbar = () => {
             </Nav.Link>
 
             <NavDropdown title="" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Sign out</NavDropdown.Item>
+              <NavDropdown.Item href="/">Sign out</NavDropdown.Item>
+              <NavDropdown.Item href="/Login">Login</NavDropdown.Item>
               <NavDropdown.Item href="/companyform">
                 Company Form
               </NavDropdown.Item>
               <NavDropdown.Item href="CompanyUpdate">
                 Update Company
               </NavDropdown.Item>
-              <NavDropdown.Item href="/signup">
-                signUp investor
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">settings</NavDropdown.Item>
+              <NavDropdown.Item href="/">settings</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">Contact us</NavDropdown.Item>
+              <NavDropdown.Item href="/">Contact us</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
