@@ -1,51 +1,42 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import classnames from 'classnames'
-import { Link } from 'react-router-dom'
 import { getElectronicJournals } from '../../globalState/actions/electronicJournalsActions'
 
-class electronicJournals extends Component {
-  componentDidMount() {
+class ElectronicJournals extends Component {
+	componentDidMount() {
 		// if(this.props.isLoggedIn)
 		this.props.getElectronicJournals();
 	}
 
-  render() {
-			const electronicJournal = this.props.electronicJournals.map((book, index) => {
+	render() {
+			const electronicJournalsItems = this.props.electronicJournals.map((electronicJournal, index) => {
 				return (
 					<div key={index}>
-						<h3>{book.title}</h3>
-						<p>{book.author}</p>
+						<h3>{electronicJournal.companyName}</h3>
+						<p>{electronicJournal.companyDescription}</p>
 					</div>
-				);
-			});
-			return (
-				<div>
-					<h1> Posts </h1>
-					<button onClick={this.logout}>Logout</button>
-					{bookItems}
-				</div>
-			);
-		
-
+				)
+			})
 		return (
-				<div>
-					<h1> Please login to view books </h1>
-					<button onClick={this.login}>Login</button>
-				</div>
-		)
+			<div>
+				<h1> ElectronicJournals </h1>
+				<button onClick={this.getElectronicJournals}>get all ElectronicJournals</button>
+				{electronicJournalsItems}
+			</div>
+		);
 	}
+}
 
-electronicJournals.defaultProps = {
-  showActions: true
+ElectronicJournals.propTypes = {
+	getElectronicJournals: PropTypes.func.isRequired,
+	electronicJournals: PropTypes.array.isRequired
 }
 
 const mapStateToProps = state => ({
-  getElectronicJournals: PropTypes.func.isRequired,
-  electronicJournals: PropTypes.array.isRequired
+	electronicJournals: state.electronicJournal.electronicJournals
 })
 
 export default connect(mapStateToProps, { getElectronicJournals })(
-  electronicJournals
+  ElectronicJournals
 )
