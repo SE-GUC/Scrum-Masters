@@ -2,6 +2,8 @@ import React, { Component } from "react";
 //import logo from './logo.svg';
 
 import image from "../1.jpg";
+import invimage from "../investor.jpg";
+import form from "../form.jpg";
 import "../App.css";
 import "bootstrap";
 
@@ -11,6 +13,7 @@ import {
   ListGroup,
   Jumbotron,
   ButtonGroup,
+  Card,
   Alert
 } from "react-bootstrap";
 
@@ -91,25 +94,58 @@ class Investor extends Component {
     this.getinvstorname();
     return (
       <div>
-        <Jumbotron className="uptext">
-          <h1>{this.state.name}</h1>
-          <p>
-            <Button variant="primary">Show Profile</Button>
-          </p>
-        </Jumbotron>
-        <ButtonGroup className="m-2">
-          <Button onClick={this.showCompnies}>My Companies</Button>
-          <a href="/companyform">
-            <Button type="button" class="btn btn-info">
-              Application Form
-            </Button>
-          </a>
-
-          <Button>Button2</Button>
-          <Button>Button3</Button>
-        </ButtonGroup>
-        <br />
+        <div>
+          <h1 class="text-center">{this.state.name}</h1>
+          <Button class=" btn pull-right" variant="primary">
+            My Profile
+          </Button>
+          <img src={invimage} className="img2" />
+        </div>
+        <Button onClick={this.showCompnies} block>
+          My Companies
+        </Button>
         {this.rendercompanies()}
+        <br />
+        <br />
+        <Jumbotron className="m-4 " style={{ width: "60rem" }}>
+          <div class="row mx-md-n5">
+            <Card
+              style={{ width: "25rem" }}
+              class="col px-md-5"
+              className="m-5"
+            >
+              <Card.Img variant="top" src={form} />
+              <Card.Body>
+                <Card.Title>Company Application </Card.Title>
+                <Card.Text>
+                  Fill The Company Form And start the process Of Publishing Your
+                  New Company
+                </Card.Text>
+                <a href="/companyform">
+                  <Button type="button" class="btn btn-info">
+                    Application Form
+                  </Button>
+                </a>
+              </Card.Body>
+            </Card>
+            <Card
+              style={{ width: "25rem" }}
+              class="col px-ms-5"
+              className="m-4"
+            >
+              <Card.Img variant="top" src={form} />
+              <Card.Body>
+                <Card.Title>Company Application </Card.Title>
+                <Card.Text>
+                  Fill The Company Form And start the process Of Publishing Your
+                  New Company
+                </Card.Text>
+                <Button>Button2</Button>
+              </Card.Body>
+            </Card>
+          </div>
+        </Jumbotron>
+        <br />
         <img src={image} className="img" />
       </div>
     );

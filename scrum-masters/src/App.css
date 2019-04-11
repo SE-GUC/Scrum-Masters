@@ -32,12 +32,27 @@ a {
   min-width: 100%;
   opacity: 0.5;
 }
+.container {
+  display: flex;
+  position: relative;
+  width: 50%;
+}
+.img2 {
+  background-size: cover;
+  opacity: 0.9;
+  min-width: 100%;
+  top: 50px;
+}
+.name {
+  left: 50px;
+  opacity: 0.9;
+}
 .sidenav {
   height: 100%;
   width: 100px;
   position: fixed;
   z-index: 1;
-  top: 60px;
+
   left: 0;
   background-color: #111;
   overflow-x: hidden;
