@@ -2,19 +2,22 @@ import React, { Component } from "react";
 import "./App.css";
 import "bootstrap";
 import { BrowserRouter, Route } from "react-router-dom";
-import Navigationbar from "./Compnents/navigationbar";
-import AllCompanies from "./Compnents/allCompanies";
-import ApplicationReview from "./Compnents/applicationReview";
-import SignUp from "./Compnents/signup";
-import CompanyForm from "./Compnents/CompanyForm";
-import CompanyUpdate from "./Compnents/CompanyUpdate";
-import AllUnassignedCompanies from './Compnents/unassignedCompanies'
+import Navigationbar from "./components/layout/navigationbar";
+import Home from "./components/layout/Home";
+import Footer from './components/layout/footer'
+import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
+import AllCompanies from "./components/allCompanies";
+import ApplicationReview from "./components/applicationReview";
+import CompanyForm from "./components/CompanyForm";
+import CompanyUpdate from "./components/CompanyUpdate";
+import AllUnassignedCompanies from './components/unassignedCompanies'
 
-import Home from "./Compnents/Home";
-import admin_create from "./Compnents/admin_create";
-import lawyerAssignedApplications from "./Compnents/lawyerAssignedApplications";
-import reviewerAssignedApplications from "./Compnents/reviewerAssignedApplications.js";
-import userCreatedApplications from "./Compnents/userCreatedApplications";
+import admin_create from "./components/admin_create";
+import lawyerAssignedApplications from "./components/lawyerAssignedApplications";
+import reviewerAssignedApplications from "./components/reviewerAssignedApplications.js";
+import userCreatedApplications from "./components/userCreatedApplications";
+import electronicJournals from "./components/electronicJournal/ElectronicJournals";
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
@@ -24,17 +27,22 @@ class App extends Component {
       <BrowserRouter>
         <div>
           <Navigationbar />
-          <Route exact path="/" component={Home} />
-          <Route exact path="/allCompanies" component={AllCompanies} />
-          <Route exact path="/applicationReview" component={ApplicationReview} />
-          <Route exact path="/signup" component={SignUp} />
-          <Route exact path="/companyform" component={CompanyForm} />
-          <Route exact path="/CompanyUpdate" component={CompanyUpdate} />
-          <Route exact path="/unassignedCompanies" component={AllUnassignedCompanies} />
-          <Route exact path="/admin_create" component={admin_create} />
-          <Route exact path="/lawyerAssignedApplication" component={lawyerAssignedApplications} />
-          <Route exact path="/reviewerAssignedApplication" component={reviewerAssignedApplications} />
-          <Route exact path="/userCreatedApplication" component={userCreatedApplications} />
+          <Route exact path="/" component={Home} /> 
+          <div className="App">
+            <Route exact path="/allCompanies" component={AllCompanies} />
+            <Route exact path="/applicationReview" component={ApplicationReview} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/companyform" component={CompanyForm} />
+            <Route exact path="/CompanyUpdate" component={CompanyUpdate} />
+            <Route exact path="/unassignedCompanies" component={AllUnassignedCompanies} />
+            <Route exact path="/admin_create" component={admin_create} />
+            <Route exact path="/lawyerAssignedApplication" component={lawyerAssignedApplications} />
+            <Route exact path="/reviewerAssignedApplication" component={reviewerAssignedApplications} />
+            <Route exact path="/userCreatedApplication" component={userCreatedApplications} />
+            <Route exact path="/electronicJournal" component={electronicJournals} />
+          </div>
+          <Footer />
         </div>
       </BrowserRouter>
     );
