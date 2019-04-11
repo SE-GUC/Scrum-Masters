@@ -59,7 +59,8 @@ class CompanyUpdate extends Component {
           investor_type: companyy.data.investor_type,
           investor_email: companyy.data.investor_email,
           investor_telephone: companyy.data.investor_telephone,
-          investor_fax: companyy.data.investor_fax
+          investor_fax: companyy.data.investor_fax,
+          investor_gender : companyy.data.investor_gender
         });
       })
       .catch(err => {
@@ -70,29 +71,29 @@ class CompanyUpdate extends Component {
     console.log(this.state);
     axios
       .put("http://localhost:3001/api/company/5c94c25663abc339cc17b93b", {
-        company_type: this.state.company_type,
-        organizational_rule: this.state.organizational_rule,
-        legal_form: this.state.legal_form,
-        company_name_arabic: this.state.company_name_arabic,
-        company_name_english: this.state.company_name_english,
-        hq_governorate: this.state.hq_governorate,
-        hq_city: this.state.hq_city,
-        hq_address: this.state.hq_address,
-        hq_fax: this.state.hq_fax,
-        hq_telephone: this.state.hq_telephone,
-        capital_currency: this.state.capital_currency,
-        capital: this.state.capital,
-        investor_name: this.state.investor_name,
-        nationality: this.state.nationality,
-        investor_id_type: this.state.investor_id_type,
-        investor_id_number: this.state.investor_id_number,
-        investor_birth_date: this.state.investor_birth_date,
-        investor_address: this.state.investor_address,
-        investor_type: this.state.investor_type,
-        investor_email: this.state.investor_email,
-        investor_telephone: this.state.investor_telephone,
-        investor_fax: this.state.investor_fax,
-        investor_gender: this.state.investor_gender
+        'company_type': this.state.company_type,
+        'organizational_rule': this.state.organizational_rule,
+        'legal_form': this.state.legal_form,
+        'company_name_arabic': this.state.company_name_arabic,
+        'company_name_english': this.state.company_name_english,
+        'hq_governorate': this.state.hq_governorate,
+        'hq_city': this.state.hq_city,
+        'hq_address': this.state.hq_address,
+        'hq_fax': this.state.hq_fax,
+        'hq_telephone': this.state.hq_telephone,
+        'capital_currency': this.state.capital_currency,
+        'capital': this.state.capital,
+        'investor_name': this.state.investor_name,
+        'nationality': this.state.nationality,
+        'investor_id_type': this.state.investor_id_type,
+        'investor_id_number': this.state.investor_id_number,
+        'investor_birth_date': this.state.investor_birth_date,
+        'investor_address': this.state.investor_address,
+        'investor_type': this.state.investor_type,
+        'investor_email': this.state.investor_email,
+        'investor_telephone': this.state.investor_telephone,
+        'investor_fax': this.state.investor_fax,
+        'investor_gender': this.state.investor_gender
       })
       .then(console.log("Succeed"))
       .catch(err => console.log(err));
@@ -111,11 +112,13 @@ class CompanyUpdate extends Component {
         </Badge>
       );
   };
+  componentDidMount(){
+    this.getCompany();
+  }
   render() {
-    const id = "5c94c25663abc339cc17b93b";
     return (
       <div>
-        {this.getCompany()}
+       
         <span
           style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
           className="badge"
@@ -214,10 +217,11 @@ class CompanyUpdate extends Component {
           <Form.Group controlId="hqfax">
             <Form.Label>Update the HQ fax</Form.Label>
             <Form.Control
-              type="textarea"
+              type = "textarea"
               defaultValue={this.state.hq_fax}
-              onChange={e => {
-                this.setState({ hq_fax: e.target.value });
+              onChange ={e => {
+                this.setState({ hq_fax : e.target.value });
+                console.log(this.state.hq_fax)
               }}
             />
           </Form.Group>
