@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 //import logo from './logo.svg';
 
-import invimage from "../investor.jpg";
-import form from "../form.jpg";
-import Background from "../background.jpg";
-import "../App.css";
+import invimage from "./investor.jpg";
+import form from "./form.jpg";
+import Background from "./background.jpg";
+import "../../App.css";
 import "bootstrap";
 
 import {
@@ -14,6 +14,8 @@ import {
   ListGroup,
   Jumbotron,
   Card,
+  Nav,
+  Link,
   Alert
 } from "react-bootstrap";
 
@@ -96,7 +98,11 @@ class Investor extends Component {
         console.log(err.response);
       });
   };
-
+  scroll = () => {
+    document.documentElement.scrollTop =
+      document.documentElement.scrollHeight -
+      document.documentElement.clientHeight;
+  };
   render() {
     this.getinvstorname();
     return (
@@ -152,7 +158,10 @@ class Investor extends Component {
                     <Card.Title>Company Application </Card.Title>
                     <Card.Text>
                       Fill The Company Form And start the process Of Publishing
-                      Your New Company
+                      Your New Company{" "}
+                      <Button id="buttomButton" onClick={this.scroll}>
+                        more info
+                      </Button>
                     </Card.Text>
                     <a href="/companyform">
                       <Button type="button" class="btn btn-info">
@@ -179,8 +188,22 @@ class Investor extends Component {
               </div>
             </Jumbotron>
           </div>
+          <Jumbotron Style={{ color: "black" }}>
+            <h3>What We Are Doing :</h3>
+            <p>
+              we are providing online service that allow you to establish your
+              own company while you are sitting home . No papers needed you only
+              need to:
+              <Nav.Link href="/companyform">Fill The company Form </Nav.Link>
+            </p>
+
+            <h3>What you need to know before filling the form :</h3>
+            <p>1- A Unique Company Name</p>
+            <p> 2- The Company Legal Form</p>
+            <p> 3- Organisational Rule </p>
+            <p>4- Social ID Number</p>
+          </Jumbotron>
         </div>
-        <br />
       </div>
     );
   }

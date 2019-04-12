@@ -4,7 +4,7 @@ import "bootstrap";
 
 import { BrowserRouter, Route } from "react-router-dom";
 
-import investor from "./components/investor_port";
+import investor from "./components/investorPortal/investor_port";
 import Navigationbar from "./components/layout/navigationbar";
 import Home from "./components/layout/Home";
 import Footer from "./components/layout/footer";
