@@ -55,7 +55,7 @@ render() {
   return (
     <Card style={{ width: '45rem',height:'30rem' ,marginTop: '5rem' }} className="mx-auto">
         <Card.Body>
-          <Card.Title>Crete account</Card.Title>
+          <Card.Title>Create account</Card.Title>
           <Card.Text>
             <Form>
               <Form.Row>
