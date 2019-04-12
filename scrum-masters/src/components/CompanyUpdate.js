@@ -39,9 +39,9 @@ class CompanyUpdate extends Component {
       .then(companyy => {
         this.setState({
           company_type: companyy.data.company_type,
-          organizational_rule: companyy.dataorganizational_rule,
+          organizational_rule: companyy.data.organizational_rule,
           legal_form: companyy.datalegal_form,
-          company_name_arabic: companyy.datacompany_name_arabic,
+          company_name_arabic: companyy.data.company_name_arabic,
           company_name_english: companyy.data.company_name_english,
           hq_governorate: companyy.datahq_governorate,
           hq_city: companyy.data.hq_city,
@@ -60,7 +60,7 @@ class CompanyUpdate extends Component {
           investor_email: companyy.data.investor_email,
           investor_telephone: companyy.data.investor_telephone,
           investor_fax: companyy.data.investor_fax,
-          investor_gender : companyy.data.investor_gender
+          investor_gender: companyy.data.investor_gender
         });
       })
       .catch(err => {
@@ -71,29 +71,29 @@ class CompanyUpdate extends Component {
     console.log(this.state);
     axios
       .put("http://localhost:3001/api/company/5c94c25663abc339cc17b93b", {
-        'company_type': this.state.company_type,
-        'organizational_rule': this.state.organizational_rule,
-        'legal_form': this.state.legal_form,
-        'company_name_arabic': this.state.company_name_arabic,
-        'company_name_english': this.state.company_name_english,
-        'hq_governorate': this.state.hq_governorate,
-        'hq_city': this.state.hq_city,
-        'hq_address': this.state.hq_address,
-        'hq_fax': this.state.hq_fax,
-        'hq_telephone': this.state.hq_telephone,
-        'capital_currency': this.state.capital_currency,
-        'capital': this.state.capital,
-        'investor_name': this.state.investor_name,
-        'nationality': this.state.nationality,
-        'investor_id_type': this.state.investor_id_type,
-        'investor_id_number': this.state.investor_id_number,
-        'investor_birth_date': this.state.investor_birth_date,
-        'investor_address': this.state.investor_address,
-        'investor_type': this.state.investor_type,
-        'investor_email': this.state.investor_email,
-        'investor_telephone': this.state.investor_telephone,
-        'investor_fax': this.state.investor_fax,
-        'investor_gender': this.state.investor_gender
+        company_type: this.state.company_type,
+        organizational_rule: this.state.organizational_rule,
+        legal_form: this.state.legal_form,
+        company_name_arabic: this.state.company_name_arabic,
+        company_name_english: this.state.company_name_english,
+        hq_governorate: this.state.hq_governorate,
+        hq_city: this.state.hq_city,
+        hq_address: this.state.hq_address,
+        hq_fax: this.state.hq_fax,
+        hq_telephone: this.state.hq_telephone,
+        capital_currency: this.state.capital_currency,
+        capital: this.state.capital,
+        investor_name: this.state.investor_name,
+        nationality: this.state.nationality,
+        investor_id_type: this.state.investor_id_type,
+        investor_id_number: this.state.investor_id_number,
+        investor_birth_date: this.state.investor_birth_date,
+        investor_address: this.state.investor_address,
+        investor_type: this.state.investor_type,
+        investor_email: this.state.investor_email,
+        investor_telephone: this.state.investor_telephone,
+        investor_fax: this.state.investor_fax,
+        investor_gender: this.state.investor_gender
       })
       .then(console.log("Succeed"))
       .catch(err => console.log(err));
@@ -112,13 +112,12 @@ class CompanyUpdate extends Component {
         </Badge>
       );
   };
-  componentDidMount(){
+  componentDidMount() {
     this.getCompany();
   }
   render() {
     return (
       <div>
-       
         <span
           style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
           className="badge"
@@ -131,7 +130,7 @@ class CompanyUpdate extends Component {
               <Form.Label>Company name in Arabic</Form.Label>
               <Form.Control
                 type="textarea"
-                defaultValue={this.state.company_name_arabic}
+                value={this.state.company_name_arabic}
                 onChange={e => {
                   this.setState({ company_name_arabic: e.target.value });
                 }}
@@ -141,7 +140,7 @@ class CompanyUpdate extends Component {
               <Form.Label>Company name in English</Form.Label>
               <Form.Control
                 type="textarea"
-                defaultValue={this.state.company_name_english}
+                value={this.state.company_name_english}
                 onChange={e => {
                   this.setState({ company_name_english: e.target.value });
                 }}
@@ -152,7 +151,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Select The Organizational Rule </Form.Label>
             <Form.Control
               as="select"
-              defaultValue={this.state.organizational_rule}
+              value={this.state.organizational_rule}
               onChange={e => {
                 this.setState({ organizational_rule: e.target.value });
               }}
@@ -169,7 +168,7 @@ class CompanyUpdate extends Component {
               </Form.Label>
               <Form.Control
                 as="select"
-                defaultValue={this.state.hq_governorate}
+                value={this.state.hq_governorate}
                 onChange={e => {
                   this.setState({ hq_governorate: e.target.value });
                 }}
@@ -183,7 +182,7 @@ class CompanyUpdate extends Component {
               <Form.Label>Select The Company HeadQuarters city </Form.Label>
               <Form.Control
                 as="select"
-                defaultValue={this.state.hq_city}
+                value={this.state.hq_city}
                 onChange={e => {
                   this.setState({ hq_city: e.target.value });
                 }}
@@ -198,7 +197,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Update the HQ address</Form.Label>
             <Form.Control
               type="textarea"
-              defaultValue={this.state.hq_address}
+              value={this.state.hq_address}
               onChange={e => {
                 this.setState({ hq_address: e.target.value });
               }}
@@ -208,7 +207,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Update the HQ telephone</Form.Label>
             <Form.Control
               type="textarea"
-              defaultValue={this.state.hq_telephone}
+              value={this.state.hq_telephone}
               onChange={e => {
                 this.setState({ hq_telephone: e.target.value });
               }}
@@ -217,11 +216,11 @@ class CompanyUpdate extends Component {
           <Form.Group controlId="hqfax">
             <Form.Label>Update the HQ fax</Form.Label>
             <Form.Control
-              type = "textarea"
-              defaultValue={this.state.hq_fax}
-              onChange ={e => {
-                this.setState({ hq_fax : e.target.value });
-                console.log(this.state.hq_fax)
+              type="textarea"
+              value={this.state.hq_fax}
+              onChange={e => {
+                this.setState({ hq_fax: e.target.value });
+                console.log(this.state.hq_fax);
               }}
             />
           </Form.Group>
@@ -229,7 +228,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Change the capital currency</Form.Label>
             <Form.Control
               as="select"
-              defaultValue={this.state.capital_currency}
+              value={this.state.capital_currency}
               onChange={e => {
                 this.setState({ capital_currency: e.target.value });
               }}
@@ -243,7 +242,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Change the capital</Form.Label>
             <Form.Control
               type="textarea"
-              defaultValue={this.state.capital}
+              value={this.state.capital}
               onChange={e => {
                 this.setState({ capital: e.target.value });
               }}
@@ -253,10 +252,10 @@ class CompanyUpdate extends Component {
             <Form.Label>Update the investor's Name</Form.Label>
             <Form.Control
               type="textarea"
-              defaultValue={this.state.investor_name}
+              value={this.state.investor_name}
               onChange={e => {
                 this.setState({ investor_name: e.target.value });
-                console.log(e.target.value + " "+ this.state.investor_name);
+                console.log(e.target.value + " " + this.state.investor_name);
               }}
             />
           </Form.Group>
@@ -264,7 +263,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Change the investor type</Form.Label>
             <Form.Control
               as="select"
-              defaultValue={this.state.investor_type}
+              value={this.state.investor_type}
               onChange={e => {
                 this.setState({ investor_type: e.target.value });
               }}
@@ -278,7 +277,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Change the investor gender</Form.Label>
             <Form.Control
               as="select"
-              defaultValue={this.state.investor_gender}
+              value={this.state.investor_gender}
               onChange={e => {
                 this.setState({ investor_gender: e.target.value });
               }}
@@ -292,7 +291,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Change the nationality</Form.Label>
             <Form.Control
               as="select"
-              defaultValue={this.state.nationality}
+              value={this.state.nationality}
               onChange={e => {
                 this.setState({ nationality: e.target.value });
               }}
@@ -306,7 +305,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Change the investor id type</Form.Label>
             <Form.Control
               as="select"
-              defaultValue={this.state.investor_id_type}
+              value={this.state.investor_id_type}
               onChange={e => {
                 this.setState({ investor_id_type: e.target.value });
               }}
@@ -320,7 +319,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Update the investor's ID number</Form.Label>
             <Form.Control
               type="textarea"
-              defaultValue={this.state.investor_id_type}
+              value={this.state.investor_id_type}
               onChange={e => {
                 this.setState({ investor_id_type: e.target.value });
               }}
@@ -330,7 +329,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Update the investor's birthdate</Form.Label>
             <Form.Control
               type="Date"
-              defaultValue={this.state.investor_birth_date}
+              value={this.state.investor_birth_date}
               onChange={e => {
                 this.setState({ investor_birth_date: e.target.value });
               }}
@@ -340,7 +339,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Update the investor's address</Form.Label>
             <Form.Control
               type="textarea"
-              defaultValue={this.state.investor_address}
+              value={this.state.investor_address}
               onChange={e => {
                 this.setState({ investor_address: e.target.value });
               }}
@@ -350,7 +349,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Update the investor's telephone</Form.Label>
             <Form.Control
               type="textarea"
-              defaultValue={this.state.investor_telephone}
+              value={this.state.investor_telephone}
               onChange={e => {
                 this.setState({ investor_telephone: e.target.value });
               }}
@@ -360,7 +359,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Update the investor's fax</Form.Label>
             <Form.Control
               type="textarea"
-              defaultValue={this.state.investor_fax}
+              value={this.state.investor_fax}
               onChange={e => {
                 this.setState({ investor_fax: e.target.value });
               }}
@@ -370,7 +369,7 @@ class CompanyUpdate extends Component {
             <Form.Label>Update the investor's email</Form.Label>
             <Form.Control
               type="textarea"
-              defaultValue={this.state.investor_email}
+              value={this.state.investor_email}
               onChange={e => {
                 this.setState({ investor_email: e.target.value });
               }}
