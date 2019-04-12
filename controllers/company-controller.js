@@ -145,6 +145,17 @@ exports.getCompany = (req, res) => {
     })
 }
 
+exports.getEstablished = (req, res) => {
+  Company.find({ _id: req.params.id, established: true })
+    .then(company => {
+      if (!company || company.length === 0) return res.status(404).send('Company not found')
+      return res.json(company[0])
+    })
+    .catch(err => {
+      console.log(err)
+      return res.sendStatus(500)
+    })
+}
 
 exports.createCompany = (req, res) => {
   const { error } = validatecreateCompany(req.body)
