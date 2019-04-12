@@ -114,6 +114,7 @@ render() {
                    as="select"
                    vlaue={this.state.gender}
                    onChange={(e) => {this.setState({gender: e.target.value})}}>
+                    <option>..</option>
                     <option>male</option>
                     <option>female</option>
                   </Form.Control>
@@ -127,6 +128,7 @@ render() {
                    as="select"
                    value={this.state.usertype}
                    onChange={(e) => {this.setState({type: e.target.value})}}>
+                    <option>..</option>
                     <option>lawyer</option>
                     <option>reviewer</option>
                   </Form.Control>
