@@ -1,4 +1,4 @@
-import { GET_ELECTRONICJOURNALS } from './actionTypes'
+import { GET_ELECTRONICJOURNALS, GET_ERRORS } from './actionTypes'
 import axios from 'axios'
 
 export const getElectronicJournals = () => dispatch => {
@@ -7,13 +7,13 @@ export const getElectronicJournals = () => dispatch => {
     .then(res =>
       dispatch({
         type: GET_ELECTRONICJOURNALS,
-        payload: res.data
+        payload: res.data.data
       })
     )
     .catch(err =>
       dispatch({
-        type: GET_ELECTRONICJOURNALS,
-        payload: null
+        type: GET_ERRORS,
+        payload: err.response.data
       })
     )
 }
