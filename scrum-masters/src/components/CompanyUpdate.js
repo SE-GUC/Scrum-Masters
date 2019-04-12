@@ -60,7 +60,7 @@ class CompanyUpdate extends Component {
           investor_email: companyy.data.investor_email,
           investor_telephone: companyy.data.investor_telephone,
           investor_fax: companyy.data.investor_fax,
-          investor_gender : companyy.data.investor_gender
+          investor_gender: companyy.data.investor_gender
         });
       })
       .catch(err => {
@@ -110,7 +110,6 @@ class CompanyUpdate extends Component {
   render() {
     return (
       <div>
-       
         <span
           style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
           className="badge"
@@ -209,11 +208,11 @@ class CompanyUpdate extends Component {
           <Form.Group controlId="hqfax">
             <Form.Label>Update the HQ fax</Form.Label>
             <Form.Control
-              type = "textarea"
+              type="textarea"
               value={this.state.hq_fax}
-              onChange ={e => {
-                this.setState({ hq_fax : e.target.value });
-                console.log(this.state.hq_fax)
+              onChange={e => {
+                this.setState({ hq_fax: e.target.value });
+                console.log(this.state.hq_fax);
               }}
             />
           </Form.Group>
@@ -248,7 +247,7 @@ class CompanyUpdate extends Component {
               value={this.state.investor_name}
               onChange={e => {
                 this.setState({ investor_name: e.target.value });
-                console.log(e.target.value + " "+ this.state.investor_name);
+                console.log(e.target.value + " " + this.state.investor_name);
               }}
             />
           </Form.Group>

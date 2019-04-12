@@ -1,45 +1,45 @@
-import React, { Component } from 'react';
-import { Card, Button, Form } from 'react-bootstrap';
-import axios from 'axios';
+import React, { Component } from "react";
+import { Card, Button, Form } from "react-bootstrap";
+import axios from "axios";
 
 class Login extends Component {
   constructor() {
     super();
     this.state = {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       errors: {}
     };
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   login = e => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     const userData = {
       email: this.state.email,
       password: this.state.password
     };
-    
-    this.setState({ errors: {} })
-    axios.post("http://localhost:3001/api/user/login", userData)
+
+    this.setState({ errors: {} });
+    axios
+      .post("http://localhost:3001/api/user/login", userData)
       .then(login => {
-        this.props.history.push('/')
+        this.props.history.push("/");
       })
       .catch(err => {
-        this.setState({ errors: err.response.data })
-      })
-  }
+        this.setState({ errors: err.response.data });
+      });
+  };
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-  }
+  };
 
   render() {
     return (
-      <Card style={{ width: '28rem', marginTop: '5rem' }} className="mx-auto">
+      <Card style={{ width: "28rem", marginTop: "5rem" }} className="mx-auto">
         <Card.Body>
           <Card.Title>Login to your account</Card.Title>
           <Card.Text>
@@ -72,7 +72,9 @@ class Login extends Component {
                   Incorrect password
                 </Form.Control.Feedback>
               </Form.Group>
-              <Button variant="primary default" type="submit">Login</Button>
+              <Button variant="primary default" type="submit">
+                Login
+              </Button>
             </Form>
           </Card.Text>
         </Card.Body>
@@ -81,5 +83,4 @@ class Login extends Component {
   }
 }
 
-export default Login
-
+export default Login;
