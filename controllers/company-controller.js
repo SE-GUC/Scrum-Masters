@@ -1,6 +1,5 @@
 const Joi = require('joi')
 const Company = require('../models/company')
-const Notification = require('../models/Notification')
 const ElectronicJournal = require('../models/ElectronicJournal')
 const userController = require('../controllers/user-controller')
 
@@ -32,7 +31,6 @@ function validateupdateCompany (company) {
     investor_fax: Joi.string(),
     investor_email: Joi.string(),
     ispaid:Joi.boolean(),//TO Do Just for tests no and will remove it later
-    assigned_status:Joi.boolean(),//TO Do Just for tests no and will remove it later
     reviewed_statusreviewer:Joi.boolean(),//TO Do Just for tests no and will remove it later
     established:Joi.boolean()
 
@@ -228,7 +226,7 @@ exports.deleteCompany = (req, res) => {
 
 exports.listUnassignedApplications =async(req,res)=>{
   try {
-   const companies= await Company.find({ assigned_status: false })
+   const companies= await Company.find({ review_lawyer: undefined })
   res.json(companies)
   }
   catch(error){
