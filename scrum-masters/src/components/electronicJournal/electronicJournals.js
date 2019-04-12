@@ -1,47 +1,59 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { getElectronicJournals } from "../../globalState/actions/electronicJournalsActions";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { getElectronicJournals } from '../../globalState/actions/electronicJournalsActions'
+import Spinner from '../common/Spinner'
+import ElectronicJournalItem from './ElectronicJournalItem'
 
 class ElectronicJournals extends Component {
-  componentDidMount() {
-    // if(this.props.isLoggedIn)
-    this.props.getElectronicJournals();
+  componentDidMount () {
+    this.props.getElectronicJournals()
   }
 
-  render() {
-    const electronicJournalsItems = this.props.electronicJournals.map(
-      (electronicJournal, index) => {
-        return (
-          <div key={index}>
-            <h3>{electronicJournal.companyName}</h3>
-            <p>{electronicJournal.companyDescription}</p>
-          </div>
-        );
+	render() {
+      const { electronicJournals, loading } = this.props.electronicJournal
+      let electronicJournalItems
+
+      if (electronicJournals === null || loading) {
+        electronicJournalItems = <Spinner />
+      } else {
+        if(electronicJournals.length > 0) {
+          electronicJournalItems = electronicJournals.map((electronicJournal) => (
+            <ElectronicJournalItem key={electronicJournal._id} electronicJournal={electronicJournal} />
+          ))
+       } else {
+          electronicJournalItems = <h4>No electronicJournals found...</h4> 
+        }
       }
-    );
-    return (
-      <div>
-        <h1> ElectronicJournals </h1>
-        <button onClick={this.getElectronicJournals}>
-          get all ElectronicJournals
-        </button>
-        {electronicJournalsItems}
+
+		return (
+      <div className='electronicJournals'>
+        <div className='container'>
+          <div className='row'>
+            <div className='col-md-12'>
+              <h1 className='display-4 text-center'>Electronic Journals</h1>
+              <p className='lead text-center'>
+                View all established companies
+              </p>
+              {electronicJournalItems}
+            </div>
+          </div>
+        </div>
       </div>
-    );
-  }
+    )
+	}
 }
 
 ElectronicJournals.propTypes = {
-  getElectronicJournals: PropTypes.func.isRequired,
-  electronicJournals: PropTypes.array.isRequired
-};
+	getElectronicJournals: PropTypes.func.isRequired,
+	electronicJournal: PropTypes.object.isRequired
+}
 
 const mapStateToProps = state => ({
-  electronicJournals: state.electronicJournal.electronicJournals
-});
+	electronicJournal: state.electronicJournal
+})
 
-export default connect(
-  mapStateToProps,
-  { getElectronicJournals }
-)(ElectronicJournals);
+export default connect(mapStateToProps, { getElectronicJournals })(
+  withRouter(ElectronicJournals)
+)

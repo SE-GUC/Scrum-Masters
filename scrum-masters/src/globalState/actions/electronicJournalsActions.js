@@ -1,6 +1,7 @@
-import { GET_ELECTRONICJOURNALS } from './actionTypes'
+import { GET_ELECTRONICJOURNALS, ELECTRONICJOURNAL_LOADING } from './actionTypes'
 import axios from 'axios'
 
+// Get all Electronic Journals
 export const getElectronicJournals = () => dispatch => {
   axios
     .get('http://localhost:3001/api/electronicJournals')
@@ -16,4 +17,11 @@ export const getElectronicJournals = () => dispatch => {
         payload: null
       })
     )
+}
+
+// Electronic Journal loading
+export const setElectronicJournalLoading = () => {
+  return {
+    type: ELECTRONICJOURNAL_LOADING
+  }
 }

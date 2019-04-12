@@ -14,9 +14,9 @@ a {
   text-decoration: none;
 }
 
-.container {
+/* .container {
   padding: 0 1rem;
-}
+} */
 
 .btn {
   display: inline-block;
@@ -32,11 +32,11 @@ a {
   min-width: 100%;
   opacity: 0.5;
 }
-.container {
+/* .container {
   display: flex;
   position: relative;
   width: 50%;
-}
+} */
 .img2 {
   background-size: cover;
   opacity: 0.9;

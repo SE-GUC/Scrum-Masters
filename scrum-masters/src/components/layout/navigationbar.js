@@ -11,6 +11,9 @@ const navigationbar = () => {
           <Nav className="mr-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/login">Login</Nav.Link>
+            <Nav.Link href="/electronicJournal">
+              Electronic Journals
+            </Nav.Link>
             <Nav.Link href="#link">Notifications</Nav.Link>
             <Nav.Link href="/unassignedCompanies">
               Unassigned Companies
@@ -20,21 +23,20 @@ const navigationbar = () => {
               Review your applications
             </Nav.Link>
 
-            <Nav.Link href="/lawyerAssignedApplication">
-              lawyerAssignedApplications
-            </Nav.Link>
-            <Nav.Link href="/reviewerAssignedApplication">
-              reviewerAssignedApplications
-            </Nav.Link>
-            <Nav.Link href="/userCreatedApplication">
-              userCreatedApplications
-            </Nav.Link>
-
             <NavDropdown title="" id="basic-nav-dropdown">
               <NavDropdown.Item href="/">Sign out</NavDropdown.Item>
               <NavDropdown.Item href="/Login">Login</NavDropdown.Item>
               <NavDropdown.Item href="/companyform">
                 Company Form
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/userCreatedApplication">
+                userCreatedApplications
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/reviewerAssignedApplication">
+                reviewerAssignedApplications
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/lawyerAssignedApplication">
+                lawyerAssignedApplications
               </NavDropdown.Item>
               <NavDropdown.Item href="CompanyUpdate">
                 Update Company
