@@ -20,7 +20,7 @@ import admin_create from "./components/admin_create";
 import lawyerAssignedApplications from "./components/lawyerAssignedApplications";
 import reviewerAssignedApplications from "./components/reviewerAssignedApplications.js";
 import userCreatedApplications from "./components/userCreatedApplications";
-import electronicJournals from "./components/electronicJournal/ElectronicJournals";
+import electronicJournals from "./components/electronicJournal/electronicJournals";
 
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");

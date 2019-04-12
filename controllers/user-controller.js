@@ -1,5 +1,8 @@
 const Joi = require('joi') 
 const User = require('../models/User') 
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const tokenKey = require('../config/tokenKey')
 var Company = require('../models/company') 
 var Notification = require('../models/Notification') 
 
@@ -361,4 +364,54 @@ exports.unassignLaywer = async (req, res) => {
   } catch (error) {
     console.log(error)
   }
+}
+
+
+exports.login=async(req,res)=>{
+  try {
+		const { email, password } = req.body;
+		const user = await User.findOne({ email });
+		if (!user) return res.status(404).json({ email: 'Email does not exist' });
+		const match = bcrypt.compareSync(password, user.password);
+		if (match) {
+            const payload = {
+                id: user._id,
+                email: user.email,
+                type:user.type
+
+            }
+            const token = jwt.sign(payload, tokenKey.key, { expiresIn: '1h' })
+            return res.json({token: `Bearer ${token}`})
+        }
+		else return res.status(400).send({ password: 'Wrong password' });
+	} catch (e) {
+    console.log(e)
+    return res.json({msg:"Can't log in "})}
+
+}
+
+
+exports.register=async(req,res)=>{
+  try {
+    const { error } = validateUser(req.body, true) 
+		if (error) return res.status(400).send(error.details[0].message);
+		const { firstName, lastName, email, password,gender,type } = req.body;
+		const user = await User.findOne({ email });
+		if (user) return res.status(400).json({ email: 'Email already exists' });
+		const salt = bcrypt.genSaltSync(10);
+		const hashedPassword = bcrypt.hashSync(password, salt);
+		const newUser = new User({
+      firstName,
+      lastName,
+      email,
+			password: hashedPassword,
+			gender,
+			type,
+		});
+		await User.create(newUser);
+		res.json({ msg: 'User created successfully', data: newUser });
+	} catch (error) {
+    console.log(error)
+		res.status(422).send({ error: 'Can not register right now' });
+	}
 }
