@@ -486,7 +486,7 @@ exports.unassignLaywer = async (req, res) => {
     if (!application) {
       return res.status(404).send({ error: "Application not found" });
     }
-
+ 
     if (application.review_lawyer === null) {
       return res.status(400).send({
         error: "The lawyer is already unassigned to this application"
