@@ -5,7 +5,7 @@ const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
 class CompanyUpdate extends Component {
-  id = "5c94c25663abc339cc17b93b";
+  id = this.props.match.params.company_id;
   state = {
     company: [],
     company_type: "",
@@ -35,15 +35,15 @@ class CompanyUpdate extends Component {
 
   getCompany = () => {
     axios
-      .get("http://localhost:3001/api/company/5c94c25663abc339cc17b93b")
+      .get("http://localhost:3001/api/company/" + this.props.match.params.company_id)
       .then(companyy => {
         this.setState({
           company_type: companyy.data.company_type,
           organizational_rule: companyy.data.organizational_rule,
-          legal_form: companyy.datalegal_form,
+          legal_form: companyy.data.legal_form,
           company_name_arabic: companyy.data.company_name_arabic,
           company_name_english: companyy.data.company_name_english,
-          hq_governorate: companyy.datahq_governorate,
+          hq_governorate: companyy.data.hq_governorate,
           hq_city: companyy.data.hq_city,
           hq_address: companyy.data.hq_address,
           hq_fax: companyy.data.hq_fax,
@@ -70,51 +70,43 @@ class CompanyUpdate extends Component {
   handleSubmit = (e, id) => {
     console.log(this.state);
     axios
-      .put("http://localhost:3001/api/company/5c94c25663abc339cc17b93b", {
-        company_type: this.state.company_type,
-        organizational_rule: this.state.organizational_rule,
-        legal_form: this.state.legal_form,
-        company_name_arabic: this.state.company_name_arabic,
-        company_name_english: this.state.company_name_english,
-        hq_governorate: this.state.hq_governorate,
-        hq_city: this.state.hq_city,
-        hq_address: this.state.hq_address,
-        hq_fax: this.state.hq_fax,
-        hq_telephone: this.state.hq_telephone,
-        capital_currency: this.state.capital_currency,
-        capital: this.state.capital,
-        investor_name: this.state.investor_name,
-        nationality: this.state.nationality,
-        investor_id_type: this.state.investor_id_type,
-        investor_id_number: this.state.investor_id_number,
-        investor_birth_date: this.state.investor_birth_date,
-        investor_address: this.state.investor_address,
-        investor_type: this.state.investor_type,
-        investor_email: this.state.investor_email,
-        investor_telephone: this.state.investor_telephone,
-        investor_fax: this.state.investor_fax,
-        investor_gender: this.state.investor_gender
+      .put("http://localhost:3001/api/company/" + this.props.match.params.company_id, {
+        'company_type': this.state.company_type,
+        'organizational_rule': this.state.organizational_rule,
+        'legal_form': this.state.legal_form,
+        'company_name_arabic': this.state.company_name_arabic,
+        'company_name_english': this.state.company_name_english,
+        'hq_governorate': this.state.hq_governorate,
+        'hq_city': this.state.hq_city,
+        'hq_address': this.state.hq_address,
+        'hq_fax': this.state.hq_fax,
+        'hq_telephone': this.state.hq_telephone,
+        'capital_currency': this.state.capital_currency,
+        'capital': this.state.capital,
+        'investor_name': this.state.investor_name,
+        'nationality': this.state.nationality,
+        'investor_id_type': this.state.investor_id_type,
+        'investor_id_number': this.state.investor_id_number,
+        'investor_birth_date': this.state.investor_birth_date,
+        'investor_address': this.state.investor_address,
+        'investor_type': this.state.investor_type,
+        'investor_email': this.state.investor_email,
+        'investor_telephone': this.state.investor_telephone,
+        'investor_fax': this.state.investor_fax,
+        'investor_gender': this.state.investor_gender
       })
-      .then(console.log("Succeed"))
-      .catch(err => console.log(err));
+      .then(company => {
+        this.props.history.push("/company/"+this.props.match.params.company_id);
+      })
+      .catch(err => {
+        this.setState({ error: err.response.data });
+      });
   };
-  check = () => {
-    if (this.state.company.length === 0)
-      return (
-        <Badge style={{ fontSize: 15 }} variant="Danger">
-          {this.state.error}
-        </Badge>
-      );
-    else
-      return (
-        <Badge style={{ fontSize: 15 }} variant="primary">
-          YOUR FORM IS SUBMITED
-        </Badge>
-      );
-  };
-  componentDidMount() {
+  
+  componentDidMount(){
     this.getCompany();
   }
+  
   render() {
     return (
       <div>
@@ -148,7 +140,7 @@ class CompanyUpdate extends Component {
             </Form.Group>
           </Form.Row>
           <Form.Group controlId="rule">
-            <Form.Label>Select The Organizational Rule </Form.Label>
+            <Form.Label>Select The Organizational Rule</Form.Label>
             <Form.Control
               as="select"
               value={this.state.organizational_rule}
@@ -234,8 +226,8 @@ class CompanyUpdate extends Component {
               }}
             >
               <option />
-              <option>hq_city1</option>
-              <option>hq_city2</option>
+              <option>EGP</option>
+              <option>Euro</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="capital">
@@ -379,7 +371,11 @@ class CompanyUpdate extends Component {
             Submit
           </Button>
           <br />
-          {this.check()}
+          { this.state.error &&
+            <Badge style={{ fontSize: 15 }} variant="danger">
+              {this.state.error}
+            </Badge>
+          }
         </Form>
       </div>
     );
