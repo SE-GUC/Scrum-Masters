@@ -38,9 +38,6 @@ const navigationbar = () => {
               <NavDropdown.Item href="/lawyerAssignedApplication">
                 lawyerAssignedApplications
               </NavDropdown.Item>
-              <NavDropdown.Item href="CompanyUpdate">
-                Update Company
-              </NavDropdown.Item>
               <NavDropdown.Item href="/">settings</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="/">Contact us</NavDropdown.Item>

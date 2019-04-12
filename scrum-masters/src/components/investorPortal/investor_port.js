@@ -27,7 +27,7 @@ class Investor extends Component {
   state = {
     count: 0,
     company: [],
-    id: "5ca7904ae79c412a704bfd7d",
+    id: "5c921c633b8f9c2b4440c9a6",
     name: ""
   };
 
@@ -64,7 +64,7 @@ class Investor extends Component {
           <ul>
             {this.state.company.map(companies => (
               <li key={companies._id}>
-                <ListGroup.Item action variant="light">
+                <ListGroup.Item action variant="light" as="a" href={"/company/"+companies._id}>
                   {" "}
                   <strong style={{ color: "steelblue" }}>
                     Company Name:
