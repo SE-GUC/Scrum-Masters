@@ -41,6 +41,9 @@ const navigationbar = () => {
               <NavDropdown.Item href="CompanyUpdate">
                 Update Company
               </NavDropdown.Item>
+              <NavDropdown.Item href="userProfile">
+                User Profile
+              </NavDropdown.Item>
               <NavDropdown.Item href="/">settings</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="/">Contact us</NavDropdown.Item>
