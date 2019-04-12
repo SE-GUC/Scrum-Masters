@@ -9,7 +9,7 @@ exports.test = async (req, res) => {
 exports.listAllElectronicJournals = async (req, res) => {
   try {
     const electronicJournals = await ElectronicJournal.find()
-    res.json({ data: electronicJournals })
+    res.json(electronicJournals)
   } catch (error) {
     console.log(error)
   }
@@ -21,7 +21,7 @@ exports.getElectronicJournal = async (req, res) => {
 
     // Send 404 error if not found
     if (!electronicJournal) return res.status(404).send(`The electronicJournal with this ID was not found.`)
-    res.send(electronicJournal)
+    res.json(electronicJournal)
   } catch (error) {
     console.log(error)
   }
@@ -36,7 +36,7 @@ exports.createElectronicJournal = async (req, res) => {
     if (error) return res.status(400).send(error.details[0].message)
     // Create the electronic Journal, add to the array and display it.
     const newElectronicJournal = await ElectronicJournal.create(req.body)
-    res.json({ msg: 'Electronic Journal was created Successfully', data: newElectronicJournal })
+    res.json(newElectronicJournal)
   } catch (error) {
     console.log(error)
   }
@@ -57,7 +57,7 @@ exports.updateElectronicJournal = async (req, res) => {
     if (!updatedElectronicJournal) return res.status(404).send(`The electronicJournal with this ID was not found.`)
 
     // Return the updated electronic Journal
-    res.json({ msg: 'Electronic Journal updated successfully', data: updatedElectronicJournal })
+    res.json(updatedElectronicJournal)
   } catch (error) {
     // We will be handling the error later
     console.log(error)
@@ -73,7 +73,7 @@ exports.deleteElectronicJournal = async (req, res) => {
     if (!deletedElectronicJournal) return res.status(404).send(`The electronicJournal with this ID was not found.`)
 
     // Return the same reviewer by convention
-    res.json({ msg: 'Electronic Journal Deleted successfully', data: deletedElectronicJournal })
+    res.json(deletedElectronicJournal)
   } catch (error) {
     console.log(error)
   }
