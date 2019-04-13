@@ -248,7 +248,7 @@ class CompanyForm extends Component {
               <Form.Control as="select" onChange={this.currencychange}>
                 <option />
                 <option>EGP</option>
-                <option>Euroc</option>
+                <option>Euro</option>
               </Form.Control>
             </Form.Group>
 

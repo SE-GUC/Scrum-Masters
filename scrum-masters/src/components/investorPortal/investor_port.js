@@ -4,6 +4,8 @@ import React, { Component } from "react";
 import invimage from "./investor.jpg";
 import form from "./form.jpg";
 import Background from "./background.jpg";
+import electronicJournal from "./electronicjournal.jpg";
+
 import "../../App.css";
 import "bootstrap";
 
@@ -15,7 +17,6 @@ import {
   Jumbotron,
   Card,
   Nav,
-  Link,
   Alert
 } from "react-bootstrap";
 
@@ -27,7 +28,7 @@ class Investor extends Component {
   state = {
     count: 0,
     company: [],
-    id: "5ca7904ae79c412a704bfd7d",
+    id: "5c921c633b8f9c2b4440c9a6",
     name: ""
   };
 
@@ -64,7 +65,7 @@ class Investor extends Component {
           <ul>
             {this.state.company.map(companies => (
               <li key={companies._id}>
-                <ListGroup.Item action variant="light">
+                <ListGroup.Item action variant="light" as="a" href={"/company/"+companies._id}>
                   {" "}
                   <strong style={{ color: "steelblue" }}>
                     Company Name:
@@ -175,20 +176,24 @@ class Investor extends Component {
                   class="col px-ms-5"
                   className="m-5"
                 >
-                  <Card.Img variant="top" src={form} />
+                  <Card.Img variant="top" src={electronicJournal} />
                   <Card.Body>
-                    <Card.Title>not used yet </Card.Title>
+                    <Card.Title>Electronic Journals </Card.Title>
                     <Card.Text>
-                      Fill The Company Form And start the process Of Publishing
-                      Your New Company
+                      Show all the established companies and brief description
+                      about each of them{" "}
                     </Card.Text>
-                    <Button>Button2</Button>
+                    <a href="/electronicJournal">
+                      <Button type="button" class="btn btn-info">
+                        Electronic Journal
+                      </Button>
+                    </a>
                   </Card.Body>
                 </Card>
               </div>
             </Jumbotron>
           </div>
-          <Jumbotron Style={{ color: "black" }}>
+          <Jumbotron style={{ color: "black" }}>
             <h3>What We Are Doing :</h3>
             <p>
               we are providing online service that allow you to establish your

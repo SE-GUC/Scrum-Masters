@@ -14,6 +14,7 @@ import AllCompanies from "./components/allCompanies";
 import ApplicationReview from "./components/applicationReview";
 import CompanyForm from "./components/CompanyForm";
 import CompanyUpdate from "./components/CompanyUpdate";
+import CompanyView from "./components/CompanyView";
 import AllUnassignedCompanies from "./components/unassignedCompanies";
 
 import admin_create from "./components/admin_create";
@@ -44,7 +45,7 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/companyform" component={CompanyForm} />
-            <Route exact path="/CompanyUpdate" component={CompanyUpdate} />
+            <Route path="/CompanyUpdate/:company_id" component={CompanyUpdate} />
             <Route
               exact
               path="/unassignedCompanies"
@@ -74,6 +75,7 @@ class App extends Component {
             <Route exact path="/userProfile" component={userProfile}
             />
             <Route exact path="/inv" component={investor} />
+            <Route path="/company/:company_id" component={CompanyView} />
           </div>
           <Footer />
         </div>
