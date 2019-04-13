@@ -13,6 +13,12 @@ class Login extends Component {
   }
 
   componentDidMount() {}
+  
+  static logout() {
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userType");
+  }
 
   login = e => {
     e.preventDefault();
@@ -26,6 +32,12 @@ class Login extends Component {
     axios
       .post("http://localhost:3001/api/user/login", userData)
       .then(login => {
+        localStorage.setItem("userId", login.data.user.id);
+        localStorage.setItem("userEmail", login.data.user.email);
+        localStorage.setItem("userType", login.data.user.type);
+        if (this.props.onLogin) {
+          this.props.onLogin();
+        }
         this.props.history.push("/");
       })
       .catch(err => {

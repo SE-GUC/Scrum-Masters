@@ -1,5 +1,6 @@
 const axios = require('axios')
 const Company = require('../models/company')
+const ElectronicJournal = require('../models/ElectronicJournal')
 
 const stripeKey = require('../config/keys').stripeKey
 const stripe = require("stripe")(stripeKey)
@@ -28,7 +29,8 @@ exports.charge = async (req, res) => {
     })
     
     try {
-      const newCompany = await Company.findByIdAndUpdate(req.params.id, { ispaid: true }, { new: true })
+      const newCompany = await Company.findByIdAndUpdate(req.params.id, { ispaid: true, established: true }, { new: true })
+      const ej = await ElectronicJournal.create({ companyId: company._id, companyName: company.company_name_arabic })
       res.json({ charge: charge, company: newCompany })
     } catch (err) {
       const refund = await stripe.refunds.create({
