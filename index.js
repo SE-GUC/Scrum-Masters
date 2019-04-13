@@ -22,6 +22,7 @@ const comment = require('./routes/api/comment')
 const company = require('./routes/api/company')
 const notification = require('./routes/api/notification')
 const payment = require('./routes/api/payment')
+const externalEntity = require('./routes/api/external-entity')
 
 // Init middleware
 app.use(express.json())
@@ -37,6 +38,7 @@ app.use('/api/comment', comment)
 app.use('/api/company', company)
 app.use('/api/notification', notification)
 app.use('/api/payment', payment)
+app.use('/api/external-entity', externalEntity)
 
 // Handling 404
 app.use((req, res) => {

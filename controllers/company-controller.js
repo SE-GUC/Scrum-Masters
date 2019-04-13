@@ -109,10 +109,22 @@ function validatecreateCompany (company) {
 
   return Joi.validate(company, schema)
 }
+
 exports.listAllCompanies = (req, res) => {
   Company.find({}, { _id: true ,company_name_english: true , company_name_arabic : true})
     .then(company => {
       return res.json(company)
+    })
+    .catch(err => {
+      console.log(err)
+      return res.sendStatus(500)
+    })
+}
+
+exports.listAllEstablished = (req, res) => {
+  Company.find({ established: true }, {})
+    .then(companies => {
+      return res.json(companies)
     })
     .catch(err => {
       console.log(err)
@@ -132,6 +144,17 @@ exports.getCompany = (req, res) => {
     })
 }
 
+exports.getEstablished = (req, res) => {
+  Company.find({ _id: req.params.id, established: true })
+    .then(company => {
+      if (!company || company.length === 0) return res.status(404).send('Company not found')
+      return res.json(company[0])
+    })
+    .catch(err => {
+      console.log(err)
+      return res.sendStatus(500)
+    })
+}
 
 exports.createCompany = (req, res) => {
   const { error } = validatecreateCompany(req.body)

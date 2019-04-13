@@ -22,13 +22,13 @@ const navigationbar = () => {
               <Nav.Link href="/applicationReview">Review your applications</Nav.Link>
 
               <NavDropdown title="" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/" onClick={() => Login.logout()}>Logout</NavDropdown.Item>
                 <NavDropdown.Item href="/companyform">Company Form</NavDropdown.Item>
                 <NavDropdown.Item href="/userCreatedApplication">userCreatedApplications</NavDropdown.Item>
                 <NavDropdown.Item href="/reviewerAssignedApplication">reviewerAssignedApplications</NavDropdown.Item>
                 <NavDropdown.Item href="/lawyerAssignedApplication">lawyerAssignedApplications</NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="/">Contact us</NavDropdown.Item>
+                <NavDropdown.Item href="userProfile">User Profile</NavDropdown.Item>
+                <NavDropdown.Item href="/" onClick={() => Login.logout()}>Logout</NavDropdown.Item>
               </NavDropdown>
             </>}
           </Nav>
