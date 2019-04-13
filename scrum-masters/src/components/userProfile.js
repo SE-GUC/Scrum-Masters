@@ -12,7 +12,7 @@ class userProfile extends Component {
         companies:[],
         notifications:[],
         
-        userID:"5ca0cfc493ce191cd4a5f8de"
+        userID:localStorage.getItem("userId")
     };
 
     getProfileDetails = () => {

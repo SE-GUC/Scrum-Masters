@@ -15,6 +15,7 @@ const navigationbar = () => {
             
             { !localStorage.getItem("userId") && <>
               <Nav.Link href="/login">Login</Nav.Link>
+              <Nav.Link href="/register">Register</Nav.Link>
             </>}
             { localStorage.getItem("userId") && <>
               <Nav.Link href="#link">Notifications</Nav.Link>
