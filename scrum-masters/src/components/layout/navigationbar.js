@@ -26,6 +26,7 @@ const navigationbar = () => {
             <NavDropdown title="" id="basic-nav-dropdown">
               <NavDropdown.Item href="/">Sign out</NavDropdown.Item>
               <NavDropdown.Item href="/Login">Login</NavDropdown.Item>
+              <NavDropdown.Item href="/Register">Register</NavDropdown.Item>
               <NavDropdown.Item href="/companyform">
                 Company Form
               </NavDropdown.Item>

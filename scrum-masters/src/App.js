@@ -42,7 +42,7 @@ class App extends Component {
               path="/applicationReview"
               component={ApplicationReview}
             />
-            <Route exact path="/register" component={Register} />
+            <Route exact path="/Register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/companyform" component={CompanyForm} />
             <Route path="/CompanyUpdate/:company_id" component={CompanyUpdate} />
@@ -76,6 +76,8 @@ class App extends Component {
             />
             <Route exact path="/inv" component={investor} />
             <Route path="/company/:company_id" component={CompanyView} />
+            
+
           </div>
           <Footer />
         </div>
