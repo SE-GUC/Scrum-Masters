@@ -22,6 +22,7 @@ import lawyerAssignedApplications from "./components/lawyerAssignedApplications"
 import reviewerAssignedApplications from "./components/reviewerAssignedApplications.js";
 import userCreatedApplications from "./components/userCreatedApplications";
 import electronicJournals from "./components/electronicJournal/electronicJournals";
+import userProfile from "./components/userProfile";
 
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
@@ -70,6 +71,8 @@ class App extends Component {
               exact
               path="/electronicJournal"
               component={electronicJournals}
+            />
+            <Route exact path="/userProfile" component={userProfile}
             />
             <Route exact path="/inv" component={investor} />
             <Route path="/company/:company_id" component={CompanyView} />
