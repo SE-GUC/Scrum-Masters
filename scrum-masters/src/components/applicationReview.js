@@ -15,7 +15,7 @@ class applicationReview extends Component{
     comment_text: "",
     comment_date: "",
     application_id: "5ca0bdaa284aa32a50743d79",        //not needed
-    user_id: "5ca0cfcc93ce191cd4a5f8f2" //not needed
+    user_id: localStorage.getItem("userId")
   };
 
   applicationreviewchange = e => {

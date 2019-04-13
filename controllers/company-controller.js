@@ -151,6 +151,7 @@ exports.createCompany = (req, res) => {
 
       company = {}
       company = req.body
+      company.fees = exports.getFeesValue(company.capital)
       Company.create(company)
         .then(company => {
           User.findByIdAndUpdate(company.owner, { $push: { companies: company._id } })
@@ -177,6 +178,10 @@ exports.updateCompany = (req, res) => {
   const { error } = validateupdateCompany(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
+  if (req.body.capital) {
+    req.body.fees = exports.getFeesValue(req.body.capital)
+  }
+  
   Company.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(company => {
       if (!company) return res.status(404).send('application not found')
@@ -265,7 +270,7 @@ exports.establishCompany = async(req, res) => {
           await userController.createNotificationForUser(
             { owner_id: company.owner, target_type: 'company', target_id: company._id, notif_text: "Your company has been established" }
           )
-          ElectronicJournal.create({ companyName: company.company_name_arabic })
+          ElectronicJournal.create({ companyId: company._id, companyName: company.company_name_arabic })
           .then(ej => {
             return res.json({ msg: "Success", data: company })
           })
@@ -285,14 +290,16 @@ exports.establishCompany = async(req, res) => {
     })
 }
 
+exports.getFeesValue = capital => {
+  return ((1/1000)*(capital))+((1/400)*capital)+56
+}
+
 exports.calculateCompanyFees = async(req,res)=>{
 
 const company_id = req.params.id
 const company = await Company.findById(company_id)
 if(! company ) return res.status(404).send('application not found')
-const companyCapital= company.capital
-const fees = ((1/1000)*(companyCapital))+((1/400)*companyCapital)+56
-company.fees=fees
+company.fees=exports.getFeesValue(company.capital)
 const targetcompany = await Company.findByIdAndUpdate(company_id,company, { new: true })
 return res.json(targetcompany)
 
