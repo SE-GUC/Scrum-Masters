@@ -9,7 +9,7 @@ class userCreatedApplications extends Component {
     isApplicationsShown: false
   }
 
-  showUserCreatedApplications = () => {
+  componentDidMount = () => {
     axios
          .get('http://localhost:3001/api/company/userCreatedApplications/'+localStorage.getItem("userId"))
          .then(userCreatedApplication => {
@@ -34,7 +34,7 @@ class userCreatedApplications extends Component {
         <ul>
           {this.state.applications.map(application => (
             <li key={application._id}>
-              <ListGroup.Item action href="#link1" variant="secondary">
+              <ListGroup.Item action href={"/company/"+application._id} variant="secondary">
                 <strong style={{ color: "steelblue" }}>
                   Company Name:
                 </strong> {" "}
@@ -55,9 +55,6 @@ class userCreatedApplications extends Component {
             Created Companies
         </span>
         <br />
-        <Button onClick={this.showUserCreatedApplications} className=" m-2" variant="outline-secondary">
-          Show Created Companies
-        </Button>
         {this.renderApplications()}
       </div>
     )

@@ -17,6 +17,7 @@ class userProfile extends Component {
   };
 
   getProfileDetails = () => {
+    console.log(this.state)
     axios
       .get("http://localhost:3001/api/user/" + this.state.userID)
       .then(userDetails => {
@@ -47,8 +48,6 @@ class userProfile extends Component {
         <li> email: {this.state.email}</li>
         <li> gender: {this.state.gender}</li>
         <li>account type: {this.state.type}</li>
-        <li>companies: {this.state.companies}</li>
-        <li>notificaitons : {this.state.notifications}</li>
       </div>
     );
   }

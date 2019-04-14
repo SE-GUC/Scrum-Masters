@@ -43,7 +43,8 @@ class CompanyView extends Component {
     fees: 0,
     board_members: [],
     error: null,
-    receipt_url: null
+    receipt_url: null,
+    success_msg: null
   };
 
   getCompany() {
@@ -103,6 +104,58 @@ class CompanyView extends Component {
         }
       });
   }
+  
+  assignedStatus() {
+    if (this.state.review_lawyer) {
+      return "Assigned to lawyer";
+    } else if (this.state.review_reviewer) {
+      return "Assigned to reviewer";
+    } else if (this.state.reviewed_statuslawyer && !this.state.reviewed_statusreviewer) {
+      return "Unassigned, waiting to be assigned to reviewer";
+    } else if (!this.state.reviewed_statuslawyer && !this.state.reviewed_statuslawyer) {
+      return "Unassigned, waiting to be assigned to lawyer";
+    } else {
+      return "Finished revewal process";
+    }
+  }
+  
+  needsLawyer() {
+    return !this.state.reviewed_statuslawyer && !this.state.review_lawyer;
+  }
+  
+  needsReviewer() {
+    return this.state.reviewed_statuslawyer && !this.state.reviewed_statusreviewer && !this.state.review_reviewer;
+  }
+  
+  needsPayment() {
+    return this.state.fees > 0 && !this.state.ispaid && this.state.reviewed_statusreviewer;
+  }
+  
+  assignToMyself() {
+    const api = localStorage.getItem("userType") === "lawyer" ? "assignLawyer" : "assignreviewer";
+    
+    axios.post("http://localhost:3001/api/user/" + api + "/" + this.state._id + "/" + localStorage.getItem("userId"))
+      .then(company => {
+        this.setState({ success_msg: "You have assigned this case to yourself." })
+        this.setState(company.data)
+      })
+      .catch(err => {
+        this.setState({ error: err.response.data.error })
+      })
+  }
+  
+  unassign() {
+    const api = localStorage.getItem("userType") === "lawyer" ? "unassignLawyer" : "unassignReviewer";
+    
+    axios.put("http://localhost:3001/api/user/" + api + "/" + this.state._id)
+      .then(company => {
+        this.setState({ success_msg: "You have been unassigned from this case." })
+        this.setState(company.data)
+      })
+      .catch(err => {
+        this.setState({ error: err.response.data.error })
+      })
+  }
 
   render() {
     if (!this.state.fetched) {
@@ -111,19 +164,21 @@ class CompanyView extends Component {
 
     return (
       <div className="company-view">
-        <StripeCheckout
-          stripeKey="pk_test_fMRKRMIpnVRxz8FNmJBBMG3p00CEMX1VKZ"
-          image="https://stripe.com/img/documentation/checkout/marketplace.png"
-          locale="auto"
-          style={{ display: "none" }}
-          ref="checkoutBtn"
-          currency="EGP"
-          amount={this.state.fees * 100}
-          token={token => this.pay(token)}
-        />
+        {this.needsPayment() &&
+          <StripeCheckout
+            stripeKey="pk_test_fMRKRMIpnVRxz8FNmJBBMG3p00CEMX1VKZ"
+            image="https://stripe.com/img/documentation/checkout/marketplace.png"
+            locale="auto"
+            style={{ display: "none" }}
+            ref="checkoutBtn"
+            currency="EGP"
+            amount={this.state.fees * 100}
+            token={token => this.pay(token)}
+          />
+        }
 
         <span
-          style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
+          style={{ fontSize: 30, fontWeight: "italic", color: "steelblue" }}
           className="badge"
         >
           View company details
@@ -137,9 +192,7 @@ class CompanyView extends Component {
               Edit application
             </Button>
           )}
-          {this.state.fees > 0 &&
-            !this.state.ispaid &&
-            this.state.reviewed_statusreviewer && (
+          {this.needsPayment() && (
               <Button
                 style={{ margin: "10px" }}
                 onClick={() => this.refs.checkoutBtn.onClick()}
@@ -147,14 +200,18 @@ class CompanyView extends Component {
                 Pay fees ({this.state.fees} EGP)
               </Button>
             )}
-          {(localStorage.getItem("userType") === "laywer" ||
-            localStorage.getItem("userType") === "reviewer") &&
-            this.state.assigned_status === false && (
-              <Button style={{ margin: "10px" }}>Assign to myself</Button>
+          {((localStorage.getItem("userType") === "lawyer" && this.needsLawyer()) ||
+            (localStorage.getItem("userType") === "reviewer" && this.needsReviewer())) && (
+              <Button style={{ margin: "10px" }} onClick={() => this.assignToMyself()}>Assign to myself</Button>
             )}
+          {(this.state.review_lawyer === localStorage.getItem("userId") ||
+            this.state.review_reviewer === localStorage.getItem("userId")) && <>
+              <Button style={{ margin: "10px" }} onClick={() => this.unassign()}>Unassign</Button>
+              <Button style={{ margin: "10px" }} as="a" href={"/applicationReview/"+this.state._id}>Review application</Button>
+            </>}
         </span>
 
-        <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>
+        <div style={{ paddingLeft: "20px", paddingRight: "20px", margin: "0" }}>
           <Alert variant="danger" show={this.state.error}>
             {this.state.error}
           </Alert>
@@ -163,6 +220,9 @@ class CompanyView extends Component {
             <a href={this.state.receipt_url} target="_blank">
               View receipt
             </a>
+          </Alert>
+          <Alert variant="success" show={this.state.success_msg}>
+            {this.state.success_msg}
           </Alert>
         </div>
 
@@ -185,7 +245,7 @@ class CompanyView extends Component {
               <Form.Control
                 plaintext
                 readOnly
-                value={this.state.assigned_status ? "Assigned" : "Unassigned"}
+                value={this.assignedStatus()}
               />
             </Form.Group>
           </Form.Row>

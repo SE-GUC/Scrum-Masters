@@ -9,7 +9,7 @@ class reviewerAssignedApplications extends Component {
     isApplicationsShown: false
   }
 
-  showReviewerAssignedApplications = () => {
+  componentDidMount = () => {
     
       axios.get('http://localhost:3001/api/company/reviewerAssignedApplications/'+localStorage.getItem("userId"))
            .then(reviewerAssignedApplication => {
@@ -34,7 +34,7 @@ class reviewerAssignedApplications extends Component {
         <ul>
           {this.state.applications.map(application => (
             <li key={application._id}>
-              <ListGroup.Item action href="#link1" variant="secondary">
+              <ListGroup.Item action href={"/company/"+application._id} variant="secondary">
                 <strong style={{ color: "steelblue" }}>
                   Company Name:
                 </strong>{" "}
@@ -51,12 +51,9 @@ class reviewerAssignedApplications extends Component {
     return (
       <div>
         <span style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }} className="badge">
-            Reviewer Assigned Companies
+            Assigned Tasks
         </span>
         <br />
-        <Button onClick={this.showReviewerAssignedApplications} className=" m-2" variant="outline-secondary">
-            Show reviewer assigned Applications
-        </Button>
         {this.renderApplications()}
       </div>
     )

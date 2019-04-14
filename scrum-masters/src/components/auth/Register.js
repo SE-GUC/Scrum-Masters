@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Jumbotron, Form, Col, Row, Button } from "react-bootstrap";
+import { Jumbotron, Form, Col, Row, Button, Alert } from "react-bootstrap";
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
@@ -21,7 +21,7 @@ class Register extends Component {
   }
 
   sign = () => {
-    console.log(this.state);
+    this.setState({msg:""})
     var payload = {
       firstName: this.state.first_name,
       lastName: this.state.last_name,
@@ -33,11 +33,27 @@ class Register extends Component {
     axios
       .post("http://localhost:3001/api/user/register", payload)
       .then(users => {
-        console.log(users.data);
-        this.setState({ users: users.data, msg: "Success" });
+        //Login with new account
+        axios
+          .post("http://localhost:3001/api/user/login", { email: this.state.email, password: this.state.password })
+          .then(login => {
+            localStorage.setItem("userId", login.data.user.id);
+            localStorage.setItem("userEmail", login.data.user.email);
+            localStorage.setItem("userType", login.data.user.type);
+            if (this.props.onLogin) {
+              this.props.onLogin();
+            }
+            this.props.history.push("/");
+          })
+          .catch(err => {
+            this.props.history.push("/login");
+          });
       })
       .catch(err => {
-        this.setState({ msg: err.response.data });
+        console.log(err.response.data)
+        if (err.response.data.email) this.setState({ msg: err.response.data.email });
+        else if (err.response.data.error) this.setState({ msg: err.response.data.error });
+        else this.setState({ msg: err.response.data });
       })
 
       .catch(err => {
@@ -47,19 +63,22 @@ class Register extends Component {
 
   render() {
     return (
-      <div style={{ padding: "250px" }}>
+      <div style={{ paddingLeft: "250px", paddingRight: "250px", paddingTop: "50px" }}>
         <Jumbotron>
-          <span
+          <div
             style={{
               fontSize: 30,
               fontWeight: "italic",
               color: "black",
-              paddingLeft: "400px"
+              textAlign: "center"
             }}
           >
             Sign Up
-          </span>
-          <br />
+          </div>
+          
+          <Alert variant="danger" show={this.state.msg} style={{ marginTop: "10px" }}>
+            {this.state.msg}
+          </Alert>
 
           <div>
             <Form className=" m-4">
@@ -120,8 +139,6 @@ class Register extends Component {
             <Button onClick={event => this.sign()} variant="primary">
               Sign Up
             </Button>
-            <br />
-            {this.state.msg}
           </div>
         </Jumbotron>
       </div>

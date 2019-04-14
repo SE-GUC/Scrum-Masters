@@ -15,10 +15,9 @@ exports.listAllComments = async (req, res) => {
 
 // add comment on a specific company application
 exports.createComment = (req, res) => {
-  let { comment_text, application_id, user_id } = req.body
-  if (!(comment_text && application_id && user_id)) return res.sendStatus(400)
   const { error } = validatecommnet(req.body)
   if (error) return res.status(400).send(error.details[0].message)
+  let { comment_text, application_id, user_id } = req.body
 
   let comment = {} 
   comment.comment_date = new Date()

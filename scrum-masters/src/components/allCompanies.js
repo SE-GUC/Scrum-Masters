@@ -38,7 +38,7 @@ class AllCompanies extends Component {
           >
             Companies
           </span>
-          <Spinner animation="border" />;
+          <Spinner animation="border" />
         </div>
       );
     return (

@@ -386,7 +386,7 @@ exports.lawyerReviewCompany = async (req, res) => {
     const updatedApp = await Company.findByIdAndUpdate(
       appId,
       {
-        reviewed_statuslawyer: true,
+        reviewed_statuslawyer: req.body.review_status,
         review_lawyer: undefined
       },
       { new: true }
@@ -420,7 +420,7 @@ exports.reviewerReviewCompany = async (req, res) => {
     const updatedApp = await Company.findByIdAndUpdate(
       appId,
       {
-        reviewed_statusreviewer: true,
+        reviewed_statusreviewer: req.body.review_status,
         review_reviewer: undefined
       },
       { new: true }
