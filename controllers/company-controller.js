@@ -3,7 +3,6 @@ const Company = require('../models/company')
 const ElectronicJournal = require('../models/ElectronicJournal')
 const userController = require('../controllers/user-controller')
 
-
 function validateupdateCompany (company) {
   const schema = {
     owner: Joi.string(),
@@ -32,8 +31,18 @@ function validateupdateCompany (company) {
     investor_email: Joi.string(),
     ispaid:Joi.boolean(),//TO Do Just for tests no and will remove it later
     reviewed_statusreviewer:Joi.boolean(),//TO Do Just for tests no and will remove it later
-    established:Joi.boolean()
-
+    established:Joi.boolean(),
+    reviewed_statusreviewer:Joi.boolean(),
+    reviewed_statuslawyer:Joi.boolean(),
+    // review_lawyer: Joi.object({
+    //                 firstName: Joi.string(),
+    //                 lastName: Joi.string(),
+    //                 password: Joi.string(),
+    //                 gender: Joi.string(),
+    //                 type: Joi.string(),
+    //                }),
+    // review_reviewer: Joi.object({
+    //               })              
   }
   if (company.company_type === 'ssc') {
     Object.assign(schema, {
@@ -175,7 +184,9 @@ exports.createCompany = (req, res) => {
 
 exports.updateCompany = (req, res) => {
   const { error } = validateupdateCompany(req.body)
-  if (error) return res.status(400).send(error.details[0].message)
+  if (error){
+    return res.status(400).send(error.details[0].message)
+  }
 
   Company.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(company => {

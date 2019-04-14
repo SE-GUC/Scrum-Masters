@@ -14,11 +14,10 @@ class applicationReview extends Component{
   state = {
     count:0,
     comment_text: "",
-    comment_date: "",
     reviewed_statuslawyer: false,
     reviewed_statusreviewer: false,
-    review_reviewer:null,
-    review_lawyer:null,
+    review_reviewer:{},
+    review_lawyer:{},
     comments:[],
     msg:"",
     application_id: "5ca0bdaa284aa32a50743d79",        //not needed
@@ -34,17 +33,40 @@ class applicationReview extends Component{
     this.setState({ comment_date: e.target.value });
   }
 
-  // reviewHandler = () => {
-  //   if ()
-  // } 
+  //STILL NEEDS TO ALTER review_lawyer/review_reviewer THAT REVIEWED IN COMPANY
+  reviewHandler = () => {
+    axios
+      .get("http://localhost:3001/api/user/"+this.state.user_id)
+      .then(user => {
+        console.log(user)
+          if (user.data.type === 'reviewer'){
+              this.setState({ reviewed_statusreviewer: true });
+              this.setState({ review_reviewer: user.data });
+          }
+          else if(user.data.type === 'lawyer'){
+              this.setState({ reviewed_statuslawyer: true });
+              this.setState({ review_lawyer: user.data });
+              console.log(this.state);
+          }
+          else{
+            this.setState({ msg:"review error" })
+          }
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      
+   } 
 
   reviewApplication = () => {
+    this.reviewHandler();
     axios
       .put("http://localhost:3001/api/company/"+this.state.application_id, 
-      {'reviewed_reviewer': this.state.reviewed_reviewer,
-       'reviewed_lawyer': this.state.reviewed_lawyer,
+      {'reviewed_statusreviewer': this.state.reviewed_statusreviewer,
+       'reviewed_statuslawyer': this.state.reviewed_statuslawyer,
        'review_reviewer': this.state.review_reviewer,
-       'review_lawyer': this.state.review_lawyer})
+       'review_lawyer': this.state.review_lawyer
+    })
       .then(res => {
         this.setState({ msg: res.data.msg })
       })
@@ -53,15 +75,14 @@ class applicationReview extends Component{
       })
   }
 
+  //STILL NEEDS TO BE ADDED COMPANY
   commentApplication = () => {
 
     const comment = {
-      comment_text: this.state.text,
-      comment_date: this.state.date,
+      comment_text: this.state.comment_text,
       application_id: this.state.application_id,
       user_id: this.state.user_id
     };
-    console.log(comment)
     axios
       .post("http://localhost:3001/api/comment", comment) 
       .then(res => {
@@ -115,17 +136,14 @@ class applicationReview extends Component{
 
         <InputGroup>
           <InputGroup.Prepend>
-           <InputGroup.Text 
-          onChange={this.applicationcommentchange}>Comment</InputGroup.Text>
+           <InputGroup.Text>Comment</InputGroup.Text>
           </InputGroup.Prepend>
-          <FormControl as="textarea" aria-label="With textarea" />
+          <FormControl 
+            as="textarea" 
+            aria-label="With textarea"
+            onChange={this.applicationcommentchange} />
         </InputGroup>
-        {/* <input
-          type="text"
-          value={this.state.value}
-          placeholder="Type application comment"
-          onChange={this.applicationcommentchange}
-          /> */}
+       
           
       </div>
     )
