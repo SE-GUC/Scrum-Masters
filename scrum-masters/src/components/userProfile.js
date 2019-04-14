@@ -15,7 +15,7 @@ class userProfile extends Component {
     companiesname: [],
     notifications: [],
 
-    userID: localStorage.getItem("userId")
+    userID: this.props.match.params.user_id
   };
 
   getProfileDetails = () => {
