@@ -12,7 +12,7 @@ class Notification extends Component{
   }
 
   componentDidMount(){
-      axios.get("http://localhost:3001/api/notification/" + this.props.match.params.user_id).then(
+      axios.get("http://localhost:3001/api/notification/" + localStorage.getItem("userId")).then(
           notification =>{
           this.setState({notifications : notification.data});
           this.setState({loading : false});}
@@ -38,7 +38,7 @@ class Notification extends Component{
             <li key={notifications._id}>
               <ListGroup.Item
                 action
-                href="#link1"
+                href={"/company/"+notifications.target_id}
                 variant="secondary"
                 onClick ={() => this.handler(notifications._id)}
                 
@@ -88,7 +88,7 @@ class Notification extends Component{
     )
     return(
         <div>
-            {this.rendernotifications}
+            {this.rendernotifications()}
         </div>
     )
   }

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Redirect } from "react";
 import "./App.css";
 import "bootstrap";
 
@@ -28,6 +28,12 @@ const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
 class App extends Component {
+  getHomeTarget() {
+    if (!localStorage.getItem("userType")) return Home;
+    else if (localStorage.getItem("userType") === "investor") return investor;
+    else return AllCompanies;
+  }
+  
   render() {
     return (
       <BrowserRouter>
@@ -37,7 +43,7 @@ class App extends Component {
           <Route
             exact
             path="/"
-            component={localStorage.getItem("userEmail") ? investor : Home}
+            component={this.getHomeTarget()}
           />
           <div className="App">
             <Route exact path="/allCompanies" component={AllCompanies} />
