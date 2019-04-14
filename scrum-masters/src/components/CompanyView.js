@@ -115,7 +115,7 @@ class CompanyView extends Component {
     } else if (!this.state.reviewed_statuslawyer && !this.state.reviewed_statuslawyer) {
       return "Unassigned, waiting to be assigned to lawyer";
     } else {
-      return "Finished revewal process";
+      return "Finished reviewal process";
     }
   }
   
