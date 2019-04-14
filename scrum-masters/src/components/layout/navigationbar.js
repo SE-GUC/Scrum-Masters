@@ -19,7 +19,7 @@ const navigationbar = () => {
               <Nav.Link href="/register">Register</Nav.Link>
             </>}
             { localStorage.getItem("userId") && <>
-              <Nav.Link href="#link">Notifications</Nav.Link>
+              <Nav.Link href="/notifications">Notifications</Nav.Link>
               { localStorage.getItem("userType") !== "investor" && <>
                 <Nav.Link href="/allCompanies">View companies</Nav.Link>
               </>}
