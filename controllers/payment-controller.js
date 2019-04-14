@@ -22,7 +22,7 @@ exports.charge = async (req, res) => {
     }
     
     const charge = await stripe.charges.create({
-      amount: company.fees * 100,
+      amount: Math.floor(company.fees * 100),
       currency: 'egp',
       source: req.body.token,
       description: "Company establishment fees - " + company.company_name_arabic + "/" + company.company_name_english

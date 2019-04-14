@@ -128,7 +128,7 @@ class CompanyView extends Component {
   }
   
   needsPayment() {
-    return this.state.fees > 0 && !this.state.ispaid && this.state.reviewed_statusreviewer;
+    return this.state.owner == localStorage.getItem("userId") && this.state.fees > 0 && !this.state.ispaid && this.state.reviewed_statusreviewer;
   }
   
   assignToMyself() {
