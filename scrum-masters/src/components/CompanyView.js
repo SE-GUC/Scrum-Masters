@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Col, Row, Button, Card, Alert } from "react-bootstrap";
+import { Form, Col, Button, Card, Alert } from "react-bootstrap";
 import StripeCheckout from 'react-stripe-checkout';
 
 const axios = require("axios");

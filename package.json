@@ -38,6 +38,7 @@
     "react-alert": "^5.4.0",
     "react-alert-template-basic": "^1.0.0",
     "reactjs": "^1.0.0",
+    "stripe": "^6.28.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
