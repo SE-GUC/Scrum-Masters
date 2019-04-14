@@ -121,6 +121,7 @@ exports.deleteUser = (req, res) => {
 // This is a helper method which will be used whenever a notification needs to be created
 exports.createNotificationForUser = async notification => {
   try {
+    console.log(notification)
     const notif_obj = await Notification.create(notification);
     if (!notif_obj) return undefined;
 
@@ -452,7 +453,7 @@ exports.login=async(req,res)=>{
 
             }
             const token = jwt.sign(payload, tokenKey.key, { expiresIn: '1h' })
-            return res.json({token: `Bearer ${token}`})
+            return res.json({token: `Bearer ${token}`, user: payload })
         }
 		else return res.status(400).send({ password: 'Wrong password' });
 	} catch (e) {

@@ -37,6 +37,7 @@ class CompanyUpdate extends Component {
     axios
       .get("http://localhost:3001/api/company/" + this.props.match.params.company_id)
       .then(companyy => {
+        console.log(companyy)
         this.setState({
           company_type: companyy.data.company_type,
           organizational_rule: companyy.data.organizational_rule,
@@ -311,9 +312,9 @@ class CompanyUpdate extends Component {
             <Form.Label>Update the investor's ID number</Form.Label>
             <Form.Control
               type="textarea"
-              value={this.state.investor_id_type}
+              value={this.state.investor_id_number}
               onChange={e => {
-                this.setState({ investor_id_type: e.target.value });
+                this.setState({ investor_id_number: e.target.value });
               }}
             />
           </Form.Group>
