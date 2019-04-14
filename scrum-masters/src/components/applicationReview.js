@@ -41,12 +41,12 @@ class applicationReview extends Component{
         console.log(user)
           if (user.data.type === 'reviewer'){
               this.setState({ reviewed_statusreviewer: true });
-              this.setState({ review_reviewer: user.data });
+             // this.setState({ review_reviewer: user.data });
           }
           else if(user.data.type === 'lawyer'){
               this.setState({ reviewed_statuslawyer: true });
-              this.setState({ review_lawyer: user.data });
-              console.log(this.state);
+             // this.setState({ review_lawyer: user.data });
+              //console.log(this.state);
           }
           else{
             this.setState({ msg:"review error" })
