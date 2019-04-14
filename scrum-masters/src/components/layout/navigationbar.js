@@ -5,15 +5,17 @@ import Login from "../auth/Login.js";
 const navigationbar = () => {
   return (
     <div>
-      <Navbar bg="light" color="skyblue" expand="lg">
+      <Navbar bg="light" color="skyblue" expand="lg" >
         <Navbar.Brand>Sumerge</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/electronicJournal">Electronic Journals</Nav.Link>
-            
+          </Nav>
+          <Nav>
             { !localStorage.getItem("userId") && <>
+            <Nav className='ml-auto'></Nav>
               <Nav.Link href="/login">Login</Nav.Link>
               <Nav.Link href="/register">Register</Nav.Link>
             </>}

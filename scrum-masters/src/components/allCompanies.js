@@ -1,55 +1,46 @@
 import React, { Component } from "react";
-//import logo from './logo.svg';
-import { Badge, Button, ListGroup } from "react-bootstrap";
+import {
+  Spinner,
+  ListGroup,
+  ButtonToolbar,
+  ToggleButton,
+  ToggleButtonGroup
+} from "react-bootstrap";
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
 class AllCompanies extends Component {
   state = {
-    count: 0,
-    company: []
+    company: [],
+    loading: true,
+    showUnreviewed: false,
+    showUnAssigned: false
   };
 
-  showCompnies = () => {
+  componentDidMount = () => {
     axios
       .get("http://localhost:3001/api/company")
       .then(companies => {
         this.setState({ company: companies.data });
-        this.setState({ count: this.state.count + 1 });
+        this.setState({ loading: false });
       })
       .catch(err => {
         console.log(err);
       });
   };
-
-  rendercompanies = () => {
-    if (this.state.count === 0) return null;
-    else if (this.state.company.length === 0)
-      return (
-        <Badge style={{ fontSize: 15 }} variant="primary">
-          No Companies
-        </Badge>
-      );
-    else {
-      return (
-        <ul>
-          {this.state.company.map(companies => (
-            <li key={companies._id}>
-              <ListGroup.Item action href="#link1" variant="light">
-                {" "}
-                <strong style={{ color: "steelblue" }}>
-                  Company Name:
-                </strong>{" "}
-                {companies.company_name_english}
-              </ListGroup.Item>{" "}
-            </li>
-          ))}
-        </ul>
-      );
-    }
-  };
-
   render() {
+    if (this.state.loading)
+      return (
+        <div>
+          <span
+            style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
+            className="badge"
+          >
+            Companies
+          </span>
+          <Spinner animation="border" />;
+        </div>
+      );
     return (
       <div>
         <span
@@ -59,14 +50,61 @@ class AllCompanies extends Component {
           Companies
         </span>
         <br />
-        <Button
-          onClick={this.showCompnies}
-          className=" m-2"
-          variant="outline-secondary"
-        >
-          Show Companies
-        </Button>
-        {this.rendercompanies()}
+        <br />
+        <ButtonToolbar>
+          <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
+            <ToggleButton
+              value={1}
+              onClick={() =>
+                this.setState({ showUnAssigned: false, showUnreviewed: false })
+              }
+            >
+              All Companies
+            </ToggleButton>
+            <ToggleButton
+              value={2}
+              onClick={() =>
+                this.setState({ showUnAssigned: true, showUnreviewed: false })
+              }
+            >
+              UnAssigned Companies
+            </ToggleButton>
+            <ToggleButton
+              value={3}
+              onClick={() =>
+                this.setState({ showUnAssigned: false, showUnreviewed: true })
+              }
+            >
+              UnReviewed companies
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </ButtonToolbar>
+        <br />
+        <ul>
+          {this.state.company.map(companies => (
+            <>
+              {console.log(companies)}
+              {(!this.state.showUnAssigned || !companies.review_lawyer) &&
+                (!this.state.showUnreviewed ||
+                  (!companies.review_reviewer &&
+                    companies.reviewed_statuslawyer)) && (
+                  <li key={companies._id}>
+                    <ListGroup.Item
+                      action
+                      href={`/company/${companies._id}`}
+                      variant="light"
+                    >
+                      {""}
+                      <strong style={{ color: "steelblue" }}>
+                        Company Name:
+                      </strong>{" "}
+                      {companies.company_name_english}
+                    </ListGroup.Item>{" "}
+                  </li>
+                )}
+            </>
+          ))}
+        </ul>
       </div>
     );
   }

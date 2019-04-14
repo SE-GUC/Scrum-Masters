@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, Button, Form,Nav } from "react-bootstrap";
 
 const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http")
+axios.defaults.adapter = require("axios/lib/adapters/http");
 
   class Register extends Component {
      constructor(props){
