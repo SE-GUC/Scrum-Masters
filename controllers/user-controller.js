@@ -1,12 +1,10 @@
-const Joi = require('joi') 
-const User = require('../models/User') 
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const tokenKey = require('../config/tokenKey')
-var Company = require('../models/company') 
-var Notification = require('../models/Notification') 
-
-
+const Joi = require("joi");
+const User = require("../models/User");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const tokenKey = require("../config/tokenKey");
+var Company = require("../models/company");
+var Notification = require("../models/Notification");
 
 function validateUser(user, creating) {
   const schema = {
@@ -112,16 +110,15 @@ exports.deleteUser = (req, res) => {
       return res.json({ msg: "User deleted", data: user });
     })
     .catch(err => {
-      console.log(err) 
-      return res.sendStatus(500) 
-    }) 
-} 
-
+      console.log(err);
+      return res.sendStatus(500);
+    });
+};
 
 // This is a helper method which will be used whenever a notification needs to be created
 exports.createNotificationForUser = async notification => {
   try {
-    console.log(notification)
+    console.log(notification);
     const notif_obj = await Notification.create(notification);
     if (!notif_obj) return undefined;
 
@@ -353,7 +350,7 @@ exports.unassignLaywer = async (req, res) => {
     if (!application) {
       return res.status(404).send({ error: "Application not found" });
     }
- 
+
     if (application.review_lawyer === null) {
       return res.status(400).send({
         error: "The lawyer is already unassigned to this application"
@@ -368,7 +365,6 @@ exports.unassignLaywer = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-
 };
 
 exports.lawyerReviewCompany = async (req, res) => {
@@ -410,11 +406,9 @@ exports.reviewerReviewCompany = async (req, res) => {
     if (user.type) var app = await Company.findById(appId);
     if (!app) return res.status(404).send({ error: "Invalid Application Id" });
     if (app.reviewed_statuslawyer == false)
-      return res
-        .status(400)
-        .send({
-          error: "This application has to be reviewed by a lawyer first"
-        });
+      return res.status(400).send({
+        error: "This application has to be reviewed by a lawyer first"
+      });
     if (app.review_reviewer != userId)
       return res
         .status(400)
@@ -437,54 +431,49 @@ exports.reviewerReviewCompany = async (req, res) => {
   }
 };
 
-
-
-exports.login=async(req,res)=>{
+exports.login = async (req, res) => {
   try {
-		const { email, password } = req.body;
-		const user = await User.findOne({ email });
-		if (!user) return res.status(404).json({ email: 'Email does not exist' });
-		const match = bcrypt.compareSync(password, user.password);
-		if (match) {
-            const payload = {
-                id: user._id,
-                email: user.email,
-                type:user.type
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ email: "Email does not exist" });
+    const match = bcrypt.compareSync(password, user.password);
 
-            }
-            const token = jwt.sign(payload, tokenKey.key, { expiresIn: '1h' })
-            return res.json({token: `Bearer ${token}`, user: payload })
-        }
-		else return res.status(400).send({ password: 'Wrong password' });
-	} catch (e) {
-    console.log(e)
-    return res.json({msg:"Can't log in "})}
+    if (match) {
+      const payload = {
+        id: user._id,
+        email: user.email,
+        type: user.type
+      };
+      const token = jwt.sign(payload, tokenKey.key, { expiresIn: "1h" });
+      return res.json({ token: `Bearer ${token}`, user: payload });
+    } else return res.status(400).send({ password: "Wrong password" });
+  } catch (e) {
+    console.log(e);
+    return res.json({ msg: "Can't log in " });
+  }
+};
 
-}
-
-
-exports.register=async(req,res)=>{
+exports.register = async (req, res) => {
   try {
-    const { error } = validateUser(req.body, true) 
-		if (error) return res.status(400).send(error.details[0].message);
-		const { firstName, lastName, email, password,gender,type } = req.body;
-		const user = await User.findOne({ email });
-		if (user) return res.status(400).json({ email: 'Email already exists' });
-		const salt = bcrypt.genSaltSync(10);
-		const hashedPassword = bcrypt.hashSync(password, salt);
-		const newUser = new User({
+    const { error } = validateUser(req.body, true);
+    if (error) return res.status(400).send(error.details[0].message);
+    const { firstName, lastName, email, password, gender, type } = req.body;
+    const user = await User.findOne({ email });
+    if (user) return res.status(400).json({ email: "Email already exists" });
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt);
+    const newUser = new User({
       firstName,
       lastName,
       email,
-			password: hashedPassword,
-			gender,
-			type,
-		});
-		await User.create(newUser);
-		res.json({ msg: 'User created successfully', data: newUser });
-	} catch (error) {
-    console.log(error)
-		res.status(422).send({ error: 'Can not register right now' });
-	}
-}
-
+      password: hashedPassword,
+      gender,
+      type
+    });
+    await User.create(newUser);
+    res.json({ msg: "User created successfully", data: newUser });
+  } catch (error) {
+    console.log(error);
+    res.status(422).send({ error: "Can not register right now" });
+  }
+};

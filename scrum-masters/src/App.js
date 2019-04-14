@@ -34,7 +34,11 @@ class App extends Component {
         <div>
           <Navigationbar />
 
-          <Route exact path="/" component={localStorage.getItem('userEmail') ? investor : Home} />
+          <Route
+            exact
+            path="/"
+            component={localStorage.getItem("userEmail") ? investor : Home}
+          />
           <div className="App">
             <Route exact path="/allCompanies" component={AllCompanies} />
             <Route
@@ -43,9 +47,18 @@ class App extends Component {
               component={ApplicationReview}
             />
             <Route exact path="/register" component={Register} />
-            <Route exact path="/login" render={props => <Login onLogin={() => this.forceUpdate()} {...props} />} />
+            <Route
+              exact
+              path="/login"
+              render={props => (
+                <Login onLogin={() => this.forceUpdate()} {...props} />
+              )}
+            />
             <Route exact path="/companyform" component={CompanyForm} />
-            <Route path="/CompanyUpdate/:company_id" component={CompanyUpdate} />
+            <Route
+              path="/CompanyUpdate/:company_id"
+              component={CompanyUpdate}
+            />
             <Route
               exact
               path="/unassignedCompanies"
@@ -72,8 +85,8 @@ class App extends Component {
               path="/electronicJournal"
               component={electronicJournals}
             />
-            <Route exact path="/userProfile" component={userProfile}
-            />
+            <Route exact path="/userProfile/:inv_id" component={userProfile} />
+            <Route exact path="/inv" component={investor} />
             <Route path="/company/:company_id" component={CompanyView} />
           </div>
           <Footer />

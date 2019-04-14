@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 //import logo from './logo.svg';
-
+import * as Scroll from "react-scroll";
 import invimage from "./investor.jpg";
 import form from "./form.jpg";
 import Background from "./background.jpg";
@@ -21,7 +21,7 @@ import {
 } from "react-bootstrap";
 
 const axios = require("axios");
-
+var scroll = Scroll.animateScroll;
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
 class Investor extends Component {
@@ -65,7 +65,12 @@ class Investor extends Component {
           <ul>
             {this.state.company.map(companies => (
               <li key={companies._id}>
-                <ListGroup.Item action variant="light" as="a" href={"/company/"+companies._id}>
+                <ListGroup.Item
+                  action
+                  variant="light"
+                  as="a"
+                  href={"/company/" + companies._id}
+                >
                   {" "}
                   <strong style={{ color: "steelblue" }}>
                     Company Name:
@@ -100,9 +105,7 @@ class Investor extends Component {
       });
   };
   scroll = () => {
-    document.documentElement.scrollTop =
-      document.documentElement.scrollHeight -
-      document.documentElement.clientHeight;
+    scroll.scrollToBottom();
   };
   render() {
     this.getinvstorname();
@@ -119,7 +122,12 @@ class Investor extends Component {
           }}
         >
           <h1 style={{ color: "white" }}>{this.state.name}</h1>
-          <Button class=" btn pull-right" variant="primary">
+          <Button
+            class=" btn pull-right"
+            as="a"
+            href={"/userProfile/" + this.state.id}
+            variant="primary"
+          >
             My Profile
           </Button>
         </div>
@@ -164,7 +172,7 @@ class Investor extends Component {
                         more info
                       </Button>
                     </Card.Text>
-                    <a href="/companyform">
+                    <a href={"/companyform"}>
                       <Button type="button" class="btn btn-info">
                         Application Form
                       </Button>
@@ -199,7 +207,7 @@ class Investor extends Component {
               we are providing online service that allow you to establish your
               own company while you are sitting home . No papers needed you only
               need to:
-              <Nav.Link href="/companyform">Fill The company Form </Nav.Link>
+              <Nav.Link href={"/companyform"}>Fill The company Form </Nav.Link>
             </p>
 
             <h3>What you need to know before filling the form :</h3>
