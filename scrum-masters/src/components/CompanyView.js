@@ -50,21 +50,21 @@ class CompanyView extends Component {
   getCompany() {
     axios
       .get(
-        "/api/company/" +
+        "http://localhost:3001/api/company/" +
           this.props.match.params.company_id
       )
       .then(company => {
         this.setState(company.data);
         axios
           .get(
-            "/api/comment/" +
+            "http://localhost:3001/api/comment/" +
               this.props.match.params.company_id
           )
           .then(comments => {
             this.setState({ loadedComments: comments.data });
             this.state.loadedComments.map(comment => {
               axios
-                .get("/api/user/" + comment.user_id)
+                .get("http://localhost:3001/api/user/" + comment.user_id)
                 .then(user => {
                   comment.user = user.data.firstName + " " + user.data.lastName;
                   this.forceUpdate();
@@ -88,7 +88,7 @@ class CompanyView extends Component {
   pay(token) {
     axios
       .post(
-        "/api/payment/charge/" +
+        "http://localhost:3001/api/payment/charge/" +
           this.props.match.params.company_id,
         { token: token.id }
       )
@@ -134,7 +134,7 @@ class CompanyView extends Component {
   assignToMyself() {
     const api = localStorage.getItem("userType") === "lawyer" ? "assignLawyer" : "assignreviewer";
     
-    axios.post("/api/user/" + api + "/" + this.state._id + "/" + localStorage.getItem("userId"))
+    axios.post("http://localhost:3001/api/user/" + api + "/" + this.state._id + "/" + localStorage.getItem("userId"))
       .then(company => {
         this.setState({ success_msg: "You have assigned this case to yourself." })
         this.setState(company.data)
@@ -147,7 +147,7 @@ class CompanyView extends Component {
   unassign() {
     const api = localStorage.getItem("userType") === "lawyer" ? "unassignLawyer" : "unassignReviewer";
     
-    axios.put("/api/user/" + api + "/" + this.state._id)
+    axios.put("http://localhost:3001/api/user/" + api + "/" + this.state._id)
       .then(company => {
         this.setState({ success_msg: "You have been unassigned from this case." })
         this.setState(company.data)

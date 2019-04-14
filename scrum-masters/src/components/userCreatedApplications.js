@@ -11,7 +11,7 @@ class userCreatedApplications extends Component {
 
   componentDidMount = () => {
     axios
-         .get('/api/company/userCreatedApplications/'+localStorage.getItem("userId"))
+         .get('http://localhost:3001/api/company/userCreatedApplications/'+localStorage.getItem("userId"))
          .then(userCreatedApplication => {
            this.setState({ applications: userCreatedApplication.data })
            this.setState({ isApplicationsShown: true })

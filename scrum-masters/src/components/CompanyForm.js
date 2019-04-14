@@ -137,7 +137,7 @@ class CompanyForm extends Component {
     }
 
     axios
-      .post("/api/company", company)
+      .post("http://localhost:3001/api/company", company)
       .then(company => {
         this.setState({ company: [company] });
         this.props.history.push("/company/" + company.data._id);

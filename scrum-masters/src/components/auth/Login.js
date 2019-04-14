@@ -30,7 +30,7 @@ class Login extends Component {
 
     this.setState({ errors: {} });
     axios
-      .post("/api/user/login", userData)
+      .post("http://localhost:3001/api/user/login", userData)
       .then(login => {
         localStorage.setItem("userId", login.data.user.id);
         localStorage.setItem("userEmail", login.data.user.email);

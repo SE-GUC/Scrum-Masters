@@ -40,7 +40,7 @@ class admin_create extends Component {
 
     }
     axios
-      .post("/api/user/register",data)
+      .post("http://localhost:3001/api/user/register",data)
       .then(res=>{
         this.setState({msg:"User created successfully",error:""})
 

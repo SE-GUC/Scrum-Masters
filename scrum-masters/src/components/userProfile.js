@@ -21,7 +21,7 @@ class userProfile extends Component {
   getProfileDetails = () => {
     console.log(this.state);
     axios
-      .get("/api/user/" + this.state.userID)
+      .get("http://localhost:3001/api/user/" + this.state.userID)
       .then(userDetails => {
         this.setState({ firstName: userDetails.data.firstName });
         this.setState({ lastName: userDetails.data.lastName });
@@ -40,7 +40,7 @@ class userProfile extends Component {
   getCompaniesname = () => {
     for (var i = 0; i < this.state.companies.length; i++) {
       axios
-        .get("/api/company/" + this.state.companies[i])
+        .get("http://localhost:3001/api/company/" + this.state.companies[i])
         .then(companies => {
           this.setState({
             companiesname: this.state.companiesname.concat(

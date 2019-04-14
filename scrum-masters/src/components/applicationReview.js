@@ -25,11 +25,11 @@ class applicationReview extends Component{
     };
 
     axios
-      .post("/api/comment", review) 
+      .post("http://localhost:3001/api/comment", review) 
       .then(comment => {
         const api = localStorage.getItem("userType") === "lawyer" ? "lawyerReviewCompany" : "reviewerReviewCompany";
         
-        axios.put("/api/user/" + api + "/" + this.state.application_id + "/" + localStorage.getItem("userId"), { review_status: this.state.review_status })
+        axios.put("http://localhost:3001/api/user/" + api + "/" + this.state.application_id + "/" + localStorage.getItem("userId"), { review_status: this.state.review_status })
           .then(company => {
             this.props.history.push("/company/"+this.state.application_id);
           })

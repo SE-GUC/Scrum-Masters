@@ -11,7 +11,7 @@ class lawyerAssignedApplications extends Component {
 
   componentDidMount = () => {
     axios
-      .get('/api/company/lawyerAssignedApplications/'+localStorage.getItem("userId"))
+      .get('http://localhost:3001/api/company/lawyerAssignedApplications/'+localStorage.getItem("userId"))
       .then(lawyerAssignedApplication => {
         this.setState({ applications: lawyerAssignedApplication.data })
         this.setState({ isApplicationsShown: true })

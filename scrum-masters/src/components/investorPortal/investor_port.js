@@ -36,7 +36,7 @@ class Investor extends Component {
     console.log("mostafa");
     axios
       .get(
-        "/api/company/userCreatedApplications/" +
+        "http://localhost:3001/api/company/userCreatedApplications/" +
           this.state.id
       )
       .then(companies => {
@@ -96,7 +96,7 @@ class Investor extends Component {
 
   getinvstorname = () => {
     axios
-      .get("/api/user/" + this.state.id)
+      .get("http://localhost:3001/api/user/" + this.state.id)
       .then(inv => {
         this.setState({ name: inv.data.firstName + " " + inv.data.lastName });
       })
