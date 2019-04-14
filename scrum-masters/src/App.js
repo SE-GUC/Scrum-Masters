@@ -44,8 +44,11 @@ class App extends Component {
             />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/companyform" component={CompanyForm} />
-            <Route path="/CompanyUpdate/:company_id" component={CompanyUpdate} />
+            <Route exact path="/companyform/:inv_id" component={CompanyForm} />
+            <Route
+              path="/CompanyUpdate/:company_id"
+              component={CompanyUpdate}
+            />
             <Route
               exact
               path="/unassignedCompanies"
@@ -72,8 +75,7 @@ class App extends Component {
               path="/electronicJournal"
               component={electronicJournals}
             />
-            <Route exact path="/userProfile" component={userProfile}
-            />
+            <Route exact path="/userProfile/:inv_id" component={userProfile} />
             <Route exact path="/inv" component={investor} />
             <Route path="/company/:company_id" component={CompanyView} />
           </div>

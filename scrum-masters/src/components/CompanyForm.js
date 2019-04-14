@@ -8,7 +8,7 @@ class CompanyForm extends Component {
   state = {
     company: [],
     error: "",
-    owner: "5ca79058e79c412a704bfda6",
+    owner: this.props.match.params.inv_id,
     arabicname: "",
     englishname: "",
     orgrule: "",
