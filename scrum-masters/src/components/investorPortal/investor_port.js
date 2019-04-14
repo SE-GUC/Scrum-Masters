@@ -28,7 +28,7 @@ class Investor extends Component {
   state = {
     count: 0,
     company: [],
-    id: "5ca7904ae79c412a704bfd7d",
+    id: localStorage.getItem("userId"),
     name: ""
   };
 
@@ -172,7 +172,7 @@ class Investor extends Component {
                         more info
                       </Button>
                     </Card.Text>
-                    <a href={"/companyform/" + this.state.id}>
+                    <a href={"/companyform"}>
                       <Button type="button" class="btn btn-info">
                         Application Form
                       </Button>
@@ -207,9 +207,7 @@ class Investor extends Component {
               we are providing online service that allow you to establish your
               own company while you are sitting home . No papers needed you only
               need to:
-              <Nav.Link href={"/companyform/" + this.state.id}>
-                Fill The company Form{" "}
-              </Nav.Link>
+              <Nav.Link href={"/companyform"}>Fill The company Form </Nav.Link>
             </p>
 
             <h3>What you need to know before filling the form :</h3>

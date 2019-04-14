@@ -13,7 +13,7 @@ class userProfile extends Component {
     companies: [],
     notifications: [],
 
-    userID: this.props.match.params.inv_id
+    userID: localStorage.getItem("userId")
   };
 
   getProfileDetails = () => {
