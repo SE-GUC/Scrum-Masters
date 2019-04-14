@@ -22,6 +22,7 @@ import reviewerAssignedApplications from "./components/reviewerAssignedApplicati
 import userCreatedApplications from "./components/userCreatedApplications";
 import electronicJournals from "./components/electronicJournal/electronicJournals";
 import userProfile from "./components/userProfile";
+import notifications from "./components/Notifications"
 
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
@@ -86,6 +87,7 @@ class App extends Component {
             />
             <Route exact path={"/userProfile/" + localStorage.getItem("userId")} component={userProfile} />
             <Route path="/company/:company_id" component={CompanyView} />
+            <Route path="/notifications" component={notifications} />
           </div>
           <Footer />
         </div>
