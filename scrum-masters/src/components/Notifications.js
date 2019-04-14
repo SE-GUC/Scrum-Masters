@@ -12,7 +12,7 @@ class Notification extends Component{
   }
 
   componentDidMount(){
-      axios.get("http://localhost:3001/api/notification/" + localStorage.getItem("userId")).then(
+      axios.get("/api/notification/" + localStorage.getItem("userId")).then(
           notification =>{
           this.setState({notifications : notification.data});
           this.setState({loading : false});}
@@ -59,7 +59,7 @@ class Notification extends Component{
   handler = async e => {
     
     try {
-      await axios.delete('http://localhost:3001/api/notification/' + e) 
+      await axios.delete('/api/notification/' + e) 
       this.setState({alert:"Success"})
     } catch(error) {
        

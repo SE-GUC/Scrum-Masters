@@ -35,7 +35,7 @@ class CompanyUpdate extends Component {
 
   getCompany = () => {
     axios
-      .get("http://localhost:3001/api/company/" + this.props.match.params.company_id)
+      .get("/api/company/" + this.props.match.params.company_id)
       .then(companyy => {
         console.log(companyy)
         this.setState({
@@ -71,7 +71,7 @@ class CompanyUpdate extends Component {
   handleSubmit = (e, id) => {
     console.log(this.state);
     axios
-      .put("http://localhost:3001/api/company/" + this.props.match.params.company_id, {
+      .put("/api/company/" + this.props.match.params.company_id, {
         'company_type': this.state.company_type,
         'organizational_rule': this.state.organizational_rule,
         'legal_form': this.state.legal_form,

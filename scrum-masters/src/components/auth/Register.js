@@ -31,11 +31,11 @@ class Register extends Component {
       type: this.state.type
     };
     axios
-      .post("http://localhost:3001/api/user/register", payload)
+      .post("/api/user/register", payload)
       .then(users => {
         //Login with new account
         axios
-          .post("http://localhost:3001/api/user/login", { email: this.state.email, password: this.state.password })
+          .post("/api/user/login", { email: this.state.email, password: this.state.password })
           .then(login => {
             localStorage.setItem("userId", login.data.user.id);
             localStorage.setItem("userEmail", login.data.user.email);

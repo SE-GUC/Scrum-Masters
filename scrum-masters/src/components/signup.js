@@ -30,7 +30,7 @@ class signup extends Component {
       type: "investor"
     };
     axios
-      .post("http://localhost:3001/api/user", payload)
+      .post("/api/user", payload)
       .then(users => {
         this.setState({ users: users.data, msg: "Success" });
       })

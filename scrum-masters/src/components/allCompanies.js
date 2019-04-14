@@ -19,7 +19,7 @@ class AllCompanies extends Component {
 
   componentDidMount = () => {
     axios
-      .get("http://localhost:3001/api/company")
+      .get("/api/company")
       .then(companies => {
         this.setState({ company: companies.data });
         this.setState({ loading: false });
