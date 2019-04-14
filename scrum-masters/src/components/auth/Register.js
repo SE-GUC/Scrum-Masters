@@ -22,9 +22,11 @@ axios.defaults.adapter = require("axios/lib/adapters/http")
            isRegistered: false,
         }
 }
-componentDidMount() {}
-register = () => {
- // e.preventDefault();
+componentDidMount() {
+
+}
+register = (e) => {
+  e.preventDefault()
   const inv={   
     "firstName": this.state.first_name,
     "lastName":this.state.last_name,
@@ -34,12 +36,12 @@ register = () => {
     "type":"investor",
     
     };
-    this.setState({ errors: {} });
+    //this.setState({ errors: {} });
     axios
       .post("http://localhost:3001/api/user/register", inv)
       .then(users => {
         this.props.history.push("/");
-        this.setState({users:users.data,msg:"Success"});
+        this.setState({msg:users.data.msg});
         
         this.setState({ isRegistered: true });
         
@@ -146,12 +148,12 @@ register = () => {
                 </Form.Control.Feedback>
 
               </Form.Group>
-              <Button onClick={this.register} variant="primary default" type="submit" >
+              <Button onClick={this.register.bind(this)} variant="primary default" type="submit" >
                 Register
                 
               </Button>
              
-              <Nav.Link href="/userProfile"> </Nav.Link>
+              
               {this.state.msg}
               
         </Form>
