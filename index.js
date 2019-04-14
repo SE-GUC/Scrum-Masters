@@ -40,6 +40,14 @@ app.use('/api/notification', notification)
 app.use('/api/payment', payment)
 app.use('/api/external-entity', externalEntity)
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
 // Handling 404
 app.use((req, res) => {
   res.status(404).send({ err: 'We can not find what you are looking for' })
