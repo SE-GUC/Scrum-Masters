@@ -1,9 +1,6 @@
 import React, { Component } from "react";
+import { Alert, Button, Form, Col } from "react-bootstrap";
 
-import {
-  Badge,
-  Button
-} from "react-bootstrap";
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
@@ -11,79 +8,41 @@ axios.defaults.adapter = require("axios/lib/adapters/http");
 class applicationReview extends Component{
 
   state = {
-    count:0,
+    review_status: false,
     comment_text: "",
-    comment_date: "",
-    application_id: "5ca0bdaa284aa32a50743d79",        //not needed
-    user_id: localStorage.getItem("userId")
+    application_id: this.props.match.params.company_id,
+    user_id: localStorage.getItem("userId"),
+    error: ""
   };
 
-  applicationreviewchange = e => {
-    this.setState({ comment_text: e.target.value });
-    this.check();
-  }
-
-  applicationdatechange = e => {
-    this.setState({ comment_date: e.target.value });
-  }
-
   reviewApplication = () => {
+    this.setState({ error: "" })
 
     const review = {
-      comment_text: this.state.text,
-      comment_date: this.state.date,
+      comment_text: this.state.comment_text,
       application_id: this.state.application_id,
       user_id: this.state.user_id
     };
 
     axios
       .post("http://localhost:3001/api/comment", review) 
-      .then(review => {
-        this.setState({ review: [review]});
-        this.setState({ count: this.state.count+1});
+      .then(comment => {
+        const api = localStorage.getItem("userType") === "lawyer" ? "lawyerReviewCompany" : "reviewerReviewCompany";
+        
+        axios.put("http://localhost:3001/api/user/" + api + "/" + this.state.application_id + "/" + localStorage.getItem("userId"), { review_status: this.state.review_status })
+          .then(company => {
+            this.props.history.push("/company/"+this.state.application_id);
+          })
+          .catch(err => {
+            console.log(err.response.data);
+            this.setState({ error: err.response.data });
+          });
       })
       .catch(err => {
-        console.log(err);
+        this.setState({ error: err.response.data })
       });
   };
 
-  check = () => {
-    if(this.state.comment_text.length === 0)
-      return(
-        <Badge style={{ fontSize: 15 }} variant="Danger">
-          {this.state.error}
-        </Badge>
-      );
-    else
-      return(
-        <Badge style={{ fontSize: 15 }} variant="primary">
-          Your review has been submitted
-        </Badge>
-      );
-  };
-
-  // renderApplication = () => {
-  //   if(this.state.count === 0 ) return null;
-  //   else {
-  //     return (
-  //       <ul>
-  //         {this.state.company.map(application => (
-  //           <li key={application._id}>
-  //             <ListGroup.Item action href="#link1" action variant="secondary">
-  //               {" "}
-  //               <strong style={{ color: "steelblue" }}>
-  //                 Application and review :
-  //               </strong>{" "}
-  //               {application.x}
-  //             </ListGroup.Item>{" "}
-  //           </li>
-  //         ))}
-  //       </ul>
-  //     )
-  //   }
-  // }
-
-  //Supposed to have list of application to choose from
   render() {
     return (
       <div>
@@ -91,22 +50,44 @@ class applicationReview extends Component{
           style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
           className="badge"
         >
-          Applications
+          Review application
         </span>
         <br />
-        <Button
-          onClick={this.reviewApplication}
-          className=" m-2"
-          variant="outline-secondary"
-        >
-          Submit review
-        </Button>
-        <input
-          type="text"
-          value={this.state.value}
-          placeholder="Type application comment"
-          onChange={this.applicationreviewchange}
-          />
+        <Alert style={{ margin: "10px" }} variant="danger" show={this.state.error}>
+          {this.state.error}
+        </Alert>
+        <Form className=" m-4">
+          <Form.Row>
+            <Form.Group as={Col} controlId="status">
+              <Form.Label>Review status</Form.Label>
+              <Form.Control
+                as="select"
+                onChange={e => this.setState({ review_status: e.target.value })}
+              >
+                <option value={false}>Rejected</option>
+                <option value={true}>Approved</option>
+              </Form.Control>
+            </Form.Group>
+          </Form.Row>
+          <Form.Row>
+            <Form.Group as={Col} controlId="comment">
+              <Form.Label>Comment</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows="3"
+                placeholder="Enter a comment"
+                onChange={e => this.setState({ comment_text: e.target.value })}
+              />
+            </Form.Group>
+          </Form.Row>
+          <Button
+            onClick={this.reviewApplication}
+            className=" m-2"
+            variant="outline-secondary"
+          >
+            Submit review
+          </Button>
+        </Form>
           
       </div>
     )

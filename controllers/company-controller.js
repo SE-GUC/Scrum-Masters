@@ -28,8 +28,10 @@ function validateupdateCompany(company) {
     investor_telephone: Joi.string(),
     investor_fax: Joi.string(),
     investor_email: Joi.string(),
-    ispaid: Joi.boolean(), //TO Do Just for tests no and will remove it later
-    reviewed_statusreviewer: Joi.boolean(), //TO Do Just for tests no and will remove it later
+    reviewed_statusreviewer: Joi.boolean(),
+    reviewed_statuslawyer: Joi.boolean(),
+    review_lawyer: Joi.string().allow(null),
+    review_reviewer: Joi.string().allow(null),
     established: Joi.boolean()
   };
   if (company.company_type === "ssc") {

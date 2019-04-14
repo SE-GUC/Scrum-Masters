@@ -9,7 +9,7 @@ class lawyerAssignedApplications extends Component {
      isApplicationsShown: false
     }
 
-  showAssignedApplications = () => {
+  componentDidMount = () => {
     axios
       .get('http://localhost:3001/api/company/lawyerAssignedApplications/'+localStorage.getItem("userId"))
       .then(lawyerAssignedApplication => {
@@ -34,7 +34,7 @@ class lawyerAssignedApplications extends Component {
         <ul>
           {this.state.applications.map(application => (
             <li key={application._id}>
-              <ListGroup.Item action href="#link1" variant="secondary">
+              <ListGroup.Item action href={"/company/"+application._id} variant="secondary">
                 <strong style={{ color: "steelblue" }}>
                   Company Name:
                 </strong>{" "}
@@ -51,16 +51,9 @@ class lawyerAssignedApplications extends Component {
     return (
       <div>
         <span style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }} className="badge">
-          Assigned Applications
+          Assigned Tasks
         </span>
         <br />
-        <Button 
-          onClick={this.showAssignedApplications}
-          className=" m-2"
-          variant="outline-secondary" 
-        >
-          Show Assigned Applications
-        </Button>
         {this.renderApplications()}
       </div>
     )

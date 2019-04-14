@@ -15,7 +15,6 @@ import ApplicationReview from "./components/applicationReview";
 import CompanyForm from "./components/CompanyForm";
 import CompanyUpdate from "./components/CompanyUpdate";
 import CompanyView from "./components/CompanyView";
-import AllUnassignedCompanies from "./components/unassignedCompanies";
 
 import admin_create from "./components/admin_create";
 import lawyerAssignedApplications from "./components/lawyerAssignedApplications";
@@ -42,11 +41,16 @@ class App extends Component {
           <div className="App">
             <Route exact path="/allCompanies" component={AllCompanies} />
             <Route
-              exact
-              path="/applicationReview"
+              path="/applicationReview/:company_id"
               component={ApplicationReview}
             />
-            <Route exact path="/register" component={Register} />
+            <Route
+              exact
+              path="/register"
+              render={props => (
+                <Register onLogin={() => this.forceUpdate()} {...props} />
+              )}
+            />
             <Route
               exact
               path="/login"
@@ -58,11 +62,6 @@ class App extends Component {
             <Route
               path="/CompanyUpdate/:company_id"
               component={CompanyUpdate}
-            />
-            <Route
-              exact
-              path="/unassignedCompanies"
-              component={AllUnassignedCompanies}
             />
             <Route exact path="/admin_create" component={admin_create} />
             <Route
@@ -86,7 +85,6 @@ class App extends Component {
               component={electronicJournals}
             />
             <Route exact path="/userProfile/:inv_id" component={userProfile} />
-            <Route exact path="/inv" component={investor} />
             <Route path="/company/:company_id" component={CompanyView} />
           </div>
           <Footer />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Form } from 'react-bootstrap';
+import { Card, Button, Form, Alert } from 'react-bootstrap';
 import {Col } from 'react-bootstrap';
 
 
@@ -19,7 +19,8 @@ class admin_create extends Component {
       password:"",
       gender:"",
       type:"",
-      msg:""
+      msg:"",
+      error:""
 
     }
    
@@ -28,6 +29,7 @@ class admin_create extends Component {
   createaccount=(e)=>
   {
     e.preventDefault()
+    this.setState({msg:"",error:""})
     const data={
       "firstName":this.state.firstName,
       "lastName":this.state.lastName,
@@ -40,11 +42,13 @@ class admin_create extends Component {
     axios
       .post("http://localhost:3001/api/user/register",data)
       .then(res=>{
-        this.setState({msg:res.data.msg})
+        this.setState({msg:"User created successfully",error:""})
 
       })
       .catch(err => {
-        this.setState({msg:"Some error happend"})
+        if (err.response.data.email) this.setState({ error: err.response.data.email });
+        else if (err.response.data.error) this.setState({ error: err.response.data.error });
+        else this.setState({ error: err.response.data });
       })
 
   }
@@ -53,9 +57,18 @@ class admin_create extends Component {
 
 render() {
   return (
-    <Card style={{ width: '45rem',height:'30rem' ,marginTop: '5rem' }} className="mx-auto">
+    <Card style={{ width: '45rem', marginTop: '5rem' }} className="mx-auto">
         <Card.Body>
           <Card.Title>Create account</Card.Title>
+          
+          <Alert variant="success" show={this.state.msg} style={{ marginTop: "10px" }}>
+            {this.state.msg}
+          </Alert>
+          
+          <Alert variant="danger" show={this.state.error} style={{ marginTop: "10px" }}>
+            {this.state.error}
+          </Alert>
+          
           <Card.Text>
             <Form>
               <Form.Row>
@@ -138,10 +151,9 @@ render() {
               </Form.Row>
 
               <Button variant="primary" type="create" onClick={this.createaccount.bind(this)}>
-                create
+                Create
               </Button>
              </Form>
-             <Form.Label>{this.state.msg}</Form.Label>
 
           </Card.Text>
         </Card.Body>
