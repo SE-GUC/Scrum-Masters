@@ -293,7 +293,7 @@ exports.establishCompany = async(req, res) => {
           await userController.createNotificationForUser(
             { owner_id: company.owner, target_type: 'company', target_id: company._id, notif_text: "Your company has been established" }
           )
-          ElectronicJournal.create({ companyId: company._id, companyName: company.company_name_arabic })
+          ElectronicJournal.create({ companyId: company._id, companyName: company.company_name_english })
           .then(ej => {
             return res.json({ msg: "Success", data: company })
           })

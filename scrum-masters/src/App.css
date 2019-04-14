@@ -72,16 +72,15 @@ img {
   width: 100%;
 }
 
-.landing {
+.home {
   position: relative;
+  background: url("./img/sumergeHomeBackground.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   height: 100vh;
-  margin-top: -24px;
-  margin-bottom: -50px;
 }
 
-.landing-inner {
+.home-inner {
   padding-top: 80px;
 }
 
