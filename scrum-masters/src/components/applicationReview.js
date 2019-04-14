@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-
+import InputGroup from 'react-bootstrap/InputGroup'
+import FormControl from 'react-bootstrap/FormControl'
 import {
-  Badge,
-  Button
+  Button,
+  Badge
 } from "react-bootstrap";
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
@@ -14,36 +15,60 @@ class applicationReview extends Component{
     count:0,
     comment_text: "",
     comment_date: "",
+    reviewed_statuslawyer: false,
+    reviewed_statusreviewer: false,
+    review_reviewer:null,
+    review_lawyer:null,
+    comments:[],
+    msg:"",
     application_id: "5ca0bdaa284aa32a50743d79",        //not needed
     user_id: "5ca0cfcc93ce191cd4a5f8f2" //not needed
   };
 
-  applicationreviewchange = e => {
+  
+  applicationcommentchange = e => {
     this.setState({ comment_text: e.target.value });
-    this.check();
   }
 
   applicationdatechange = e => {
     this.setState({ comment_date: e.target.value });
   }
 
-  reviewApplication = () => {
+  // reviewHandler = () => {
+  //   if ()
+  // } 
 
-    const review = {
+  reviewApplication = () => {
+    axios
+      .put("http://localhost:3001/api/company/"+this.state.application_id, 
+      {'reviewed_reviewer': this.state.reviewed_reviewer,
+       'reviewed_lawyer': this.state.reviewed_lawyer,
+       'review_reviewer': this.state.review_reviewer,
+       'review_lawyer': this.state.review_lawyer})
+      .then(res => {
+        this.setState({ msg: res.data.msg })
+      })
+      .catch(err => {
+        this.setState({ msg:"Error occured" })
+      })
+  }
+
+  commentApplication = () => {
+
+    const comment = {
       comment_text: this.state.text,
       comment_date: this.state.date,
       application_id: this.state.application_id,
       user_id: this.state.user_id
     };
-
+    console.log(comment)
     axios
-      .post("http://localhost:3001/api/comment", review) 
-      .then(review => {
-        this.setState({ review: [review]});
-        this.setState({ count: this.state.count+1});
+      .post("http://localhost:3001/api/comment", comment) 
+      .then(res => {
+        this.setState({ msg: res.data.msg })
       })
       .catch(err => {
-        console.log(err);
+        this.setState({ msg:"Error occured" })
       });
   };
 
@@ -57,31 +82,10 @@ class applicationReview extends Component{
     else
       return(
         <Badge style={{ fontSize: 15 }} variant="primary">
-          Your review has been submitted
+          Your comment has been submitted
         </Badge>
       );
   };
-
-  // renderApplication = () => {
-  //   if(this.state.count === 0 ) return null;
-  //   else {
-  //     return (
-  //       <ul>
-  //         {this.state.company.map(application => (
-  //           <li key={application._id}>
-  //             <ListGroup.Item action href="#link1" action variant="secondary">
-  //               {" "}
-  //               <strong style={{ color: "steelblue" }}>
-  //                 Application and review :
-  //               </strong>{" "}
-  //               {application.x}
-  //             </ListGroup.Item>{" "}
-  //           </li>
-  //         ))}
-  //       </ul>
-  //     )
-  //   }
-  // }
 
   //Supposed to have list of application to choose from
   render() {
@@ -95,18 +99,33 @@ class applicationReview extends Component{
         </span>
         <br />
         <Button
+          onClick={this.commentApplication}
+          className=" m-2"
+          variant="outline-secondary"
+        >
+          Submit comment
+        </Button>
+        <Button
           onClick={this.reviewApplication}
           className=" m-2"
           variant="outline-secondary"
         >
           Submit review
         </Button>
-        <input
+
+        <InputGroup>
+          <InputGroup.Prepend>
+           <InputGroup.Text 
+          onChange={this.applicationcommentchange}>Comment</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl as="textarea" aria-label="With textarea" />
+        </InputGroup>
+        {/* <input
           type="text"
           value={this.state.value}
           placeholder="Type application comment"
-          onChange={this.applicationreviewchange}
-          />
+          onChange={this.applicationcommentchange}
+          /> */}
           
       </div>
     )
@@ -114,3 +133,11 @@ class applicationReview extends Component{
 }
 
 export default applicationReview;
+
+// foo = arrayOfStuff => {
+//   return(
+//     !arrayofStuff? <p>nothing to show here</p>:arrayOfStuff.map((item, index) => {
+//       <p>item.info || 'default value' </p>
+//     })
+//   )
+// }
