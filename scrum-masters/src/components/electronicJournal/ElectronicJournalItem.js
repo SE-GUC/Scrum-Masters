@@ -15,15 +15,15 @@ class ElectronicJournalItem extends Component {
             <img src={companyLogo} alt='' className='rounded-circle' />
           </div>
           <div className='col-lg-6 col-md-4 col-8'>
-            <h3>Company Name: {electronicJournal.companyName}</h3>
-            <h5>
-              Company Description: {isEmpty(electronicJournal.companyDescription) ? null : (
-                <span>{electronicJournal.companyDescription}</span>
+            <h3>{electronicJournal.companyName}</h3>
+            <p>
+              {isEmpty(electronicJournal.companyDescription) ? null : (
+                <span>Company Description: {electronicJournal.companyDescription}</span>
               )}
-            </h5>
-            <h5>
-              Company Establishment Date: { electronicJournal.companyAcceptanceDate.split('T')[0] }
-            </h5>
+            </p>
+            <p>
+              Established: { electronicJournal.companyAcceptanceDate.split('T')[0] }
+            </p>
             <Link to={`/electronicJournal/${electronicJournal._id}`} className='btn btn-info'>
                 View Contract
             </Link>
