@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ListGroup from "react-bootstrap/ListGroup";
+import { ListGroup, Col, Row, Form } from "react-bootstrap";
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
@@ -10,14 +10,16 @@ class userProfile extends Component {
     email: "",
     gender: "",
     type: "",
+    flag: false,
     companies: [],
+    companiesname: [],
     notifications: [],
 
-    userID: localStorage.getItem("userId")
+    userID: this.props.match.params.user_id
   };
 
   getProfileDetails = () => {
-    console.log(this.state)
+    console.log(this.state);
     axios
       .get("http://localhost:3001/api/user/" + this.state.userID)
       .then(userDetails => {
@@ -28,33 +30,73 @@ class userProfile extends Component {
         this.setState({ type: userDetails.data.type });
         this.setState({ companies: userDetails.data.companies });
         this.setState({ notifications: userDetails.data.notifications });
+        this.setState({ flag: true });
+        this.getCompaniesname();
       })
       .catch(err => {
         console.log(err);
       });
   };
+  getCompaniesname = () => {
+    for (var i = 0; i < this.state.companies.length; i++) {
+      axios
+        .get("http://localhost:3001/api/company/" + this.state.companies[i])
+        .then(companies => {
+          this.setState({
+            companiesname: this.state.companiesname.concat(
+              companies.data.company_name_english
+            )
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  };
 
   render() {
     return (
-      <div>
+      <div className="company-view">
         <span
-          style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
+          style={{
+            fontSize: 30,
+            fontWeight: "italic",
+            color: "steelblue ",
+            paddingTop: "10px"
+          }}
           className="badge"
         >
-          User Profile
+          {this.state.firstName + " " + this.state.lastName}
         </span>
-        <li> First name: {this.state.firstName}</li>
-        <li> Last name: {this.state.lastName}</li>
-        <li> email: {this.state.email}</li>
-        <li> gender: {this.state.gender}</li>
-        <li>account type: {this.state.type}</li>
+
+        <Form className="m-4">
+          <Form.Group>
+            <Form.Label>Email:</Form.Label>
+            <Form.Control plaintext readOnly value={this.state.email} />
+          </Form.Group>
+          <Form.Group controlId="englishname">
+            <Form.Label>gender:</Form.Label>
+            <Form.Control plaintext readOnly value={this.state.gender} />
+          </Form.Group>
+          <Form.Group controlId="englishname">
+            <Form.Label>Type:</Form.Label>
+            <Form.Control plaintext readOnly value={this.state.type} />
+          </Form.Group>
+          <Form.Group controlId="englishname">
+            <Form.Label>Companies Name:</Form.Label>
+            <Form.Control
+              plaintext
+              readOnly
+              value={this.state.companiesname.join("   -   ")}
+            />
+          </Form.Group>
+        </Form>
       </div>
     );
   }
-
-  UNSAFE_componentWillMount() {
+  componentDidMount = () => {
     this.getProfileDetails();
-  }
+  };
 }
 
 export default userProfile;

@@ -85,7 +85,7 @@ class App extends Component {
               path="/electronicJournal"
               component={electronicJournals}
             />
-            <Route exact path={"/userProfile/" + localStorage.getItem("userId")} component={userProfile} />
+            <Route path="/userProfile/:user_id" component={userProfile} />
             <Route path="/company/:company_id" component={CompanyView} />
             <Route path="/notifications" component={notifications} />
           </div>

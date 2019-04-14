@@ -1,5 +1,6 @@
 const Joi = require("joi");
 const Company = require("../models/company");
+const User = require("../models/User");
 const ElectronicJournal = require("../models/ElectronicJournal");
 const userController = require("../controllers/user-controller");
 
@@ -28,10 +29,8 @@ function validateupdateCompany(company) {
     investor_telephone: Joi.string(),
     investor_fax: Joi.string(),
     investor_email: Joi.string(),
+    ispaid: Joi.boolean(),
     reviewed_statusreviewer: Joi.boolean(),
-    reviewed_statuslawyer: Joi.boolean(),
-    review_lawyer: Joi.string().allow(null),
-    review_reviewer: Joi.string().allow(null),
     established: Joi.boolean()
   };
   if (company.company_type === "ssc") {
@@ -155,10 +154,19 @@ exports.getEstablished = (req, res) => {
     });
 };
 
-exports.createCompany = (req, res) => {
+exports.createCompany = async (req, res) => {
   const { error } = validatecreateCompany(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-
+  
+  const user = await User.findById(req.body.owner)
+  if (!user) {
+    return res.status(400).send("Invalid user ID")
+  }
+  let reviewed_statuslawyer = false;
+  if (user.type == "lawyer") {
+    reviewed_statuslawyer = true;
+  }
+  
   Company.findOne(
     { company_name_arabic: req.body.company_name_arabic } || {
       company_name_english: req.body.company_name_english
@@ -174,6 +182,7 @@ exports.createCompany = (req, res) => {
       company = {};
       company = req.body;
       company.fees = exports.getFeesValue(company.capital);
+      company.reviewed_statuslawyer = reviewed_statuslawyer;
       Company.create(company)
         .then(company => {
           User.findByIdAndUpdate(company.owner, {
@@ -198,13 +207,23 @@ exports.createCompany = (req, res) => {
     });
 };
 
-exports.updateCompany = (req, res) => {
+exports.updateCompany = async (req, res) => {
   const { error } = validateupdateCompany(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   if (req.body.capital) {
     req.body.fees = exports.getFeesValue(req.body.capital);
   }
+  
+  const oldCompany = await Company.findById(req.params.id)
+  const user = await User.findById(oldCompany.owner)
+  let reviewed_statuslawyer = false;
+  if (user.type == "lawyer") {
+    reviewed_statuslawyer = true;
+  }
+  
+  req.body.reviewed_statuslawyer = reviewed_statuslawyer
+  req.body.reviewed_statusreviewer = false
 
   Company.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(company => {

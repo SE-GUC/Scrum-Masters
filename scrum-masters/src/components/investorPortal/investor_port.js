@@ -125,7 +125,7 @@ class Investor extends Component {
           <Button
             class=" btn pull-right"
             as="a"
-            href={"/userProfile/" + this.state.id}
+            href={"/userProfile"}
             variant="primary"
           >
             My Profile

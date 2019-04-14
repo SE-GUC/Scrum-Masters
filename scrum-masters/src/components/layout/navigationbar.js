@@ -39,7 +39,7 @@ const navigationbar = () => {
                   <Nav.Link href="/admin_create">Create accounts</Nav.Link>
                 </>}
                 <NavDropdown.Divider />
-                <NavDropdown.Item href={"/userProfile/" + localStorage.getItem("userId")}>User Profile</NavDropdown.Item>
+                <NavDropdown.Item href={"/userProfile/"+localStorage.getItem("userId")}>User Profile</NavDropdown.Item>
                 <NavDropdown.Item href="/" onClick={() => Login.logout()}>Logout</NavDropdown.Item>
               </NavDropdown>
             </>}
