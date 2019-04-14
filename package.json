@@ -10,7 +10,7 @@
     "test": "jest",
     "client": "npm start --prefix scrum-masters",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-	"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+	"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix scrum-masters && npm run build --prefix scrum-masters"
   },
   "repository": {
     "type": "git",

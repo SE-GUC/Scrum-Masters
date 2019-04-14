@@ -41,10 +41,10 @@ app.use('/api/payment', payment)
 app.use('/api/external-entity', externalEntity)
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
+  app.use(express.static('scrum-masters/build'));
   
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, 'scrum-masters', 'build', 'index.html'));
   });
 }
 
