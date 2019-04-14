@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
+const path = require('path')
 
 const app = express()
 app.use(express.json())
@@ -20,23 +21,30 @@ const user = require('./routes/api/user')
 const electronicJournal = require('./routes/api/electronicJournals')
 const comment = require('./routes/api/comment')
 const company = require('./routes/api/company')
-const companyRequest = require('./routes/api/company-request')
 const notification = require('./routes/api/notification')
+const payment = require('./routes/api/payment')
+const externalEntity = require('./routes/api/external-entity')
 
 // Init middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.get('/', (req, res) => {
-  res.send(`<h1>Welcome to our Scrum Master's Website</h1>`)
-})
 
 // Direct to Route Handlers
 app.use('/api/user', user)
 app.use('/api/electronicJournals', electronicJournal)
 app.use('/api/comment', comment)
 app.use('/api/company', company)
-app.use('/api/company-request', companyRequest)
 app.use('/api/notification', notification)
+app.use('/api/payment', payment)
+app.use('/api/external-entity', externalEntity)
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('scrum-masters/build'));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'scrum-masters', 'build', 'index.html'));
+  });
+}
 
 // Handling 404
 app.use((req, res) => {

@@ -8,7 +8,7 @@ class CompanyForm extends Component {
   state = {
     company: [],
     error: "",
-    owner: "5ca7904ae79c412a704bfd7d",
+    owner: localStorage.getItem("userId"),
     arabicname: "",
     englishname: "",
     orgrule: "",
@@ -120,7 +120,14 @@ class CompanyForm extends Component {
       investor_id_type: this.state.idtype,
       investor_id_number: this.state.natid,
       investor_birth_date: this.state.bd,
-      investor_address: this.state.invaddress
+      investor_address: this.state.invaddress,
+      hq_fax: this.state.hqfax,
+      hq_telephone: this.state.hqtele,
+      investor_type: this.state.investortype,
+      investor_email: this.state.email,
+      investor_telephone: this.state.invtele,
+      investor_fax: this.state.invfax,
+      investor_gender: this.state.gender
     };
     if (this.state.type === "ssc") {
       Object.assign(company, {
@@ -133,6 +140,7 @@ class CompanyForm extends Component {
       .post("http://localhost:3001/api/company", company)
       .then(company => {
         this.setState({ company: [company] });
+        this.props.history.push("/company/" + company.data._id);
       })
       .catch(err => {
         this.setState({ error: err.response.data });
@@ -248,7 +256,7 @@ class CompanyForm extends Component {
               <Form.Control as="select" onChange={this.currencychange}>
                 <option />
                 <option>EGP</option>
-                <option>Euroc</option>
+                <option>Euro</option>
               </Form.Control>
             </Form.Group>
 

@@ -9,7 +9,8 @@
     "server": "nodemon index.js",
     "test": "jest",
     "client": "npm start --prefix scrum-masters",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+	"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix scrum-masters && npm run build --prefix scrum-masters"
   },
   "repository": {
     "type": "git",
@@ -23,16 +24,22 @@
   "homepage": "https://github.com/SE-GUC/Scrum-Masters#readme",
   "dependencies": {
     "axios": "^0.18.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "concurrently": "^4.1.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "joi": "^14.3.1",
+    "joi-objectid": "^2.0.0",
     "jshint": "^2.10.1",
+    "jsonwebtoken": "^8.5.0",
     "mongoose": "^5.4.19",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
     "react-alert": "^5.4.0",
     "react-alert-template-basic": "^1.0.0",
     "reactjs": "^1.0.0",
+    "stripe": "^6.28.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

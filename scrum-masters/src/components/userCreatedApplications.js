@@ -9,9 +9,9 @@ class userCreatedApplications extends Component {
     isApplicationsShown: false
   }
 
-  showUserCreatedApplications = () => {
+  componentDidMount = () => {
     axios
-         .get('http://localhost:3001/api/company/userCreatedApplications/5cab8cc5c2100c36280ed6d3')
+         .get('http://localhost:3001/api/company/userCreatedApplications/'+localStorage.getItem("userId"))
          .then(userCreatedApplication => {
            this.setState({ applications: userCreatedApplication.data })
            this.setState({ isApplicationsShown: true })
@@ -34,7 +34,7 @@ class userCreatedApplications extends Component {
         <ul>
           {this.state.applications.map(application => (
             <li key={application._id}>
-              <ListGroup.Item action href="#link1" variant="secondary">
+              <ListGroup.Item action href={"/company/"+application._id} variant="secondary">
                 <strong style={{ color: "steelblue" }}>
                   Company Name:
                 </strong> {" "}
@@ -55,9 +55,6 @@ class userCreatedApplications extends Component {
             Created Companies
         </span>
         <br />
-        <Button onClick={this.showUserCreatedApplications} className=" m-2" variant="outline-secondary">
-          Show Created Companies
-        </Button>
         {this.renderApplications()}
       </div>
     )

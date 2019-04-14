@@ -3,38 +3,38 @@ import {Badge, Button, ListGroup} from 'react-bootstrap'
 const axios = require('axios')
 axios.default.adapter = require ('axios/lib/adapters/http')
 
-class lawyerAssignedApplications extends Component {
-    state = {
-     applications: [],
-     isApplicationsShown: false
-    }
+class reviewerAssignedApplications extends Component {
+  state = {
+    applications: [],
+    isApplicationsShown: false
+  }
 
-  showAssignedApplications = () => {
-    axios
-      .get('http://localhost:3001/api/company/lawyerAssignedApplications/5ca8e9885c3ff610702e3069')
-      .then(lawyerAssignedApplication => {
-        this.setState({ applications: lawyerAssignedApplication.data })
-        this.setState({ isApplicationsShown: true })
-      })
-      .catch(err => {
-        console.log(err)
-      })
+  componentDidMount = () => {
+    
+      axios.get('http://localhost:3001/api/company/reviewerAssignedApplications/'+localStorage.getItem("userId"))
+           .then(reviewerAssignedApplication => {
+            this.setState({ applications: reviewerAssignedApplication.data })
+            this.setState({ isApplicationsShown: true })
+          })
+           .catch(err => {
+              console.log(err)
+           })
   }
 
   renderApplications = () => {
-    if(!this.state.isApplicationsShown) return null
+    if (!this.state.isApplicationsShown) return null;
     else if (this.state.applications.length === 0)
       return (
         <Badge style={{ fontSize: 15 }} variant="primary">
-          No Assigned Applications
+          No Applications
         </Badge>
-      )
+      );
     else {
       return (
         <ul>
           {this.state.applications.map(application => (
             <li key={application._id}>
-              <ListGroup.Item action href="#link1" variant="secondary">
+              <ListGroup.Item action href={"/company/"+application._id} variant="secondary">
                 <strong style={{ color: "steelblue" }}>
                   Company Name:
                 </strong>{" "}
@@ -43,7 +43,7 @@ class lawyerAssignedApplications extends Component {
             </li>
           ))}
         </ul>
-      )
+      );
     }
   }
 
@@ -51,20 +51,13 @@ class lawyerAssignedApplications extends Component {
     return (
       <div>
         <span style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }} className="badge">
-          Assigned Applications
+            Assigned Tasks
         </span>
         <br />
-        <Button 
-          onClick={this.showAssignedApplications}
-          className=" m-2"
-          variant="outline-secondary" 
-        >
-          Show Assigned Applications
-        </Button>
         {this.renderApplications()}
       </div>
     )
   }
 }
 
-export default lawyerAssignedApplications
+export default reviewerAssignedApplications

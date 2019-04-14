@@ -102,11 +102,7 @@ var companySchema = new Schema({
   company_type: {
     type: String,
     enum: ['ssc', 'spc']
-  },
-  assigned_status: {
-    type: Boolean,
-    default: false
-  },
+  },  
   owner: {
     type: Schema.ObjectId,
     ref: 'User',
