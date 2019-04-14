@@ -16,6 +16,7 @@ class CompanyView extends Component {
     ispaid: false,
     established: false,
     _id: "",
+    owner: "",
     organizational_rule: "Not specified",
     legal_form: "Not specified",
     company_name_arabic: "Not specified",
@@ -115,11 +116,15 @@ class CompanyView extends Component {
           className="badge"
         >
           View company details 
-          <Button style={{ margin: "10px" }} as="a" href={"/CompanyUpdate/"+this.props.match.params.company_id}>Edit application</Button> 
+          { (localStorage.getItem("userType") === "admin" || localStorage.getItem("userId") === this.state.owner) &&
+            <Button style={{ margin: "10px" }} as="a" href={"/CompanyUpdate/"+this.props.match.params.company_id}>Edit application</Button> 
+          }
           { this.state.fees > 0 && !this.state.ispaid &&
             <Button style={{ margin: "10px" }} onClick={() => this.refs.checkoutBtn.onClick()}>Pay fees ({ this.state.fees } EGP)</Button>
           }
-          <Button style={{ margin: "10px" }}>Assign to myself</Button>
+          { (localStorage.getItem("userType") === "laywer" || localStorage.getItem("userType") === "reviewer") && this.state.assigned_status === false &&
+            <Button style={{ margin: "10px" }}>Assign to myself</Button>
+          }
         </span>
         
         <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>

@@ -11,7 +11,7 @@ class userCreatedApplications extends Component {
 
   showUserCreatedApplications = () => {
     axios
-         .get('http://localhost:3001/api/company/userCreatedApplications/5cab8cc5c2100c36280ed6d3')
+         .get('http://localhost:3001/api/company/userCreatedApplications/'+localStorage.getItem("userId"))
          .then(userCreatedApplication => {
            this.setState({ applications: userCreatedApplication.data })
            this.setState({ isApplicationsShown: true })

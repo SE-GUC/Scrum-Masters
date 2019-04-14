@@ -11,7 +11,7 @@ class lawyerAssignedApplications extends Component {
 
   showAssignedApplications = () => {
     axios
-      .get('http://localhost:3001/api/company/lawyerAssignedApplications/5ca8e9885c3ff610702e3069')
+      .get('http://localhost:3001/api/company/lawyerAssignedApplications/'+localStorage.getItem("userId"))
       .then(lawyerAssignedApplication => {
         this.setState({ applications: lawyerAssignedApplication.data })
         this.setState({ isApplicationsShown: true })

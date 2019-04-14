@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ListGroup from 'react-bootstrap/ListGroup'
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
@@ -12,7 +13,7 @@ class userProfile extends Component {
         companies:[],
         notifications:[],
         
-        userID:"5ca0cfc493ce191cd4a5f8de"
+        userID:localStorage.getItem("userId")
     };
 
     getProfileDetails = () => {
@@ -41,13 +42,21 @@ class userProfile extends Component {
             >
               User Profile
             </span>
-            <li> First name: {this.state.firstName}</li>
-            <li> Last name: {this.state.lastName}</li>
-                <li> email: {this.state.email}</li>
-                <li> gender: {this.state.gender}</li>
-                <li>account type: {this.state.type}</li>
-                <li>companies: {this.state.companies}</li>
-                <li>notificaitons : {this.state.notifications}</li>
+    
+            <span
+              style={{ fontSize: 20, fontWeight: "italic", color: "steelgray " }}
+              className="Profile Details"
+            >
+              <ListGroup variant="flush">
+                <ListGroup.Item><b>First Name</b>   {this.state.firstName}</ListGroup.Item>
+                <ListGroup.Item><b>Last Name</b>   {this.state.lastName}</ListGroup.Item>               
+                <ListGroup.Item><b>Email</b>   {this.state.email}</ListGroup.Item>
+                <ListGroup.Item><b>Gender</b>   {this.state.gender}</ListGroup.Item>
+                <ListGroup.Item><b>Account Type</b>   {this.state.type}</ListGroup.Item>
+                <ListGroup.Item><b>Companies</b>   {this.state.companies}</ListGroup.Item>
+                <ListGroup.Item><b>Notificaitons</b>   {this.state.notifications}</ListGroup.Item>
+              </ListGroup>
+             </span>
           </div>
         );
       }

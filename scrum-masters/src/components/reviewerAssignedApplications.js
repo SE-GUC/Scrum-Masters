@@ -11,7 +11,7 @@ class reviewerAssignedApplications extends Component {
 
   showReviewerAssignedApplications = () => {
     
-      axios.get('http://localhost:3001/api/company/reviewerAssignedApplications/5cab87cbdfbd5434c05dd1ba')
+      axios.get('http://localhost:3001/api/company/reviewerAssignedApplications/'+localStorage.getItem("userId"))
            .then(reviewerAssignedApplication => {
             this.setState({ applications: reviewerAssignedApplication.data })
             this.setState({ isApplicationsShown: true })

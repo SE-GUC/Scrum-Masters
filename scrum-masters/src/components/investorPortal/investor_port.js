@@ -28,7 +28,7 @@ class Investor extends Component {
   state = {
     count: 0,
     company: [],
-    id: "5c921c633b8f9c2b4440c9a6",
+    id: localStorage.getItem("userId"),
     name: ""
   };
 
