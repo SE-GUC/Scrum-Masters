@@ -84,7 +84,7 @@ class App extends Component {
               path="/electronicJournal"
               component={electronicJournals}
             />
-            <Route exact path="/userProfile/:inv_id" component={userProfile} />
+            <Route exact path="/userProfile" component={userProfile} />
             <Route path="/company/:company_id" component={CompanyView} />
           </div>
           <Footer />
