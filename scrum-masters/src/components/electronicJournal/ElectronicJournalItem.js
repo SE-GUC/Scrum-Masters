@@ -5,6 +5,14 @@ import isEmpty from '../../validations/is-empty'
 import companyLogo from '../../img/logo-ex-7.png'
 
 class ElectronicJournalItem extends Component {
+  format = date => {
+    var d = date.getDate();
+    var m = date.getMonth() + 1;
+    var y = date.getFullYear();
+    return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+  }
+
+
   render () {
     const { electronicJournal } = this.props
 
@@ -15,12 +23,15 @@ class ElectronicJournalItem extends Component {
             <img src={companyLogo} alt='' className='rounded-circle' />
           </div>
           <div className='col-lg-6 col-md-4 col-8'>
-            <h3>{electronicJournal.companyName}</h3>
-            <p>
-              {isEmpty(electronicJournal.companyDescription) ? null : (
+            <h3>Company Name: {electronicJournal.companyName}</h3>
+            <h5>
+              Company Description: {isEmpty(electronicJournal.companyDescription) ? null : (
                 <span>{electronicJournal.companyDescription}</span>
               )}
-            </p>
+            </h5>
+            <h5>
+              Company Establishment Date: { electronicJournal.companyAcceptanceDate.split('T')[0] }
+            </h5>
             <Link to={`/electronicJournal/${electronicJournal._id}`} className='btn btn-info'>
                 View Contract
             </Link>
