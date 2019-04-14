@@ -113,3 +113,7 @@ footer {
   left: 0;
   width: 100%;
 }
+
+.company-view label {
+	font-weight: bold;
+}

@@ -14,6 +14,7 @@ import AllCompanies from "./components/allCompanies";
 import ApplicationReview from "./components/applicationReview";
 import CompanyForm from "./components/CompanyForm";
 import CompanyUpdate from "./components/CompanyUpdate";
+import CompanyView from "./components/CompanyView";
 import AllUnassignedCompanies from "./components/unassignedCompanies";
 
 import admin_create from "./components/admin_create";
@@ -21,6 +22,7 @@ import lawyerAssignedApplications from "./components/lawyerAssignedApplications"
 import reviewerAssignedApplications from "./components/reviewerAssignedApplications.js";
 import userCreatedApplications from "./components/userCreatedApplications";
 import electronicJournals from "./components/electronicJournal/electronicJournals";
+import userProfile from "./components/userProfile";
 
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
@@ -32,7 +34,7 @@ class App extends Component {
         <div>
           <Navigationbar />
 
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={localStorage.getItem('userEmail') ? investor : Home} />
           <div className="App">
             <Route exact path="/allCompanies" component={AllCompanies} />
             <Route
@@ -41,9 +43,9 @@ class App extends Component {
               component={ApplicationReview}
             />
             <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
+            <Route exact path="/login" render={props => <Login onLogin={() => this.forceUpdate()} {...props} />} />
             <Route exact path="/companyform" component={CompanyForm} />
-            <Route exact path="/CompanyUpdate" component={CompanyUpdate} />
+            <Route path="/CompanyUpdate/:company_id" component={CompanyUpdate} />
             <Route
               exact
               path="/unassignedCompanies"
@@ -70,7 +72,9 @@ class App extends Component {
               path="/electronicJournal"
               component={electronicJournals}
             />
-            <Route exact path="/inv" component={investor} />
+            <Route exact path="/userProfile" component={userProfile}
+            />
+            <Route path="/company/:company_id" component={CompanyView} />
           </div>
           <Footer />
         </div>

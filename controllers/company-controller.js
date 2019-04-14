@@ -109,10 +109,22 @@ function validatecreateCompany (company) {
 
   return Joi.validate(company, schema)
 }
+
 exports.listAllCompanies = (req, res) => {
   Company.find({}, { _id: true ,company_name_english: true , company_name_arabic : true})
     .then(company => {
       return res.json(company)
+    })
+    .catch(err => {
+      console.log(err)
+      return res.sendStatus(500)
+    })
+}
+
+exports.listAllEstablished = (req, res) => {
+  Company.find({ established: true }, {})
+    .then(companies => {
+      return res.json(companies)
     })
     .catch(err => {
       console.log(err)
@@ -132,6 +144,17 @@ exports.getCompany = (req, res) => {
     })
 }
 
+exports.getEstablished = (req, res) => {
+  Company.find({ _id: req.params.id, established: true })
+    .then(company => {
+      if (!company || company.length === 0) return res.status(404).send('Company not found')
+      return res.json(company[0])
+    })
+    .catch(err => {
+      console.log(err)
+      return res.sendStatus(500)
+    })
+}
 
 exports.createCompany = (req, res) => {
   const { error } = validatecreateCompany(req.body)
@@ -151,6 +174,7 @@ exports.createCompany = (req, res) => {
 
       company = {}
       company = req.body
+      company.fees = exports.getFeesValue(company.capital)
       Company.create(company)
         .then(company => {
           User.findByIdAndUpdate(company.owner, { $push: { companies: company._id } })
@@ -177,6 +201,10 @@ exports.updateCompany = (req, res) => {
   const { error } = validateupdateCompany(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
+  if (req.body.capital) {
+    req.body.fees = exports.getFeesValue(req.body.capital)
+  }
+  
   Company.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(company => {
       if (!company) return res.status(404).send('application not found')
@@ -265,7 +293,7 @@ exports.establishCompany = async(req, res) => {
           await userController.createNotificationForUser(
             { owner_id: company.owner, target_type: 'company', target_id: company._id, notif_text: "Your company has been established" }
           )
-          ElectronicJournal.create({ companyName: company.company_name_arabic })
+          ElectronicJournal.create({ companyId: company._id, companyName: company.company_name_arabic })
           .then(ej => {
             return res.json({ msg: "Success", data: company })
           })
@@ -285,14 +313,16 @@ exports.establishCompany = async(req, res) => {
     })
 }
 
+exports.getFeesValue = capital => {
+  return ((1/1000)*(capital))+((1/400)*capital)+56
+}
+
 exports.calculateCompanyFees = async(req,res)=>{
 
 const company_id = req.params.id
 const company = await Company.findById(company_id)
 if(! company ) return res.status(404).send('application not found')
-const companyCapital= company.capital
-const fees = ((1/1000)*(companyCapital))+((1/400)*companyCapital)+56
-company.fees=fees
+company.fees=exports.getFeesValue(company.capital)
 const targetcompany = await Company.findByIdAndUpdate(company_id,company, { new: true })
 return res.json(targetcompany)
 
