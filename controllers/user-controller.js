@@ -2,7 +2,7 @@ const Joi = require("joi");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const tokenKey = require("../config/tokenKey");
+const tokenKey = require("../config/keys").tokenKey;
 var Company = require("../models/company");
 var Notification = require("../models/Notification");
 
@@ -444,11 +444,10 @@ exports.login = async (req, res) => {
         email: user.email,
         type: user.type
       };
-      const token = jwt.sign(payload, tokenKey.key, { expiresIn: "1h" });
+      const token = jwt.sign(payload, tokenKey, { expiresIn: "1h" });
       return res.json({ token: `Bearer ${token}`, user: payload });
     } else return res.status(400).send({ password: "Wrong password" });
   } catch (e) {
-    console.log(e);
     return res.json({ msg: "Can't log in " });
   }
 };
@@ -473,7 +472,6 @@ exports.register = async (req, res) => {
     await User.create(newUser);
     res.json({ msg: "User created successfully", data: newUser });
   } catch (error) {
-    console.log(error);
     res.status(422).send({ error: "Can not register right now" });
   }
 };

@@ -1,11 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const userController = require('../../controllers/user-controller')
+const passport = require('passport')
+
 
 router.use(express.json())
 
-router.get('/', userController.listAllUsers)
-router.get('/:id', userController.getUser)
+router.get('/',passport.authenticate('jwt', {session: false}),userController.listAllUsers)//test
+router.get('/:id',userController.getUser)
 router.get('/getfees/:id', userController.viewApplicationFees)
 router.get('/getlawyer/:companyid', userController.getassignedlawyer)
 
