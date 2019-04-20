@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { Badge, Button, Form, Col } from "react-bootstrap";
+import BoardMembersEditor from "./BoardMembersEditor.js";
 
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
 class CompanyForm extends Component {
+  boardMembersEditor = React.createRef();
+  
   state = {
     company: [],
     error: "",
@@ -31,7 +34,8 @@ class CompanyForm extends Component {
     natid: "",
     invtele: "",
     invfax: "",
-    email: ""
+    email: "",
+    board_members: []
   };
   arabicnamechange = e => {
     this.setState({ arabicname: e.target.value });
@@ -132,7 +136,7 @@ class CompanyForm extends Component {
     if (this.state.type === "ssc") {
       Object.assign(company, {
         investor_type: this.state.investortype,
-        board_members: []
+        board_members: this.state.board_members
       });
     }
 
@@ -372,6 +376,7 @@ class CompanyForm extends Component {
               onChange={this.invemailchange}
             />
           </Form.Group>
+          <BoardMembersEditor ref={this.boardMembersEditor} onChange={board_members => this.setState({ board_members: board_members })} />
           <Button onClick={this.createCompany} variant="primary">
             Submit
           </Button>

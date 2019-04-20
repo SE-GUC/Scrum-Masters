@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { Badge, Button, Form, Col } from "react-bootstrap";
+import BoardMembersEditor from "./BoardMembersEditor.js";
 
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
 
 class CompanyUpdate extends Component {
   id = this.props.match.params.company_id;
+  boardMembersEditor = React.createRef();
+  
   state = {
     company: [],
     company_type: "",
@@ -30,7 +33,9 @@ class CompanyUpdate extends Component {
     investor_email: "",
     investor_telephone: "",
     investor_fax: "",
-    investor_gender: ""
+    investor_gender: "",
+    board_members: [],
+    new_board_members: []
   };
 
   getCompany = () => {
@@ -61,7 +66,8 @@ class CompanyUpdate extends Component {
           investor_email: companyy.data.investor_email,
           investor_telephone: companyy.data.investor_telephone,
           investor_fax: companyy.data.investor_fax,
-          investor_gender: companyy.data.investor_gender
+          investor_gender: companyy.data.investor_gender,
+          board_members: companyy.data.board_members
         });
       })
       .catch(err => {
@@ -94,7 +100,8 @@ class CompanyUpdate extends Component {
         'investor_email': this.state.investor_email,
         'investor_telephone': this.state.investor_telephone,
         'investor_fax': this.state.investor_fax,
-        'investor_gender': this.state.investor_gender
+        'investor_gender': this.state.investor_gender,
+        'board_members': this.state.new_board_members
       })
       .then(company => {
         this.props.history.push("/company/"+this.props.match.params.company_id);
@@ -368,6 +375,10 @@ class CompanyUpdate extends Component {
               }}
             />
           </Form.Group>
+          <BoardMembersEditor
+            boardMembers={this.state.board_members}
+            onChange={board_members => this.setState({ new_board_members: board_members })}
+            ref={this.boardMembersEditor} />
           <Button onClick={this.handleSubmit} variant="primary">
             Submit
           </Button>
