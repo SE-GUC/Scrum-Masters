@@ -92,7 +92,7 @@ class App extends Component {
               path="/electronicJournal"
               component={electronicJournals}
             />
-            <Route path="/electronicJournal/:company_id" component={ContractView} />
+            <Route path="/electronicJournal/:ej_id" component={ContractView} />
             <Route path="/userProfile/:user_id" component={userProfile} />
             <Route path="/company/:company_id" component={CompanyView} />
             <Route path="/notifications" component={notifications} />

@@ -24,7 +24,7 @@ class ElectronicJournalItem extends Component {
             <p>
               Established: { electronicJournal.companyAcceptanceDate.split('T')[0] }
             </p>
-            <Link to={`/electronicJournal/${electronicJournal.companyId}`} className='btn btn-info'>
+            <Link to={`/electronicJournal/${electronicJournal._id}`} className='btn btn-info'>
                 View Contract
             </Link>
           </div>
