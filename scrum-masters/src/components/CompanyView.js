@@ -70,6 +70,7 @@ class CompanyView extends Component {
                   comment.user = user.data.firstName + " " + user.data.lastName;
                   this.forceUpdate();
                 });
+              return comment;
             });
             this.setState({ fetched: true });
           })
@@ -129,7 +130,7 @@ class CompanyView extends Component {
   }
   
   needsPayment() {
-    return this.state.owner == localStorage.getItem("userId") && this.state.fees > 0 && !this.state.ispaid && this.state.reviewed_statusreviewer;
+    return this.state.owner === localStorage.getItem("userId") && this.state.fees > 0 && !this.state.ispaid && this.state.reviewed_statusreviewer;
   }
   
   assignToMyself() {
@@ -184,7 +185,8 @@ class CompanyView extends Component {
         >
           View company details
           {(localStorage.getItem("userType") === "admin" ||
-            localStorage.getItem("userId") === this.state.owner) && !this.state.ispaid && (
+            localStorage.getItem("userId") === this.state.owner ||
+            (localStorage.getItem("userType") === "lawyer" && this.state.reviewed_statuslawyer)) && !this.state.ispaid && (
             <Button
               style={{ margin: "10px" }}
               as="a"
@@ -295,7 +297,7 @@ class CompanyView extends Component {
                   this.state.hq_city +
                   ", " +
                   this.state.hq_governorate +
-                  ", telehpone: " +
+                  ", telephone: " +
                   this.state.hq_telephone +
                   ", fax: " +
                   this.state.hq_fax
