@@ -36,7 +36,7 @@ class ContractView extends Component {
     var male = true;
     if (this.state.board_members.filter(board_member => {
       return board_member.gender === "Female";
-    }).length > 0) {
+    }).length === this.state.board_members.length) {
       male = false;
     }
     
