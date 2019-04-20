@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Form, Col, Row, Button, Card, Alert } from "react-bootstrap";
 import StripeCheckout from "react-stripe-checkout";
+import BoardMembersEditor from "./BoardMembersEditor.js";
 
 const axios = require("axios");
 axios.defaults.adapter = require("axios/lib/adapters/http");
@@ -183,7 +184,7 @@ class CompanyView extends Component {
         >
           View company details
           {(localStorage.getItem("userType") === "admin" ||
-            localStorage.getItem("userId") === this.state.owner) && (
+            localStorage.getItem("userId") === this.state.owner) && !this.state.ispaid && (
             <Button
               style={{ margin: "10px" }}
               as="a"
@@ -400,6 +401,7 @@ class CompanyView extends Component {
               </Form.Group>
             </Form.Row>
           )}
+          <BoardMembersEditor boardMembers={this.state.board_members} readOnly />
         </Form>
         <span
           style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
