@@ -21,6 +21,7 @@ import lawyerAssignedApplications from "./components/lawyerAssignedApplications"
 import reviewerAssignedApplications from "./components/reviewerAssignedApplications.js";
 import userCreatedApplications from "./components/userCreatedApplications";
 import electronicJournals from "./components/electronicJournal/electronicJournals";
+import ContractView from "./components/electronicJournal/ContractView";
 import userProfile from "./components/userProfile";
 import notifications from "./components/Notifications"
 
@@ -91,6 +92,7 @@ class App extends Component {
               path="/electronicJournal"
               component={electronicJournals}
             />
+            <Route path="/electronicJournal/:ej_id" component={ContractView} />
             <Route path="/userProfile/:user_id" component={userProfile} />
             <Route path="/company/:company_id" component={CompanyView} />
             <Route path="/notifications" component={notifications} />
