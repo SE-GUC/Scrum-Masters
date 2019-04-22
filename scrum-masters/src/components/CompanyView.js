@@ -106,57 +106,91 @@ class CompanyView extends Component {
         }
       });
   }
-  
+
   assignedStatus() {
     if (this.state.review_lawyer) {
       return "Assigned to lawyer";
     } else if (this.state.review_reviewer) {
       return "Assigned to reviewer";
-    } else if (this.state.reviewed_statuslawyer && !this.state.reviewed_statusreviewer) {
+    } else if (
+      this.state.reviewed_statuslawyer &&
+      !this.state.reviewed_statusreviewer
+    ) {
       return "Unassigned, waiting to be assigned to reviewer";
-    } else if (!this.state.reviewed_statuslawyer && !this.state.reviewed_statuslawyer) {
+    } else if (
+      !this.state.reviewed_statuslawyer &&
+      !this.state.reviewed_statuslawyer
+    ) {
       return "Unassigned, waiting to be assigned to lawyer";
     } else {
       return "Finished reviewal process";
     }
   }
-  
+
   needsLawyer() {
     return !this.state.reviewed_statuslawyer && !this.state.review_lawyer;
   }
-  
+
   needsReviewer() {
-    return this.state.reviewed_statuslawyer && !this.state.reviewed_statusreviewer && !this.state.review_reviewer;
+    return (
+      this.state.reviewed_statuslawyer &&
+      !this.state.reviewed_statusreviewer &&
+      !this.state.review_reviewer
+    );
   }
-  
+
   needsPayment() {
-    return this.state.owner === localStorage.getItem("userId") && this.state.fees > 0 && !this.state.ispaid && this.state.reviewed_statusreviewer;
+    return (
+      this.state.owner == localStorage.getItem("userId") &&
+      this.state.fees > 0 &&
+      !this.state.ispaid &&
+      this.state.reviewed_statusreviewer
+    );
   }
-  
+
   assignToMyself() {
-    const api = localStorage.getItem("userType") === "lawyer" ? "assignLawyer" : "assignreviewer";
-    
-    axios.post("http://localhost:3001/api/user/" + api + "/" + this.state._id + "/" + localStorage.getItem("userId"))
+    const api =
+      localStorage.getItem("userType") === "lawyer"
+        ? "assignLawyer"
+        : "assignreviewer";
+
+    axios
+      .post(
+        "http://localhost:3001/api/user/" +
+          api +
+          "/" +
+          this.state._id +
+          "/" +
+          localStorage.getItem("userId")
+      )
       .then(company => {
-        this.setState({ success_msg: "You have assigned this case to yourself." })
-        this.setState(company.data)
+        this.setState({
+          success_msg: "You have assigned this case to yourself."
+        });
+        this.setState(company.data);
       })
       .catch(err => {
-        this.setState({ error: err.response.data.error })
-      })
+        this.setState({ error: err.response.data.error });
+      });
   }
-  
+
   unassign() {
-    const api = localStorage.getItem("userType") === "lawyer" ? "unassignLawyer" : "unassignReviewer";
-    
-    axios.put("http://localhost:3001/api/user/" + api + "/" + this.state._id)
+    const api =
+      localStorage.getItem("userType") === "lawyer"
+        ? "unassignLawyer"
+        : "unassignReviewer";
+
+    axios
+      .put("http://localhost:3001/api/user/" + api + "/" + this.state._id)
       .then(company => {
-        this.setState({ success_msg: "You have been unassigned from this case." })
-        this.setState(company.data)
+        this.setState({
+          success_msg: "You have been unassigned from this case."
+        });
+        this.setState(company.data);
       })
       .catch(err => {
-        this.setState({ error: err.response.data.error })
-      })
+        this.setState({ error: err.response.data.error });
+      });
   }
 
   render() {
@@ -166,7 +200,7 @@ class CompanyView extends Component {
 
     return (
       <div className="company-view">
-        {this.needsPayment() &&
+        {this.needsPayment() && (
           <StripeCheckout
             stripeKey="pk_test_fMRKRMIpnVRxz8FNmJBBMG3p00CEMX1VKZ"
             image="https://stripe.com/img/documentation/checkout/marketplace.png"
@@ -177,7 +211,7 @@ class CompanyView extends Component {
             amount={this.state.fees * 100}
             token={token => this.pay(token)}
           />
-        }
+        )}
 
         <span
           style={{ fontSize: 30, fontWeight: "italic", color: "steelblue" }}
@@ -187,31 +221,51 @@ class CompanyView extends Component {
           {(localStorage.getItem("userType") === "admin" ||
             localStorage.getItem("userId") === this.state.owner ||
             (localStorage.getItem("userType") === "lawyer" && this.state.reviewed_statuslawyer)) && !this.state.ispaid && (
-            <Button
-              style={{ margin: "10px" }}
-              as="a"
-              href={"/CompanyUpdate/" + this.props.match.params.company_id}
-            >
-              Edit application
-            </Button>
-          )}
-          {this.needsPayment() && (
               <Button
                 style={{ margin: "10px" }}
-                onClick={() => this.refs.checkoutBtn.onClick()}
+                as="a"
+                href={"/CompanyUpdate/" + this.props.match.params.company_id}
               >
-                Pay fees ({this.state.fees} EGP)
+                Edit application
               </Button>
             )}
-          {((localStorage.getItem("userType") === "lawyer" && this.needsLawyer()) ||
-            (localStorage.getItem("userType") === "reviewer" && this.needsReviewer())) && (
-              <Button style={{ margin: "10px" }} onClick={() => this.assignToMyself()}>Assign to myself</Button>
-            )}
+          {this.needsPayment() && (
+            <Button
+              style={{ margin: "10px" }}
+              onClick={() => this.refs.checkoutBtn.onClick()}
+            >
+              Pay fees ({this.state.fees} EGP)
+            </Button>
+          )}
+          {((localStorage.getItem("userType") === "lawyer" &&
+            this.needsLawyer()) ||
+            (localStorage.getItem("userType") === "reviewer" &&
+              this.needsReviewer())) && (
+            <Button
+              style={{ margin: "10px" }}
+              onClick={() => this.assignToMyself()}
+            >
+              Assign to myself
+            </Button>
+          )}
           {(this.state.review_lawyer === localStorage.getItem("userId") ||
-            this.state.review_reviewer === localStorage.getItem("userId")) && <>
-              <Button style={{ margin: "10px" }} onClick={() => this.unassign()}>Unassign</Button>
-              <Button style={{ margin: "10px" }} as="a" href={"/applicationReview/"+this.state._id}>Review application</Button>
-            </>}
+            this.state.review_reviewer === localStorage.getItem("userId")) && (
+            <>
+              <Button
+                style={{ margin: "10px" }}
+                onClick={() => this.unassign()}
+              >
+                Unassign
+              </Button>
+              <Button
+                style={{ margin: "10px" }}
+                as="a"
+                href={"/applicationReview/" + this.state._id}
+              >
+                Review application
+              </Button>
+            </>
+          )}
         </span>
 
         <div style={{ paddingLeft: "20px", paddingRight: "20px", margin: "0" }}>
@@ -245,11 +299,7 @@ class CompanyView extends Component {
             </Form.Group>
             <Form.Group as={Col} controlId="englishname">
               <Form.Label>Assigned status</Form.Label>
-              <Form.Control
-                plaintext
-                readOnly
-                value={this.assignedStatus()}
-              />
+              <Form.Control plaintext readOnly value={this.assignedStatus()} />
             </Form.Group>
           </Form.Row>
           <Form.Row>
@@ -403,7 +453,10 @@ class CompanyView extends Component {
               </Form.Group>
             </Form.Row>
           )}
-          <BoardMembersEditor boardMembers={this.state.board_members} readOnly />
+          <BoardMembersEditor
+            boardMembers={this.state.board_members}
+            readOnly
+          />
         </Form>
         <span
           style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
