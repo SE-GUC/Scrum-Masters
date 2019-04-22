@@ -182,8 +182,8 @@ exports.viewApplicationFees = async (req, res) => {
 };
 
 exports.assignReviewer = async (req, res) => {
-  const targetId = req.params.app_id;
-  const reviewer_id = req.params.rev_id;
+  const targetId = req.params.appId;
+  const reviewer_id = req.params.revId;
 
   var targetApplication = await Company.findById(targetId);
 
@@ -283,39 +283,6 @@ exports.getassignedlawyer = async (req, res) => {
   return res.json(laywer);
 };
 
-exports.publishPaidApplication = async (req, res) => {
-  const appId = req.params.appId;
-  const adminId = req.params.adminId;
-
-  var targetApplication = await Company.findById(appId);
-
-  if (!targetApplication)
-    return res.status(404).send({ error: "Application not found" });
-
-  var targetAdmin = await User.findById(adminId);
-
-  if (!targetAdmin) return res.status(404).send({ error: "Admin not found" });
-
-  if (targetApplication.established == true)
-    return res.send({ error: "This application is already established" });
-
-  if (targetApplication.ispaid == false)
-    return res.send({ error: "This application is not paid yet" });
-
-  if (targetAdmin.type != "admin")
-    return res
-      .status(404)
-      .send({ error: "User should be of type admin to publish a company" });
-
-  const published = await Company.findByIdAndUpdate(
-    appId,
-    { established: true },
-    { new: true }
-  );
-
-  return res.send(published);
-};
-
 exports.unassignReviewer = async (req, res) => {
   try {
     const targetId = req.params.appId;
@@ -326,8 +293,8 @@ exports.unassignReviewer = async (req, res) => {
       return res.status(404).send({ error: "Application not found" });
     }
 
-    if (targetApplication.reviewed_reviewer === null) {
-      return res.send({ error: "This application is already unreviewed" });
+    if (targetApplication.review_reviewer === null) {
+      return res.status(400).send({ error: "This application is already unreviewed" });
     }
 
     const targetApplicationup = await Company.findByIdAndUpdate(

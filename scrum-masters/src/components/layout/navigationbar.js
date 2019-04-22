@@ -6,7 +6,12 @@ const navigationbar = () => {
   return (
     <div>
       <Navbar bg="light" color="skyblue" expand="lg">
-        <Navbar.Brand>Sumerge</Navbar.Brand>
+        <Navbar.Brand>Sumerge
+          {localStorage.getItem("userType") === "investor" && " Investor Portal"}
+          {(localStorage.getItem("userType") === "lawyer" ||
+            localStorage.getItem("userType") === "reviewer" ||
+            localStorage.getItem("userType") === "admin") && " Admin Portal"}
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
