@@ -258,14 +258,6 @@ class CompanyView extends Component {
               Pay fees ({this.state.fees} EGP)
             </Button>
           )}
-          {this.needsPayment() && (
-            <Button
-              style={{ margin: "10px" }}
-              onClick={() => this.refs.checkoutBtn.onClick()}
-            >
-              Pay fees ({this.state.fees} EGP)
-            </Button>
-          )}
           {((localStorage.getItem("userType") === "lawyer" &&
             this.needsLawyer()) ||
             (localStorage.getItem("userType") === "reviewer" &&

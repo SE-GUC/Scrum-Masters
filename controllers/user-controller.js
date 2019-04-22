@@ -59,6 +59,18 @@ exports.getUser = (req, res) => {
     });
 };
 
+exports.getName = (req, res) => {
+  User.findById(req.params.id, { firstName: true, lastName: true })
+    .then(user => {
+      if (!user) return res.status(404).send("User not found");
+      return res.json(user);
+    })
+    .catch(err => {
+      console.log(err);
+      return res.sendStatus(500);
+    });
+};
+
 exports.createUser = (req, res) => {
   const { error } = validateUser(req.body, true);
   if (error) {
