@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Card, ButtonToolbar, ToggleButton, ToggleButtonGroup, Table } from 'react-bootstrap';
 
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+import App from "../../App";
 
 class ContractView extends Component {
   state = {
@@ -27,10 +26,10 @@ class ContractView extends Component {
   }
   
   componentDidMount() {
-    axios.get("http://localhost:3001/api/electronicJournals/" + this.props.match.params.ej_id)
+    App.api("get", "/electronicJournals/" + this.props.match.params.ej_id)
       .then(ej => {
         this.setState(ej.data);
-        axios.get("http://localhost:3001/api/company/" + ej.data.companyId)
+        App.api("get", "/company/" + ej.data.companyId)
           .then(company => {
             this.setState(company.data);
             this.setState({ loaded: true });

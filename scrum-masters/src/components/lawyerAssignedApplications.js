@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Badge, Button, ListGroup} from 'react-bootstrap'
-const axios = require('axios')
-axios.default.adapter = require ('axios/lib/adapters/http')
+
+import App from "../App";
 
 class lawyerAssignedApplications extends Component {
     state = {
@@ -10,8 +10,7 @@ class lawyerAssignedApplications extends Component {
     }
 
   componentDidMount = () => {
-    axios
-      .get('http://localhost:3001/api/company/lawyerAssignedApplications/'+localStorage.getItem("userId"))
+    App.api("get", "/company/lawyerAssignedApplications/"+localStorage.getItem("userId"))
       .then(lawyerAssignedApplication => {
         this.setState({ applications: lawyerAssignedApplication.data })
         this.setState({ isApplicationsShown: true })

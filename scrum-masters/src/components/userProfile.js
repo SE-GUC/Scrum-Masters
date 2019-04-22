@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ListGroup, Col, Row, Form } from "react-bootstrap";
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+
+import App from "../App";
 
 class userProfile extends Component {
   state = {
@@ -20,8 +20,7 @@ class userProfile extends Component {
 
   getProfileDetails = () => {
     console.log(this.state);
-    axios
-      .get("http://localhost:3001/api/user/" + this.state.userID)
+    App.api("get", "/user/" + this.state.userID)
       .then(userDetails => {
         this.setState({ firstName: userDetails.data.firstName });
         this.setState({ lastName: userDetails.data.lastName });
@@ -39,8 +38,7 @@ class userProfile extends Component {
   };
   getCompaniesname = () => {
     for (var i = 0; i < this.state.companies.length; i++) {
-      axios
-        .get("http://localhost:3001/api/company/" + this.state.companies[i])
+      App.api("get", "/company/" + this.state.companies[i])
         .then(companies => {
           this.setState({
             companiesname: this.state.companiesname.concat(

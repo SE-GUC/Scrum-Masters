@@ -37,7 +37,7 @@ router.post(
 ); // new --update a comment.
 
 router.delete(
-  "/:comm_id",
+  "/:id",
   passport.authenticate("jwt", { session: false }),
   auth.updatecomment,
   commentController.deleteComment

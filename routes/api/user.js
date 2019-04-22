@@ -8,6 +8,7 @@ router.use(express.json())
 
 router.get('/', passport.authenticate('jwt', {session: false}), userController.listAllUsers)
 router.get('/:id', passport.authenticate('jwt', {session: false}), auth.canViewUser, userController.getUser)
+router.get('/name/:id', passport.authenticate('jwt', {session: false}), userController.getName)
 router.get('/getfees/:id', passport.authenticate('jwt', {session: false}), auth.canAccessApplication, userController.viewApplicationFees)
 router.get('/getlawyer/:companyid', passport.authenticate('jwt', {session: false}), auth.canAccessApplication, userController.getassignedlawyer)
 
@@ -16,8 +17,8 @@ router.post('/assignreviewer/:appId/:revId', passport.authenticate('jwt', {sessi
 router.post('/assignLawyer/:appId/:lawyerId', passport.authenticate('jwt', {session: false}), auth.canAssignLawyer, userController.assignLaywer)
 
 
-router.put('/lawyerReviewCompany/:appId/:userId', passport.authenticate('jwt', {session: false}), auth.canUnassignReviewer, userController.lawyerReviewCompany)
-router.put('/reviewerReviewCompany/:appId/:userId', passport.authenticate('jwt', {session: false}), auth.canUnassignLawyer, userController.reviewerReviewCompany)
+router.put('/lawyerReviewCompany/:appId/:userId', passport.authenticate('jwt', {session: false}), auth.canUnassignLawyer, userController.lawyerReviewCompany)
+router.put('/reviewerReviewCompany/:appId/:userId', passport.authenticate('jwt', {session: false}), auth.canUnassignReviewer, userController.reviewerReviewCompany)
 
 router.post('/login', userController.login)
 router.post('/register', auth.canRegister, userController.register)

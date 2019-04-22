@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Badge, Button, ListGroup} from 'react-bootstrap'
-const axios = require('axios')
-axios.default.adapter = require ('axios/lib/adapters/http')
+
+import App from "../App";
 
 class reviewerAssignedApplications extends Component {
   state = {
@@ -11,7 +11,7 @@ class reviewerAssignedApplications extends Component {
 
   componentDidMount = () => {
     
-      axios.get('http://localhost:3001/api/company/reviewerAssignedApplications/'+localStorage.getItem("userId"))
+      App.api("get", "/company/reviewerAssignedApplications/"+localStorage.getItem("userId"))
            .then(reviewerAssignedApplication => {
             this.setState({ applications: reviewerAssignedApplication.data })
             this.setState({ isApplicationsShown: true })

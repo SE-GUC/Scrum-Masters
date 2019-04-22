@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Container, Alert, ListGroup, Spinner } from "react-bootstrap";
 
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+import App from "../App";
 
 class Notification extends Component{
   id = this.props.match.params.user_id;
@@ -12,7 +11,7 @@ class Notification extends Component{
   }
 
   componentDidMount(){
-      axios.get("http://localhost:3001/api/notification/" + localStorage.getItem("userId")).then(
+      App.api("get", "/notification/" + localStorage.getItem("userId")).then(
         notification =>{
           notification.data.sort((a, b) => {
             if (a.date < b.date)
@@ -63,7 +62,7 @@ class Notification extends Component{
   handler = async e => {
     
     try {
-      await axios.delete('http://localhost:3001/api/notification/' + e) 
+      await App.api("delete", "/notification/" + e) 
       this.setState({alert:"Success"})
     } catch(error) {
        
