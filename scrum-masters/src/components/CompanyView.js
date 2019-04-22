@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Col, Row, Button, Card, Alert } from "react-bootstrap";
+import { Form, Col, Row, Button, Card, Alert, Badge } from "react-bootstrap";
 import StripeCheckout from "react-stripe-checkout";
 import BoardMembersEditor from "./BoardMembersEditor.js";
 
@@ -8,9 +8,15 @@ import App from "../App";
 class CompanyView extends Component {
   state = {
     fetched: false,
+    thiscomment: "",
     assigned_status: false,
+    updatedcomment: "",
+    message: "",
+    remove: false,
+    flag: false,
     reviewed_statuslawyer: false,
     reviewed_statusreviewer: false,
+    nowuser: localStorage.getItem("userId"),
     comments: [],
     loadedComments: [],
     ispaid: false,
@@ -181,7 +187,31 @@ class CompanyView extends Component {
         this.setState({ error: err.response.data.error });
       });
   }
+  deletecomment = id => {
+    axios
+      .delete("http://localhost:3001/api/comment/" + id)
+      .then(comment => {
+        this.setState({ message: " commnet is deleted" });
+        window.location.reload();
+      })
+      .catch(err => {
+        this.setState({ message: err.response.data.error });
+      });
+  };
 
+  changecomment = comment_id => {
+    axios
+      .post("http://localhost:3001/api/comment/" + comment_id, {
+        comment_text: this.state.updatedcomment
+      })
+      .then(comm => {
+        this.setState({ remove: true });
+        window.location.reload();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   render() {
     if (!this.state.fetched) {
       return <div />;
@@ -218,6 +248,14 @@ class CompanyView extends Component {
                 Edit application
               </Button>
             )}
+          {this.needsPayment() && (
+            <Button
+              style={{ margin: "10px" }}
+              onClick={() => this.refs.checkoutBtn.onClick()}
+            >
+              Pay fees ({this.state.fees} EGP)
+            </Button>
+          )}
           {this.needsPayment() && (
             <Button
               style={{ margin: "10px" }}
@@ -466,10 +504,53 @@ class CompanyView extends Component {
               <Card.Title>
                 By {comment.user} at {comment.comment_date}
               </Card.Title>
-              <Card.Text>{comment.comment_text}</Card.Text>
+              <Card.Text>
+                {comment.comment_text}
+                <br />
+                {this.state.nowuser === comment.user_id && (
+                  <div>
+                    {" "}
+                    <Button
+                      variant="danger"
+                      onClick={() => this.deletecomment(comment._id)}
+                    >
+                      Delete
+                    </Button>{" "}
+                    <Button
+                      onClick={() =>
+                        this.setState({ flag: true, thiscomment: comment._id })
+                      }
+                    >
+                      Update
+                    </Button>
+                    {this.state.flag && this.state.thiscomment === comment._id && (
+                      <Form className="m-4">
+                        <Form.Group as={Col}>
+                          <Form.Label>New comment</Form.Label>
+                          <Form.Control
+                            type="textarea"
+                            placeholder="Enter the new comment "
+                            defaultValue={comment.comment_text}
+                            onChange={e =>
+                              this.setState({
+                                updatedcomment: e.target.value
+                              })
+                            }
+                          />
+                        </Form.Group>
+                        <Button onClick={() => this.changecomment(comment._id)}>
+                          done
+                        </Button>
+                      </Form>
+                    )}
+                  </div>
+                )}
+              </Card.Text>
             </Card.Body>
           </Card>
         ))}
+
+        <Badge variant="danger">{this.state.message}</Badge>
       </div>
     );
   }
