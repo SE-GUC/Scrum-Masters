@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {Badge, Button, ListGroup} from 'react-bootstrap'
-const axios = require('axios')
-axios.default.adapter = require ('axios/lib/adapters/http')
+
+import App from "../App";
 
 class userCreatedApplications extends Component {
   state = {
@@ -10,15 +10,14 @@ class userCreatedApplications extends Component {
   }
 
   componentDidMount = () => {
-    axios
-         .get('http://localhost:3001/api/company/userCreatedApplications/'+localStorage.getItem("userId"))
-         .then(userCreatedApplication => {
-           this.setState({ applications: userCreatedApplication.data })
-           this.setState({ isApplicationsShown: true })
-         })
-         .catch(err => {
-           console.log(err)
-         })
+    App.api("get", "/company/userCreatedApplications/"+localStorage.getItem("userId"))
+      .then(userCreatedApplication => {
+        this.setState({ applications: userCreatedApplication.data })
+        this.setState({ isApplicationsShown: true })
+      })
+        .catch(err => {
+        console.log(err)
+      })
   }
 
   renderApplications = () => {

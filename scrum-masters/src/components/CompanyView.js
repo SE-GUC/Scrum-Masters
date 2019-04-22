@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Form, Col, Row, Button, Card, Alert, Badge } from "react-bootstrap";
 import StripeCheckout from "react-stripe-checkout";
+import BoardMembersEditor from "./BoardMembersEditor.js";
 
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+import App from "../App";
 
 class CompanyView extends Component {
   state = {
@@ -54,27 +54,23 @@ class CompanyView extends Component {
   };
 
   getCompany() {
-    axios
-      .get(
-        "http://localhost:3001/api/company/" +
+    App.api("get", "/company/" +
           this.props.match.params.company_id
       )
       .then(company => {
         this.setState(company.data);
-        axios
-          .get(
-            "http://localhost:3001/api/comment/" +
+        App.api("get", "/comment/" +
               this.props.match.params.company_id
           )
           .then(comments => {
             this.setState({ loadedComments: comments.data });
             this.state.loadedComments.map(comment => {
-              axios
-                .get("http://localhost:3001/api/user/" + comment.user_id)
+              App.api("get", "/user/" + comment.user_id)
                 .then(user => {
                   comment.user = user.data.firstName + " " + user.data.lastName;
                   this.forceUpdate();
                 });
+              return comment;
             });
             this.setState({ fetched: true });
           })
@@ -92,9 +88,7 @@ class CompanyView extends Component {
   }
 
   pay(token) {
-    axios
-      .post(
-        "http://localhost:3001/api/payment/charge/" +
+    App.api("post", "/payment/charge/" +
           this.props.match.params.company_id,
         { token: token.id }
       )
@@ -158,9 +152,7 @@ class CompanyView extends Component {
         ? "assignLawyer"
         : "assignreviewer";
 
-    axios
-      .post(
-        "http://localhost:3001/api/user/" +
+    App.api("post", "/user/" +
           api +
           "/" +
           this.state._id +
@@ -184,8 +176,7 @@ class CompanyView extends Component {
         ? "unassignLawyer"
         : "unassignReviewer";
 
-    axios
-      .put("http://localhost:3001/api/user/" + api + "/" + this.state._id)
+    App.api("put", "/user/" + api + "/" + this.state._id)
       .then(company => {
         this.setState({
           success_msg: "You have been unassigned from this case."
@@ -247,13 +238,22 @@ class CompanyView extends Component {
         >
           View company details
           {(localStorage.getItem("userType") === "admin" ||
-            localStorage.getItem("userId") === this.state.owner) && (
+            localStorage.getItem("userId") === this.state.owner ||
+            (localStorage.getItem("userType") === "lawyer" && this.state.reviewed_statuslawyer)) && !this.state.ispaid && (
+              <Button
+                style={{ margin: "10px" }}
+                as="a"
+                href={"/CompanyUpdate/" + this.props.match.params.company_id}
+              >
+                Edit application
+              </Button>
+            )}
+          {this.needsPayment() && (
             <Button
               style={{ margin: "10px" }}
-              as="a"
-              href={"/CompanyUpdate/" + this.props.match.params.company_id}
+              onClick={() => this.refs.checkoutBtn.onClick()}
             >
-              Edit application
+              Pay fees ({this.state.fees} EGP)
             </Button>
           )}
           {this.needsPayment() && (
@@ -374,7 +374,7 @@ class CompanyView extends Component {
                   this.state.hq_city +
                   ", " +
                   this.state.hq_governorate +
-                  ", telehpone: " +
+                  ", telephone: " +
                   this.state.hq_telephone +
                   ", fax: " +
                   this.state.hq_fax
@@ -480,6 +480,10 @@ class CompanyView extends Component {
               </Form.Group>
             </Form.Row>
           )}
+          <BoardMembersEditor
+            boardMembers={this.state.board_members}
+            readOnly
+          />
         </Form>
         <span
           style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}

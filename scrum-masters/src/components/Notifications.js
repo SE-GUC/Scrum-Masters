@@ -1,19 +1,25 @@
 import React, { Component } from "react";
-import { Badge, ListGroup, Spinner } from "react-bootstrap";
+import { Container, Alert, ListGroup, Spinner } from "react-bootstrap";
 
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+import App from "../App";
 
 class Notification extends Component{
   id = this.props.match.params.user_id;
   state = {
       notifications : [],
-      loading : false,
+      loading : true,
   }
 
   componentDidMount(){
-      axios.get("/api/notification/" + localStorage.getItem("userId")).then(
-          notification =>{
+      App.api("get", "/notification/" + localStorage.getItem("userId")).then(
+        notification =>{
+          notification.data.sort((a, b) => {
+            if (a.date < b.date)
+               return 1;
+            if (a.date > b.date)
+              return -1;
+            return 0;
+          });
           this.setState({notifications : notification.data});
           this.setState({loading : false});}
       )
@@ -24,34 +30,31 @@ class Notification extends Component{
   }
 
   rendernotifications = () => {
-   
     if (this.state.notifications.length === 0)
       return (
-        <Badge style={{ fontSize: 15 }} variant="primary">
-          No notifications
-        </Badge>
+        <Container style={{ marginTop: "20px" }}>
+          <Alert variant="secondary">
+            No notifications
+          </Alert>
+        </Container>
       );
     else {
       return (
-        <ul>
-          {this.state.notifications.map(notifications => (
-            <li key={notifications._id}>
-              <ListGroup.Item
-                action
-                href={"/company/"+notifications.target_id}
-                variant="secondary"
-                onClick ={() => this.handler(notifications._id)}
+        <Container style={{ marginTop: "20px" }}>
+          {this.state.notifications.map(notification => (
+            <Alert variant={notification.viewed ? "secondary" : "primary"} key={notification._id}>
+              <Alert.Link
+                href={"/company/"+notification.target_id}
+                onClick ={() => this.handler(notification._id)}
                 
               >
-                {" "}
-                <strong style={{ color: "steelblue" }}>
-                  Notification!! :
-                </strong>{" "}
-                {notifications.notif_text}
-              </ListGroup.Item>{" "}
-            </li>
+              {notification.notif_text}
+              </Alert.Link>
+              <br />
+              {new Date(notification.date).toString()}
+            </Alert>
           ))}
-        </ul>
+        </Container>
       );
     }
   };
@@ -59,7 +62,7 @@ class Notification extends Component{
   handler = async e => {
     
     try {
-      await axios.delete('/api/notification/' + e) 
+      await App.api("delete", "/notification/" + e) 
       this.setState({alert:"Success"})
     } catch(error) {
        
@@ -80,7 +83,7 @@ class Notification extends Component{
        Notifications
      </span>
      <br />
-     <Spinner animation="border" />;
+     <Spinner animation="border" />
 
 
      </div>

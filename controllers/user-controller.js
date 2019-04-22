@@ -2,7 +2,7 @@ const Joi = require("joi");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const tokenKey = require("../config/tokenKey");
+const tokenKey = require("../config/keys").tokenKey;
 var Company = require("../models/company");
 var Notification = require("../models/Notification");
 
@@ -182,8 +182,8 @@ exports.viewApplicationFees = async (req, res) => {
 };
 
 exports.assignReviewer = async (req, res) => {
-  const targetId = req.params.app_id;
-  const reviewer_id = req.params.rev_id;
+  const targetId = req.params.appId;
+  const reviewer_id = req.params.revId;
 
   var targetApplication = await Company.findById(targetId);
 
@@ -233,7 +233,10 @@ exports.assignLaywer = async (req, res) => {
     { review_lawyer: lawyerId },
     { new: true }
   );
+  
+  return res.json(updatedApplication);
 
+  /*
   notification = {};
   notification.owner_id = lawyerId;
   notification.target_type = "company";
@@ -266,6 +269,7 @@ exports.assignLaywer = async (req, res) => {
       );
       return res.sendStatus(500);
     });
+    */
 };
 
 exports.getassignedlawyer = async (req, res) => {
@@ -283,39 +287,6 @@ exports.getassignedlawyer = async (req, res) => {
   return res.json(laywer);
 };
 
-exports.publishPaidApplication = async (req, res) => {
-  const appId = req.params.appId;
-  const adminId = req.params.adminId;
-
-  var targetApplication = await Company.findById(appId);
-
-  if (!targetApplication)
-    return res.status(404).send({ error: "Application not found" });
-
-  var targetAdmin = await User.findById(adminId);
-
-  if (!targetAdmin) return res.status(404).send({ error: "Admin not found" });
-
-  if (targetApplication.established == true)
-    return res.send({ error: "This application is already established" });
-
-  if (targetApplication.ispaid == false)
-    return res.send({ error: "This application is not paid yet" });
-
-  if (targetAdmin.type != "admin")
-    return res
-      .status(404)
-      .send({ error: "User should be of type admin to publish a company" });
-
-  const published = await Company.findByIdAndUpdate(
-    appId,
-    { established: true },
-    { new: true }
-  );
-
-  return res.send(published);
-};
-
 exports.unassignReviewer = async (req, res) => {
   try {
     const targetId = req.params.appId;
@@ -326,8 +297,8 @@ exports.unassignReviewer = async (req, res) => {
       return res.status(404).send({ error: "Application not found" });
     }
 
-    if (targetApplication.reviewed_reviewer === null) {
-      return res.send({ error: "This application is already unreviewed" });
+    if (targetApplication.review_reviewer === null) {
+      return res.status(400).send({ error: "This application is already unreviewed" });
     }
 
     const targetApplicationup = await Company.findByIdAndUpdate(
@@ -391,6 +362,15 @@ exports.lawyerReviewCompany = async (req, res) => {
       },
       { new: true }
     );
+    
+    notification = {
+      notif_text: "Your company application has been reviewed by a lawyer",
+      target_type: "company",
+      target_id: appId,
+      owner_id: app.owner
+    }
+    await exports.createNotificationForUser(notification)
+    
     return res.json(updatedApp);
   } catch (error) {
     console.log(error);
@@ -425,6 +405,15 @@ exports.reviewerReviewCompany = async (req, res) => {
       },
       { new: true }
     );
+    
+    notfication = {
+      notif_text: "Your company application has been reviewed by a reviewer",
+      target_type: "company",
+      target_id: appId,
+      owner_id: app.owner
+    }
+    await exports.createNotificationForUser(notification)
+    
     return res.json(updatedApp);
   } catch (error) {
     console.log(error);
@@ -444,11 +433,10 @@ exports.login = async (req, res) => {
         email: user.email,
         type: user.type
       };
-      const token = jwt.sign(payload, tokenKey.key, { expiresIn: "1h" });
+      const token = jwt.sign(payload, tokenKey, { expiresIn: "1h" });
       return res.json({ token: `Bearer ${token}`, user: payload });
     } else return res.status(400).send({ password: "Wrong password" });
   } catch (e) {
-    console.log(e);
     return res.json({ msg: "Can't log in " });
   }
 };
@@ -473,7 +461,6 @@ exports.register = async (req, res) => {
     await User.create(newUser);
     res.json({ msg: "User created successfully", data: newUser });
   } catch (error) {
-    console.log(error);
     res.status(422).send({ error: "Can not register right now" });
   }
 };

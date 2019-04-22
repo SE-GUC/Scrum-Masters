@@ -31,16 +31,16 @@ exports.createComment = (req, res) => {
         { _id: application_id },
         { $push: { comments: comment._id } }
       )
-        .then(() => {
+        .then(company => {
           notification = {} 
-          notification.owner_id = user_id 
+          notification.owner_id = company.owner
           notification.target_type = 'company' 
           notification.target_id = application_id 
           notification.notif_text = 'You have a pending comment on your application'
           Notification.create(notification)
             .then(notification => {
               User.findOneAndUpdate(
-                { _id: user_id },
+                { _id: company.owner },
                 { $push: { notifications: notification._id } }
               )
                 .then(() => {

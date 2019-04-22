@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Alert, Button, Form, Col } from "react-bootstrap";
 
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+import App from "../App";
 
 
 class applicationReview extends Component{
@@ -24,12 +23,11 @@ class applicationReview extends Component{
       user_id: this.state.user_id
     };
 
-    axios
-      .post("http://localhost:3001/api/comment", review) 
+    App.api("post", "/comment", review)
       .then(comment => {
         const api = localStorage.getItem("userType") === "lawyer" ? "lawyerReviewCompany" : "reviewerReviewCompany";
         
-        axios.put("http://localhost:3001/api/user/" + api + "/" + this.state.application_id + "/" + localStorage.getItem("userId"), { review_status: this.state.review_status })
+        App.api("put", "/user/" + api + "/" + this.state.application_id + "/" + localStorage.getItem("userId"), { review_status: this.state.review_status })
           .then(company => {
             this.props.history.push("/company/"+this.state.application_id);
           })

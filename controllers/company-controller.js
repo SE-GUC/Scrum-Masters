@@ -224,6 +224,8 @@ exports.updateCompany = async (req, res) => {
   
   req.body.reviewed_statuslawyer = reviewed_statuslawyer
   req.body.reviewed_statusreviewer = false
+  
+  //TODO: when the logged user is a lawyer, dont reset lawyer review status
 
   Company.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(company => {
@@ -304,6 +306,7 @@ exports.listAllUnreviewedCompanies = async (req, res) => {
   }
 };
 
+/*
 exports.establishCompany = async (req, res) => {
   Company.findById(req.params.id)
     .then(company => {
@@ -348,6 +351,7 @@ exports.establishCompany = async (req, res) => {
       return res.sendStatus(500);
     });
 };
+*/
 
 exports.getFeesValue = capital => {
   return (1 / 1000) * capital + (1 / 400) * capital + 56;
