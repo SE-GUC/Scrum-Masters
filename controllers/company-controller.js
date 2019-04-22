@@ -304,6 +304,7 @@ exports.listAllUnreviewedCompanies = async (req, res) => {
   }
 };
 
+/*
 exports.establishCompany = async (req, res) => {
   Company.findById(req.params.id)
     .then(company => {
@@ -348,6 +349,7 @@ exports.establishCompany = async (req, res) => {
       return res.sendStatus(500);
     });
 };
+*/
 
 exports.getFeesValue = capital => {
   return (1 / 1000) * capital + (1 / 400) * capital + 56;

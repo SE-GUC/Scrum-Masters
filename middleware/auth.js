@@ -134,19 +134,23 @@ exports.updatecomment = async (req, res, next) => {
   }
   return res.sendStatus(401);
 };
+
 exports.pay = async (req, res, next) => {
   const payload = getPayload(req);
   if (payload.type === "admin") return next();
   const company = await Company.findById(req.params.id);
+  if (!company) res.sendStatus(404);
   if (company.owner === payload.id) return next();
   return res.sendStatus(401);
 };
+
 exports.getNotifications = async (req, res, next) => {
   const payload = getPayload(req);
   if (payload.type === "admin") return next();
   if (req.params.id === payload.id) return next();
   return res.sendStatus(401);
 };
+
 exports.deleteNotification = async (req, res, next) => {
   const payload = getPayload(req);
   const user = User.findById(payload.id);
@@ -154,5 +158,36 @@ exports.deleteNotification = async (req, res, next) => {
     return notification == req.params.id;
   });
   if (foundId) return next();
+  return res.sendStatus(401);
+};
+
+exports.isEntityEmployee = (req, res, next) => {
+  const paylod = getPayload(req);
+  if (payload.type !== "investor") return next();
+  return res.sendStatus(401);
+};
+
+exports.canListUserCompanies = (req, res, next) => {
+  const payload = getPayload(req);
+  if (payload.type !== "investor") return next();
+  if (payload.id === req.params.id) return next();
+  return res.sendStatus(401);
+};
+
+exports.canCreateApplication = (req, res, next) => {
+  const paylod = getPayload(req);
+  if (payload.type === "investor" || payload.type === "lawyer" || payload.type === "admin") return next();
+  return res.sendStatus(401);
+};
+
+exports.canUpdateApplication = async (req, res, next) => {
+  const paylod = getPayload(req);
+  if (payload.type === "admin") return next();
+  
+  const company = await getCompany(req.params.id);
+  if (company.owner === payload.id) return next();
+  if (payload.type === "lawyer" && company.review_lawyer === payload.id) return next();
+  if (payload.type === "reviewer" && company.review_reviewer === payload.id) return next();
+  
   return res.sendStatus(401);
 };
