@@ -1,16 +1,22 @@
 import React, { Component } from "react";
-import { Form, Col, Row, Button, Card, Alert } from "react-bootstrap";
+import { Form, Col, Row, Button, Card, Alert, Badge } from "react-bootstrap";
 import StripeCheckout from "react-stripe-checkout";
+import BoardMembersEditor from "./BoardMembersEditor.js";
 
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+import App from "../App";
 
 class CompanyView extends Component {
   state = {
     fetched: false,
+    thiscomment: "",
     assigned_status: false,
+    updatedcomment: "",
+    message: "",
+    remove: false,
+    flag: false,
     reviewed_statuslawyer: false,
     reviewed_statusreviewer: false,
+    nowuser: localStorage.getItem("userId"),
     comments: [],
     loadedComments: [],
     ispaid: false,
@@ -48,27 +54,18 @@ class CompanyView extends Component {
   };
 
   getCompany() {
-    axios
-      .get(
-        "http://localhost:3001/api/company/" +
-          this.props.match.params.company_id
-      )
+    App.api("get", "/company/" + this.props.match.params.company_id)
       .then(company => {
         this.setState(company.data);
-        axios
-          .get(
-            "http://localhost:3001/api/comment/" +
-              this.props.match.params.company_id
-          )
+        App.api("get", "/comment/" + this.props.match.params.company_id)
           .then(comments => {
             this.setState({ loadedComments: comments.data });
             this.state.loadedComments.map(comment => {
-              axios
-                .get("http://localhost:3001/api/user/" + comment.user_id)
-                .then(user => {
-                  comment.user = user.data.firstName + " " + user.data.lastName;
-                  this.forceUpdate();
-                });
+              App.api("get", "/user/" + comment.user_id).then(user => {
+                comment.user = user.data.firstName + " " + user.data.lastName;
+                this.forceUpdate();
+              });
+              return comment;
             });
             this.setState({ fetched: true });
           })
@@ -86,12 +83,9 @@ class CompanyView extends Component {
   }
 
   pay(token) {
-    axios
-      .post(
-        "http://localhost:3001/api/payment/charge/" +
-          this.props.match.params.company_id,
-        { token: token.id }
-      )
+    App.api("post", "/payment/charge/" + this.props.match.params.company_id, {
+      token: token.id
+    })
       .then(payment => {
         this.setState({ receipt_url: payment.data.charge.receipt_url });
         this.setState(payment.data.company);
@@ -104,59 +98,120 @@ class CompanyView extends Component {
         }
       });
   }
-  
+
   assignedStatus() {
     if (this.state.review_lawyer) {
       return "Assigned to lawyer";
     } else if (this.state.review_reviewer) {
       return "Assigned to reviewer";
-    } else if (this.state.reviewed_statuslawyer && !this.state.reviewed_statusreviewer) {
+    } else if (
+      this.state.reviewed_statuslawyer &&
+      !this.state.reviewed_statusreviewer
+    ) {
       return "Unassigned, waiting to be assigned to reviewer";
-    } else if (!this.state.reviewed_statuslawyer && !this.state.reviewed_statuslawyer) {
+    } else if (
+      !this.state.reviewed_statuslawyer &&
+      !this.state.reviewed_statuslawyer
+    ) {
       return "Unassigned, waiting to be assigned to lawyer";
     } else {
       return "Finished reviewal process";
     }
   }
-  
+
   needsLawyer() {
     return !this.state.reviewed_statuslawyer && !this.state.review_lawyer;
   }
-  
+
   needsReviewer() {
-    return this.state.reviewed_statuslawyer && !this.state.reviewed_statusreviewer && !this.state.review_reviewer;
-  }
-  
-  needsPayment() {
-    return this.state.owner == localStorage.getItem("userId") && this.state.fees > 0 && !this.state.ispaid && this.state.reviewed_statusreviewer;
-  }
-  
-  assignToMyself() {
-    const api = localStorage.getItem("userType") === "lawyer" ? "assignLawyer" : "assignreviewer";
-    
-    axios.post("http://localhost:3001/api/user/" + api + "/" + this.state._id + "/" + localStorage.getItem("userId"))
-      .then(company => {
-        this.setState({ success_msg: "You have assigned this case to yourself." })
-        this.setState(company.data)
-      })
-      .catch(err => {
-        this.setState({ error: err.response.data.error })
-      })
-  }
-  
-  unassign() {
-    const api = localStorage.getItem("userType") === "lawyer" ? "unassignLawyer" : "unassignReviewer";
-    
-    axios.put("http://localhost:3001/api/user/" + api + "/" + this.state._id)
-      .then(company => {
-        this.setState({ success_msg: "You have been unassigned from this case." })
-        this.setState(company.data)
-      })
-      .catch(err => {
-        this.setState({ error: err.response.data.error })
-      })
+    return (
+      this.state.reviewed_statuslawyer &&
+      !this.state.reviewed_statusreviewer &&
+      !this.state.review_reviewer
+    );
   }
 
+  needsPayment() {
+    return (
+      this.state.owner == localStorage.getItem("userId") &&
+      this.state.fees > 0 &&
+      !this.state.ispaid &&
+      this.state.reviewed_statusreviewer
+    );
+  }
+
+  assignToMyself() {
+    const api =
+      localStorage.getItem("userType") === "lawyer"
+        ? "assignLawyer"
+        : "assignreviewer";
+
+    App.api(
+      "post",
+      "/user/" +
+        api +
+        "/" +
+        this.state._id +
+        "/" +
+        localStorage.getItem("userId")
+    )
+      .then(company => {
+        this.setState({
+          success_msg: "You have assigned this case to yourself."
+        });
+        this.setState(company.data);
+      })
+      .catch(err => {
+        this.setState({ error: err.response.data.error });
+      });
+  }
+
+  unassign() {
+    const api =
+      localStorage.getItem("userType") === "lawyer"
+        ? "unassignLawyer"
+        : "unassignReviewer";
+
+    App.api("put", "/user/" + api + "/" + this.state._id)
+      .then(company => {
+        this.setState({
+          success_msg: "You have been unassigned from this case."
+        });
+        this.setState(company.data);
+      })
+      .catch(err => {
+        this.setState({ error: err.response.data.error });
+      });
+  }
+  deletecomment = id => {
+    App.api("delete", "/comment/" + id)
+      .then(comment => {
+        this.setState({ message: " commnet is deleted" });
+        window.location.reload();
+      })
+      .catch(err => {
+        this.setState({ message: err.response.data.error });
+      });
+  };
+  deleteapplication = () => {
+    App.api("delete", "/company/" + this.props.match.params.company_id).then(
+      com => {
+        this.props.history.push("/");
+      }
+    );
+  };
+  changecomment = comment_id => {
+    App.api("post", "/comment/" + comment_id, {
+      comment_text: this.state.updatedcomment
+    })
+      .then(comm => {
+        this.setState({ remove: true });
+        window.location.reload();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
   render() {
     if (!this.state.fetched) {
       return <div />;
@@ -164,7 +219,7 @@ class CompanyView extends Component {
 
     return (
       <div className="company-view">
-        {this.needsPayment() &&
+        {this.needsPayment() && (
           <StripeCheckout
             stripeKey="pk_test_fMRKRMIpnVRxz8FNmJBBMG3p00CEMX1VKZ"
             image="https://stripe.com/img/documentation/checkout/marketplace.png"
@@ -175,7 +230,7 @@ class CompanyView extends Component {
             amount={this.state.fees * 100}
             token={token => this.pay(token)}
           />
-        }
+        )}
 
         <span
           style={{ fontSize: 30, fontWeight: "italic", color: "steelblue" }}
@@ -183,32 +238,60 @@ class CompanyView extends Component {
         >
           View company details
           {(localStorage.getItem("userType") === "admin" ||
-            localStorage.getItem("userId") === this.state.owner) && (
-            <Button
-              style={{ margin: "10px" }}
-              as="a"
-              href={"/CompanyUpdate/" + this.props.match.params.company_id}
-            >
-              Edit application
-            </Button>
-          )}
-          {this.needsPayment() && (
+            localStorage.getItem("userId") === this.state.owner ||
+            (localStorage.getItem("userType") === "lawyer" &&
+              this.state.reviewed_statuslawyer)) &&
+            !this.state.ispaid && (
               <Button
                 style={{ margin: "10px" }}
-                onClick={() => this.refs.checkoutBtn.onClick()}
+                as="a"
+                href={"/CompanyUpdate/" + this.props.match.params.company_id}
               >
-                Pay fees ({this.state.fees} EGP)
+                Edit application
               </Button>
             )}
-          {((localStorage.getItem("userType") === "lawyer" && this.needsLawyer()) ||
-            (localStorage.getItem("userType") === "reviewer" && this.needsReviewer())) && (
-              <Button style={{ margin: "10px" }} onClick={() => this.assignToMyself()}>Assign to myself</Button>
-            )}
+          {this.needsPayment() && (
+            <Button
+              style={{ margin: "10px" }}
+              onClick={() => this.refs.checkoutBtn.onClick()}
+            >
+              Pay fees ({this.state.fees} EGP)
+            </Button>
+          )}
+          {((localStorage.getItem("userType") === "lawyer" &&
+            this.needsLawyer()) ||
+            (localStorage.getItem("userType") === "reviewer" &&
+              this.needsReviewer())) && (
+            <Button
+              style={{ margin: "10px" }}
+              onClick={() => this.assignToMyself()}
+            >
+              Assign to myself
+            </Button>
+          )}
           {(this.state.review_lawyer === localStorage.getItem("userId") ||
-            this.state.review_reviewer === localStorage.getItem("userId")) && <>
-              <Button style={{ margin: "10px" }} onClick={() => this.unassign()}>Unassign</Button>
-              <Button style={{ margin: "10px" }} as="a" href={"/applicationReview/"+this.state._id}>Review application</Button>
-            </>}
+            this.state.review_reviewer === localStorage.getItem("userId")) && (
+            <>
+              <Button
+                style={{ margin: "10px" }}
+                onClick={() => this.unassign()}
+              >
+                Unassign
+              </Button>
+              <Button
+                style={{ margin: "10px" }}
+                as="a"
+                href={"/applicationReview/" + this.state._id}
+              >
+                Review application
+              </Button>
+            </>
+          )}
+          {!this.state.established && this.state.nowuser === this.state.owner && (
+            <Button variant="danger" onClick={this.deleteapplication}>
+              Delete
+            </Button>
+          )}
         </span>
 
         <div style={{ paddingLeft: "20px", paddingRight: "20px", margin: "0" }}>
@@ -242,11 +325,7 @@ class CompanyView extends Component {
             </Form.Group>
             <Form.Group as={Col} controlId="englishname">
               <Form.Label>Assigned status</Form.Label>
-              <Form.Control
-                plaintext
-                readOnly
-                value={this.assignedStatus()}
-              />
+              <Form.Control plaintext readOnly value={this.assignedStatus()} />
             </Form.Group>
           </Form.Row>
           <Form.Row>
@@ -294,7 +373,7 @@ class CompanyView extends Component {
                   this.state.hq_city +
                   ", " +
                   this.state.hq_governorate +
-                  ", telehpone: " +
+                  ", telephone: " +
                   this.state.hq_telephone +
                   ", fax: " +
                   this.state.hq_fax
@@ -400,6 +479,10 @@ class CompanyView extends Component {
               </Form.Group>
             </Form.Row>
           )}
+          <BoardMembersEditor
+            boardMembers={this.state.board_members}
+            readOnly
+          />
         </Form>
         <span
           style={{ fontSize: 30, fontWeight: "italic", color: "steelblue " }}
@@ -420,10 +503,53 @@ class CompanyView extends Component {
               <Card.Title>
                 By {comment.user} at {comment.comment_date}
               </Card.Title>
-              <Card.Text>{comment.comment_text}</Card.Text>
+              <Card.Text>
+                {comment.comment_text}
+                <br />
+                {this.state.nowuser === comment.user_id && (
+                  <div>
+                    {" "}
+                    <Button
+                      variant="danger"
+                      onClick={() => this.deletecomment(comment._id)}
+                    >
+                      Delete
+                    </Button>{" "}
+                    <Button
+                      onClick={() =>
+                        this.setState({ flag: true, thiscomment: comment._id })
+                      }
+                    >
+                      Update
+                    </Button>
+                    {this.state.flag && this.state.thiscomment === comment._id && (
+                      <Form className="m-4">
+                        <Form.Group as={Col}>
+                          <Form.Label>New comment</Form.Label>
+                          <Form.Control
+                            type="textarea"
+                            placeholder="Enter the new comment "
+                            defaultValue={comment.comment_text}
+                            onChange={e =>
+                              this.setState({
+                                updatedcomment: e.target.value
+                              })
+                            }
+                          />
+                        </Form.Group>
+                        <Button onClick={() => this.changecomment(comment._id)}>
+                          done
+                        </Button>
+                      </Form>
+                    )}
+                  </div>
+                )}
+              </Card.Text>
             </Card.Body>
           </Card>
         ))}
+
+        <Badge variant="danger">{this.state.message}</Badge>
       </div>
     );
   }

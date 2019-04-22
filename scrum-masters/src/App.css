@@ -116,3 +116,13 @@ footer {
 .company-view label {
 	font-weight: bold;
 }
+
+.notif-unread {
+	color: orangered !important;
+	font-weight: bold;
+}
+
+.notif-unread:hover {
+	color: brown !important;
+	font-weight: bold;
+}

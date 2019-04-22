@@ -20,9 +20,9 @@ import {
   Alert
 } from "react-bootstrap";
 
-const axios = require("axios");
+import App from "../../App";
+
 var scroll = Scroll.animateScroll;
-axios.defaults.adapter = require("axios/lib/adapters/http");
 
 class Investor extends Component {
   state = {
@@ -34,9 +34,8 @@ class Investor extends Component {
 
   showCompnies = () => {
     console.log("mostafa");
-    axios
-      .get(
-        "http://localhost:3001/api/company/userCreatedApplications/" +
+    App.api("get", 
+        "/company/userCreatedApplications/" +
           this.state.id
       )
       .then(companies => {
@@ -95,8 +94,7 @@ class Investor extends Component {
   };
 
   getinvstorname = () => {
-    axios
-      .get("http://localhost:3001/api/user/" + this.state.id)
+    App.api("get", "/user/" + this.state.id)
       .then(inv => {
         this.setState({ name: inv.data.firstName + " " + inv.data.lastName });
       })
@@ -125,7 +123,7 @@ class Investor extends Component {
           <Button
             class=" btn pull-right"
             as="a"
-            href={"/userProfile"}
+            href={"/userProfile/"+this.state.id}
             variant="primary"
           >
             My Profile

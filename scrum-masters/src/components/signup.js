@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+
+import App from "../App";
 
 class signup extends Component {
   constructor(props) {
@@ -29,8 +29,7 @@ class signup extends Component {
       gender: this.state.gender,
       type: "investor"
     };
-    axios
-      .post("http://localhost:3001/api/user", payload)
+    App.api("post", "/user", payload)
       .then(users => {
         this.setState({ users: users.data, msg: "Success" });
       })
