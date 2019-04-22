@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Card, Button, Form, Alert } from 'react-bootstrap';
 import {Col } from 'react-bootstrap';
-
-
-const axios = require("axios");
+import App from '../App';
 
 
 class admin_create extends Component {
@@ -39,8 +37,7 @@ class admin_create extends Component {
       "gender":this.state.gender
 
     }
-    axios
-      .post("http://localhost:3001/api/user/register",data)
+    App.api("post", "/user/register", data)
       .then(res=>{
         this.setState({msg:"User created successfully",error:""})
 

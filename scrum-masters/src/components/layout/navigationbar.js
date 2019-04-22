@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import Login from "../auth/Login.js";
 
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+import App from "../../App";
 
 class navigationbar extends Component{
   state = {
@@ -18,7 +17,7 @@ class navigationbar extends Component{
   
   componentDidUpdate() {
     if (localStorage.getItem("userId")) {
-      axios.get("http://localhost:3001/api/notification/" + localStorage.getItem("userId")).then(notifications => {
+      App.api("get", "/notification/" + localStorage.getItem("userId")).then(notifications => {
         this.setState({ notifications : notifications.data, loaded: true });
       })
       .catch(err => {

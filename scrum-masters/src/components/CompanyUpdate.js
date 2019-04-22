@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { Badge, Button, Form, Col } from "react-bootstrap";
 import BoardMembersEditor from "./BoardMembersEditor.js";
 
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+import App from "../App";
 
 class CompanyUpdate extends Component {
   id = this.props.match.params.company_id;
@@ -39,8 +38,7 @@ class CompanyUpdate extends Component {
   };
 
   getCompany = () => {
-    axios
-      .get("http://localhost:3001/api/company/" + this.props.match.params.company_id)
+    App.api("get", "/company/" + this.props.match.params.company_id)
       .then(companyy => {
         console.log(companyy)
         this.setState({
@@ -76,8 +74,7 @@ class CompanyUpdate extends Component {
   };
   handleSubmit = (e, id) => {
     console.log(this.state);
-    axios
-      .put("http://localhost:3001/api/company/" + this.props.match.params.company_id, {
+    App.api("put", "/company/" + this.props.match.params.company_id, {
         'company_type': this.state.company_type,
         'organizational_rule': this.state.organizational_rule,
         'legal_form': this.state.legal_form,

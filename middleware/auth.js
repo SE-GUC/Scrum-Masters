@@ -162,7 +162,7 @@ exports.deleteNotification = async (req, res, next) => {
 };
 
 exports.isEntityEmployee = (req, res, next) => {
-  const paylod = getPayload(req);
+  const payload = getPayload(req);
   if (payload.type !== "investor") return next();
   return res.sendStatus(401);
 };
@@ -175,13 +175,13 @@ exports.canListUserCompanies = (req, res, next) => {
 };
 
 exports.canCreateApplication = (req, res, next) => {
-  const paylod = getPayload(req);
+  const payload = getPayload(req);
   if (payload.type === "investor" || payload.type === "lawyer" || payload.type === "admin") return next();
   return res.sendStatus(401);
 };
 
 exports.canUpdateApplication = async (req, res, next) => {
-  const paylod = getPayload(req);
+  const payload = getPayload(req);
   if (payload.type === "admin") return next();
   
   const company = await getCompany(req.params.id);

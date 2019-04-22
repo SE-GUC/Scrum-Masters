@@ -6,8 +6,8 @@ import {
   ToggleButton,
   ToggleButtonGroup
 } from "react-bootstrap";
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+
+import App from "../App";
 
 class AllCompanies extends Component {
   state = {
@@ -18,8 +18,7 @@ class AllCompanies extends Component {
   };
 
   componentDidMount = () => {
-    axios
-      .get("http://localhost:3001/api/company")
+    App.api("get", "/company")
       .then(companies => {
         this.setState({ company: companies.data });
         this.setState({ loading: false });

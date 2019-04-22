@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { Badge, Button, Form, Col } from "react-bootstrap";
 import BoardMembersEditor from "./BoardMembersEditor.js";
 
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+import App from "../App";
 
 class CompanyForm extends Component {
   boardMembersEditor = React.createRef();
@@ -140,8 +139,7 @@ class CompanyForm extends Component {
       });
     }
 
-    axios
-      .post("http://localhost:3001/api/company", company)
+    App.api("post", "/company", company)
       .then(company => {
         this.setState({ company: [company] });
         this.props.history.push("/company/" + company.data._id);
