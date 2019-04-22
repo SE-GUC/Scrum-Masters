@@ -10,6 +10,7 @@ function getPayload(req) {
   if (!token) return null;
   return jwt.verify(token.substring(7), tokenKey);
 }
+exports.getPayload = getPayload
 
 async function getUser(id) {
   const user = await User.findById(id);
@@ -153,7 +154,7 @@ exports.getNotifications = async (req, res, next) => {
 
 exports.deleteNotification = async (req, res, next) => {
   const payload = getPayload(req);
-  const user = User.findById(payload.id);
+  const user = await User.findById(payload.id);
   const foundId = user.notifications.find(notification => {
     return notification == req.params.id;
   });
@@ -186,8 +187,7 @@ exports.canUpdateApplication = async (req, res, next) => {
   
   const company = await getCompany(req.params.id);
   if (company.owner == payload.id) return next();
-  if (payload.type === "lawyer" && company.review_lawyer == payload.id) return next();
-  if (payload.type === "reviewer" && company.review_reviewer == payload.id) return next();
+  if (payload.type === "lawyer" && company.reviewed_statuslawyer) return next();
   
   return res.sendStatus(401);
 };

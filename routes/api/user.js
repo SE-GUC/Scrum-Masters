@@ -8,6 +8,7 @@ router.use(express.json())
 
 router.get('/', passport.authenticate('jwt', {session: false}), userController.listAllUsers)
 router.get('/:id', passport.authenticate('jwt', {session: false}), auth.canViewUser, userController.getUser)
+router.get('/name/:id', passport.authenticate('jwt', {session: false}), userController.getName)
 router.get('/getfees/:id', passport.authenticate('jwt', {session: false}), auth.canAccessApplication, userController.viewApplicationFees)
 router.get('/getlawyer/:companyid', passport.authenticate('jwt', {session: false}), auth.canAccessApplication, userController.getassignedlawyer)
 

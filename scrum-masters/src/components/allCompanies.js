@@ -27,6 +27,21 @@ class AllCompanies extends Component {
         console.log(err);
       });
   };
+  
+  getFilteredCompanies() {
+    if (!this.state.showUnreviewed && !this.state.showUnAssigned) {
+      return this.state.company;
+    } else if (this.state.showUnreviewed) {
+      return this.state.company.filter(company => {
+        return company.reviewed_statuslawyer && !company.reviewed_statusreviewer && !company.review_reviewer;
+      });
+    } else {
+      return this.state.company.filter(company => {
+        return !company.reviewed_statuslawyer && !company.review_lawyer;
+      });
+    }
+  }
+  
   render() {
     if (this.state.loading)
       return (
@@ -80,27 +95,21 @@ class AllCompanies extends Component {
         </ButtonToolbar>
         <br />
         <ul>
-          {this.state.company.map(companies => (
+          {this.getFilteredCompanies().map(companies => (
             <>
-              {console.log(companies)}
-              {(!this.state.showUnAssigned || !companies.review_lawyer) &&
-                (!this.state.showUnreviewed ||
-                  (!companies.review_reviewer &&
-                    companies.reviewed_statuslawyer)) && (
-                  <li key={companies._id}>
-                    <ListGroup.Item
-                      action
-                      href={`/company/${companies._id}`}
-                      variant="light"
-                    >
-                      {""}
-                      <strong style={{ color: "steelblue" }}>
-                        Company Name:
-                      </strong>{" "}
-                      {companies.company_name_english}
-                    </ListGroup.Item>{" "}
-                  </li>
-                )}
+              <li key={companies._id}>
+                <ListGroup.Item
+                  action
+                  href={`/company/${companies._id}`}
+                  variant="light"
+                >
+                  {""}
+                  <strong style={{ color: "steelblue" }}>
+                    Company Name:
+                  </strong>{" "}
+                  {companies.company_name_english}
+                </ListGroup.Item>{" "}
+              </li>
             </>
           ))}
         </ul>

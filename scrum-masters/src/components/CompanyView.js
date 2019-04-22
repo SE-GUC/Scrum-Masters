@@ -65,7 +65,7 @@ class CompanyView extends Component {
           .then(comments => {
             this.setState({ loadedComments: comments.data });
             this.state.loadedComments.map(comment => {
-              App.api("get", "/user/" + comment.user_id)
+              App.api("get", "/user/name/" + comment.user_id)
                 .then(user => {
                   comment.user = user.data.firstName + " " + user.data.lastName;
                   this.forceUpdate();
@@ -246,14 +246,6 @@ class CompanyView extends Component {
                 Edit application
               </Button>
             )}
-          {this.needsPayment() && (
-            <Button
-              style={{ margin: "10px" }}
-              onClick={() => this.refs.checkoutBtn.onClick()}
-            >
-              Pay fees ({this.state.fees} EGP)
-            </Button>
-          )}
           {this.needsPayment() && (
             <Button
               style={{ margin: "10px" }}
