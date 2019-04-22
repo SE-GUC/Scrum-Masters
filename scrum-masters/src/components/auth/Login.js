@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Card, Button, Form } from "react-bootstrap";
-import axios from "axios";
+
+import App from "../../App";
 
 class Login extends Component {
   constructor() {
@@ -18,6 +19,7 @@ class Login extends Component {
     localStorage.removeItem("userId");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userType");
+    localStorage.removeItem("token");
   }
 
   login = e => {
@@ -29,12 +31,12 @@ class Login extends Component {
     };
 
     this.setState({ errors: {} });
-    axios
-      .post("http://localhost:3001/api/user/login", userData)
+    App.api("post", "/user/login", userData)
       .then(login => {
         localStorage.setItem("userId", login.data.user.id);
         localStorage.setItem("userEmail", login.data.user.email);
         localStorage.setItem("userType", login.data.user.type);
+        localStorage.setItem("token", login.data.token);
         if (this.props.onLogin) {
           this.props.onLogin();
         }

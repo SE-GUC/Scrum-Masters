@@ -3,6 +3,7 @@ const Company = require("../models/company");
 const User = require("../models/User");
 const ElectronicJournal = require("../models/ElectronicJournal");
 const userController = require("../controllers/user-controller");
+const auth = require('../middleware/auth.js');
 
 function validateupdateCompany(company) {
   const schema = {
@@ -221,11 +222,12 @@ exports.updateCompany = async (req, res) => {
   if (user.type == "lawyer") {
     reviewed_statuslawyer = true;
   }
+  if (auth.getPayload(req).type === "lawyer" && oldCompany.reviewed_statuslawyer) {
+    reviewed_statuslawyer = true;
+  }
   
   req.body.reviewed_statuslawyer = reviewed_statuslawyer
   req.body.reviewed_statusreviewer = false
-  
-  //TODO: when the logged user is a lawyer, dont reset lawyer review status
 
   Company.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(company => {
@@ -306,6 +308,7 @@ exports.listAllUnreviewedCompanies = async (req, res) => {
   }
 };
 
+/*
 exports.establishCompany = async (req, res) => {
   Company.findById(req.params.id)
     .then(company => {
@@ -350,6 +353,7 @@ exports.establishCompany = async (req, res) => {
       return res.sendStatus(500);
     });
 };
+*/
 
 exports.getFeesValue = capital => {
   return (1 / 1000) * capital + (1 / 400) * capital + 56;

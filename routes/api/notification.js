@@ -1,16 +1,23 @@
+const express = require("express");
+const router = express.Router();
+const userController = require("../../controllers/user-controller");
+const auth = require("../../middleware/auth.js");
+const passport = require("passport");
 
-const express = require('express')
-const router = express.Router()
-const userController = require('../../controllers/user-controller')
+router.use(express.json());
 
-router.use(express.json())
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  auth.getNotifications,
+  userController.getNotifications
+);
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  auth.deleteNotification,
+  userController.setNotificationViewed
+);
+router.post("/", userController.notificationTestCreate); // for testing only
 
-router.get('/:id', userController.getNotifications)
-router.delete('/:id', userController.setNotificationViewed)
-router.post('/', userController.notificationTestCreate) // for testing only
-
-// router.post('/', notificationcontroller.createnotification)
-// router.put('/:id', notificationcontroller.updatenotification)
-// router.delete('/:id', notificationcontroller.deletenotification)
-
-module.exports = router
+module.exports = router;

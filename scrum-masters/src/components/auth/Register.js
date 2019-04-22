@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Jumbotron, Form, Col, Row, Button, Alert } from "react-bootstrap";
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+
+import App from "../../App";
 
 class Register extends Component {
   constructor(props) {
@@ -30,16 +30,15 @@ class Register extends Component {
       gender: this.state.gender,
       type: this.state.type
     };
-    axios
-      .post("http://localhost:3001/api/user/register", payload)
+    App.api("post", "/user/register", payload)
       .then(users => {
         //Login with new account
-        axios
-          .post("http://localhost:3001/api/user/login", { email: this.state.email, password: this.state.password })
+        App.api("post", "/user/login", { email: this.state.email, password: this.state.password })
           .then(login => {
             localStorage.setItem("userId", login.data.user.id);
             localStorage.setItem("userEmail", login.data.user.email);
             localStorage.setItem("userType", login.data.user.type);
+            localStorage.setItem("token", login.data.token);
             if (this.props.onLogin) {
               this.props.onLogin();
             }

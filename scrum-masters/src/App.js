@@ -35,9 +35,30 @@ class App extends Component {
     else return AllCompanies;
   }
   
+  static api(func, url, body = {}) {
+    if (localStorage.getItem("token")) {
+      axios.defaults.headers.common['Authorization'] = localStorage.getItem("token");
+    } else {
+      delete(axios.defaults.headers.common['Authorization']);
+    }
+    return axios[func]("http://localhost:3001/api" + url, body);
+  }
+  
+  componentDidMount() {
+    if (localStorage.getItem("userId")) {
+      App.api("get", "/user/" + localStorage.getItem("userId"))
+        .catch(err => {
+          if (err.response.status === 401) { //unauthorized
+            Login.logout();
+            this.refs.router.history.push("/login");
+          }
+        });
+    }
+  }
+  
   render() {
     return (
-      <BrowserRouter>
+      <BrowserRouter ref="router">
         <div>
           <Navigationbar />
 

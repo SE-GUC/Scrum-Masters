@@ -6,8 +6,8 @@ import {
   ToggleButton,
   ToggleButtonGroup
 } from "react-bootstrap";
-const axios = require("axios");
-axios.defaults.adapter = require("axios/lib/adapters/http");
+
+import App from "../App";
 
 class AllCompanies extends Component {
   state = {
@@ -18,8 +18,7 @@ class AllCompanies extends Component {
   };
 
   componentDidMount = () => {
-    axios
-      .get("http://localhost:3001/api/company")
+    App.api("get", "/company")
       .then(companies => {
         this.setState({ company: companies.data });
         this.setState({ loading: false });
@@ -28,6 +27,21 @@ class AllCompanies extends Component {
         console.log(err);
       });
   };
+  
+  getFilteredCompanies() {
+    if (!this.state.showUnreviewed && !this.state.showUnAssigned) {
+      return this.state.company;
+    } else if (this.state.showUnreviewed) {
+      return this.state.company.filter(company => {
+        return company.reviewed_statuslawyer && !company.reviewed_statusreviewer && !company.review_reviewer;
+      });
+    } else {
+      return this.state.company.filter(company => {
+        return !company.reviewed_statuslawyer && !company.review_lawyer;
+      });
+    }
+  }
+  
   render() {
     if (this.state.loading)
       return (
@@ -81,27 +95,21 @@ class AllCompanies extends Component {
         </ButtonToolbar>
         <br />
         <ul>
-          {this.state.company.map(companies => (
+          {this.getFilteredCompanies().map(companies => (
             <>
-              {console.log(companies)}
-              {(!this.state.showUnAssigned || !companies.review_lawyer) &&
-                (!this.state.showUnreviewed ||
-                  (!companies.review_reviewer &&
-                    companies.reviewed_statuslawyer)) && (
-                  <li key={companies._id}>
-                    <ListGroup.Item
-                      action
-                      href={`/company/${companies._id}`}
-                      variant="light"
-                    >
-                      {""}
-                      <strong style={{ color: "steelblue" }}>
-                        Company Name:
-                      </strong>{" "}
-                      {companies.company_name_english}
-                    </ListGroup.Item>{" "}
-                  </li>
-                )}
+              <li key={companies._id}>
+                <ListGroup.Item
+                  action
+                  href={`/company/${companies._id}`}
+                  variant="light"
+                >
+                  {""}
+                  <strong style={{ color: "steelblue" }}>
+                    Company Name:
+                  </strong>{" "}
+                  {companies.company_name_english}
+                </ListGroup.Item>{" "}
+              </li>
             </>
           ))}
         </ul>
