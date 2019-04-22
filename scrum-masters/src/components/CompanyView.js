@@ -87,7 +87,7 @@ class CompanyView extends Component {
       token: token.id
     })
       .then(payment => {
-        this.setState({ receipt_url: payment.data.charge.eceipt_url });
+        this.setState({ receipt_url: payment.data.charge.receipt_url });
         this.setState(payment.data.company);
       })
       .catch(err => {
