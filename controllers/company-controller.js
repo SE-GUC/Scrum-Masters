@@ -224,6 +224,8 @@ exports.updateCompany = async (req, res) => {
   
   req.body.reviewed_statuslawyer = reviewed_statuslawyer
   req.body.reviewed_statusreviewer = false
+  
+  //TODO: when the logged user is a lawyer, dont reset lawyer review status
 
   Company.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(company => {

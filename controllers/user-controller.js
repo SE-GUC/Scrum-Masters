@@ -233,7 +233,10 @@ exports.assignLaywer = async (req, res) => {
     { review_lawyer: lawyerId },
     { new: true }
   );
+  
+  return res.json(updatedApplication);
 
+  /*
   notification = {};
   notification.owner_id = lawyerId;
   notification.target_type = "company";
@@ -266,6 +269,7 @@ exports.assignLaywer = async (req, res) => {
       );
       return res.sendStatus(500);
     });
+    */
 };
 
 exports.getassignedlawyer = async (req, res) => {
@@ -358,6 +362,15 @@ exports.lawyerReviewCompany = async (req, res) => {
       },
       { new: true }
     );
+    
+    notification = {
+      notif_text: "Your company application has been reviewed by a lawyer",
+      target_type: "company",
+      target_id: appId,
+      owner_id: app.owner
+    }
+    await exports.createNotificationForUser(notification)
+    
     return res.json(updatedApp);
   } catch (error) {
     console.log(error);
@@ -392,6 +405,15 @@ exports.reviewerReviewCompany = async (req, res) => {
       },
       { new: true }
     );
+    
+    notfication = {
+      notif_text: "Your company application has been reviewed by a reviewer",
+      target_type: "company",
+      target_id: appId,
+      owner_id: app.owner
+    }
+    await exports.createNotificationForUser(notification)
+    
     return res.json(updatedApp);
   } catch (error) {
     console.log(error);
