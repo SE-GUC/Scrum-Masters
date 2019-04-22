@@ -1,5 +1,5 @@
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema
+var mongoose = require("mongoose");
+var Schema = mongoose.Schema;
 
 // Comment schema.
 
@@ -14,17 +14,15 @@ var commentSchema = new Schema({
   application_id: {
     type: Schema.ObjectId,
     required: true,
-    ref: 'company'
+    ref: "company"
   },
   user_id: {
     type: Schema.ObjectId,
     required: true,
-    ref: 'user' // to be user.
+    ref: "user" // to be user.
   }
-})
+});
 
+var comment = mongoose.model("comment", commentSchema);
 
-
-var comment = mongoose.model('comment', commentSchema)
-
-module.exports = comment
+module.exports = comment;
