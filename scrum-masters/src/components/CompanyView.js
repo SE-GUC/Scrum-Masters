@@ -54,22 +54,17 @@ class CompanyView extends Component {
   };
 
   getCompany() {
-    App.api("get", "/company/" +
-          this.props.match.params.company_id
-      )
+    App.api("get", "/company/" + this.props.match.params.company_id)
       .then(company => {
         this.setState(company.data);
-        App.api("get", "/comment/" +
-              this.props.match.params.company_id
-          )
+        App.api("get", "/comment/" + this.props.match.params.company_id)
           .then(comments => {
             this.setState({ loadedComments: comments.data });
             this.state.loadedComments.map(comment => {
-              App.api("get", "/user/name/" + comment.user_id)
-                .then(user => {
-                  comment.user = user.data.firstName + " " + user.data.lastName;
-                  this.forceUpdate();
-                });
+              App.api("get", "/user/" + comment.user_id).then(user => {
+                comment.user = user.data.firstName + " " + user.data.lastName;
+                this.forceUpdate();
+              });
               return comment;
             });
             this.setState({ fetched: true });
@@ -88,12 +83,11 @@ class CompanyView extends Component {
   }
 
   pay(token) {
-    App.api("post", "/payment/charge/" +
-          this.props.match.params.company_id,
-        { token: token.id }
-      )
+    App.api("post", "/payment/charge/" + this.props.match.params.company_id, {
+      token: token.id
+    })
       .then(payment => {
-        this.setState({ receipt_url: payment.data.charge.receipt_url });
+        this.setState({ receipt_url: payment.data.charge.eceipt_url });
         this.setState(payment.data.company);
       })
       .catch(err => {
@@ -152,13 +146,15 @@ class CompanyView extends Component {
         ? "assignLawyer"
         : "assignreviewer";
 
-    App.api("post", "/user/" +
-          api +
-          "/" +
-          this.state._id +
-          "/" +
-          localStorage.getItem("userId")
-      )
+    App.api(
+      "post",
+      "/user/" +
+        api +
+        "/" +
+        this.state._id +
+        "/" +
+        localStorage.getItem("userId")
+    )
       .then(company => {
         this.setState({
           success_msg: "You have assigned this case to yourself."
@@ -197,11 +193,17 @@ class CompanyView extends Component {
         this.setState({ message: err.response.data.error });
       });
   };
-
+  deleteapplication = () => {
+    App.api("delete", "/company/" + this.props.match.params.company_id).then(
+      com => {
+        this.props.history.push("/");
+      }
+    );
+  };
   changecomment = comment_id => {
     App.api("post", "/comment/" + comment_id, {
-        comment_text: this.state.updatedcomment
-      })
+      comment_text: this.state.updatedcomment
+    })
       .then(comm => {
         this.setState({ remove: true });
         window.location.reload();
@@ -237,7 +239,9 @@ class CompanyView extends Component {
           View company details
           {(localStorage.getItem("userType") === "admin" ||
             localStorage.getItem("userId") === this.state.owner ||
-            (localStorage.getItem("userType") === "lawyer" && this.state.reviewed_statuslawyer)) && !this.state.ispaid && (
+            (localStorage.getItem("userType") === "lawyer" &&
+              this.state.reviewed_statuslawyer)) &&
+            !this.state.ispaid && (
               <Button
                 style={{ margin: "10px" }}
                 as="a"
@@ -282,6 +286,11 @@ class CompanyView extends Component {
                 Review application
               </Button>
             </>
+          )}
+          {!this.state.established && this.state.nowuser === this.state.owner && (
+            <Button variant="danger" onClick={this.deleteapplication}>
+              Delete
+            </Button>
           )}
         </span>
 
