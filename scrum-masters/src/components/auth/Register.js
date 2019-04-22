@@ -38,6 +38,7 @@ class Register extends Component {
             localStorage.setItem("userId", login.data.user.id);
             localStorage.setItem("userEmail", login.data.user.email);
             localStorage.setItem("userType", login.data.user.type);
+            localStorage.setItem("token", login.data.token);
             if (this.props.onLogin) {
               this.props.onLogin();
             }
