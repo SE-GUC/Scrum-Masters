@@ -134,3 +134,25 @@ exports.updatecomment = async (req, res, next) => {
   }
   return res.sendStatus(401);
 };
+exports.pay = async (req, res, next) => {
+  const payload = getPayload(req);
+  if (payload.type === "admin") return next();
+  const company = await Company.findById(req.params.id);
+  if (company.owner === payload.id) return next();
+  return res.sendStatus(401);
+};
+exports.getNotifications = async (req, res, next) => {
+  const payload = getPayload(req);
+  if (payload.type === "admin") return next();
+  if (req.params.id === payload.id) return next();
+  return res.sendStatus(401);
+};
+exports.deleteNotification = async (req, res, next) => {
+  const payload = getPayload(req);
+  const user = User.findById(payload.id);
+  const foundId = user.notifications.find(notification => {
+    return notification == req.params.id;
+  });
+  if (foundId) return next();
+  return res.sendStatus(401);
+};
