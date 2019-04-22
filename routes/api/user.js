@@ -16,8 +16,8 @@ router.post('/assignreviewer/:appId/:revId', passport.authenticate('jwt', {sessi
 router.post('/assignLawyer/:appId/:lawyerId', passport.authenticate('jwt', {session: false}), auth.canAssignLawyer, userController.assignLaywer)
 
 
-router.put('/lawyerReviewCompany/:appId/:userId', passport.authenticate('jwt', {session: false}), auth.canUnassignReviewer, userController.lawyerReviewCompany)
-router.put('/reviewerReviewCompany/:appId/:userId', passport.authenticate('jwt', {session: false}), auth.canUnassignLawyer, userController.reviewerReviewCompany)
+router.put('/lawyerReviewCompany/:appId/:userId', passport.authenticate('jwt', {session: false}), auth.canUnassignLawyer, userController.lawyerReviewCompany)
+router.put('/reviewerReviewCompany/:appId/:userId', passport.authenticate('jwt', {session: false}), auth.canUnassignReviewer, userController.reviewerReviewCompany)
 
 router.post('/login', userController.login)
 router.post('/register', auth.canRegister, userController.register)

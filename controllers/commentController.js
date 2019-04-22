@@ -109,7 +109,7 @@ exports.viewSpecific = async(req,res)=>{
 
 exports.deleteComment = async (req, res) => {
   // const application_id = req.params.app_id 
-  const comment_id = req.params.comm_id 
+  const comment_id = req.params.id 
   const deletedcomment = await Comment.findByIdAndRemove(comment_id) 
   if (!deletedcomment) {
     return res.status(404).send({ error: 'comment not found ' })

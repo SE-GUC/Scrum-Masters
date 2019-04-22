@@ -188,8 +188,7 @@ class CompanyView extends Component {
       });
   }
   deletecomment = id => {
-    axios
-      .delete("http://localhost:3001/api/comment/" + id)
+    App.api("delete", "/comment/" + id)
       .then(comment => {
         this.setState({ message: " commnet is deleted" });
         window.location.reload();
@@ -200,8 +199,7 @@ class CompanyView extends Component {
   };
 
   changecomment = comment_id => {
-    axios
-      .post("http://localhost:3001/api/comment/" + comment_id, {
+    App.api("post", "/comment/" + comment_id, {
         comment_text: this.state.updatedcomment
       })
       .then(comm => {
