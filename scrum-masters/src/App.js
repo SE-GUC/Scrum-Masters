@@ -41,7 +41,7 @@ class App extends Component {
     } else {
       delete(axios.defaults.headers.common['Authorization']);
     }
-    return axios[func]("/api" + url, body);
+    return axios[func]("http://localhost:3001/api" + url, body);
   }
   
   componentDidMount() {
